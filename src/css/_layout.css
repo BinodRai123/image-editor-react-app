@@ -1,6 +1,6 @@
 /* -------Container Style ----------- */
 .container {
-   padding-inline: 2em;
+   padding: var(--padding-sm);
    margin-inline: auto;
    max-width: 80rem;
 }
@@ -9,4 +9,6 @@
 
 .row {
    display: flex;
+   align-items: center;
+   gap: var(--gutter-md);
 }

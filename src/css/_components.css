@@ -1,0 +1,14 @@
+.left_top > .btn {
+   border: none;
+   outline: none;
+   border-radius: var(--border-radius-md);
+   background-color: var(--bg-active-color);
+   padding: var(--padding-sm);
+   font-size: var(--font-size-sm);
+   cursor: pointer;
+}
+
+.btn:hover {
+   background-color: green;
+   color: white;
+}
