@@ -1,0 +1,12 @@
+/* -------Container Style ----------- */
+.container {
+   padding-inline: 2em;
+   margin-inline: auto;
+   max-width: 80rem;
+}
+
+/* ------------ Flex Box Layout ----------------- */
+
+.row {
+   display: flex;
+}
