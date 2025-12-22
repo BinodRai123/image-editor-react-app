@@ -1,8 +1,10 @@
 /* -------Container Style ----------- */
 .container {
-   padding: var(--padding-sm);
+   padding: var(--padding-md);
    margin-inline: auto;
    max-width: 80rem;
+   display: flex;
+   gap: 2.25em;
 }
 
 /* ------------ Flex Box Layout ----------------- */
@@ -10,5 +12,5 @@
 .row {
    display: flex;
    align-items: center;
-   gap: var(--gutter-md);
+   gap: var(--gutter-lg);
 }

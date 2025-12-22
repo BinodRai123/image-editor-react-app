@@ -1,3 +1,5 @@
+/* ---- button ---- */
+
 .left_top > .btn {
    border: none;
    outline: none;
@@ -6,9 +8,44 @@
    padding: var(--padding-sm);
    font-size: var(--font-size-sm);
    cursor: pointer;
+   color: var(--text-active-color);
 }
 
-.btn:hover {
-   background-color: green;
-   color: white;
+/* ---- Range Input ---- */
+/* 1. Reset the base input appearance */
+.right .filter input[type="range"] {
+   -webkit-appearance: none;
+   appearance: none;
+   width: 100%; /* Responsive width */
+   max-width: 600px; /* Set your desired "long" width here */
+   background: transparent;
+   cursor: pointer;
+}
+
+/* 2. Style the Track (The Line) */
+.right .filter input::-webkit-slider-runnable-track {
+   background: #d3d3d3;
+   height: 5px;
+   border-radius: var(--border-radius-md);
+}
+
+/* 3. Style the Thumb (The "Ball") */
+.right .filter input::-webkit-slider-thumb {
+   -webkit-appearance: none; /* Required to style the thumb */
+   appearance: none;
+   margin-top: -6px; /* (Track Height / 2) - (Thumb Height / 2) */
+
+   height: 18px;
+   width: 18px;
+   background: var(--bg-danger-color); /* Your brand color */
+   border-radius: var(--border-radius-2xl);
+}
+
+/* 4. Support for Firefox */
+.right .filter input::-moz-range-thumb {
+   height: 18px;
+   width: 18px;
+   background: #646cff;
+   border-radius: 50%;
+   border: none;
 }

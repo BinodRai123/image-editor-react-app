@@ -3,6 +3,8 @@
    --bg-primary-color: rgb(17, 17, 17);
    --bg-secondary-color: rgb(34, 34, 34);
    --bg-active-color: rgb(233, 233, 233);
+   --bg-danger-color: rgb(200, 50, 50);
+   --bg-sucess-color: rgb(30, 175, 30);
 
    /* ---- Text Colors ---- */
    --text-primary-color: rgb(237, 237, 237);
