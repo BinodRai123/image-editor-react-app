@@ -11,26 +11,27 @@
    color: var(--text-active-color);
 }
 
-/* ---- Range Input ---- */
+/* ---- Input Range/Track ---- */
+
 /* 1. Reset the base input appearance */
-.right .filter input[type="range"] {
+.right .filters .filter input[type="range"] {
    -webkit-appearance: none;
    appearance: none;
-   width: 100%; /* Responsive width */
-   max-width: 600px; /* Set your desired "long" width here */
+   width: 100%;
+   max-width: 600px;
    background: transparent;
    cursor: pointer;
 }
 
-/* 2. Style the Track (The Line) */
-.right .filter input::-webkit-slider-runnable-track {
-   background: #d3d3d3;
+/* 2. Style the Track/Range (The Line) */
+.right .filters .filter input::-webkit-slider-runnable-track {
+   background: #d3d3d39f;
    height: 5px;
    border-radius: var(--border-radius-md);
 }
 
-/* 3. Style the Thumb (The "Ball") */
-.right .filter input::-webkit-slider-thumb {
+/* 3. Styling The Range/track Thumb (The "Ball") */
+.right .filters .filter input::-webkit-slider-thumb {
    -webkit-appearance: none; /* Required to style the thumb */
    appearance: none;
    margin-top: -6px; /* (Track Height / 2) - (Thumb Height / 2) */
@@ -42,7 +43,7 @@
 }
 
 /* 4. Support for Firefox */
-.right .filter input::-moz-range-thumb {
+.right .filters .filter input::-moz-range-thumb {
    height: 18px;
    width: 18px;
    background: #646cff;

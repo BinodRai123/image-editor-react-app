@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Filter_Settings } from "./constants/filtersdata";
 import RangeSlider from "./components/RangeSlider";
 
 const App = () => {
    const [filterSettings, setFilterSettings] = useState(Filter_Settings);
+
+   const canvasRef = useRef(null);
+   // console.log(image);
 
    const handleFilterChange = (filterName, value) => {
       setFilterSettings((prev) => {
@@ -11,6 +14,17 @@ const App = () => {
             return filter.name === filterName ? { ...filter, value: value } : filter;
          });
       });
+   };
+
+   const hangleImageUploadInCanvas = (e) => {
+      const imagePath = e.target.files[0];
+      const canvas = canvasRef.current;
+      const context = canvas.getContext("2d");
+      let image = new Image();
+      image.src = URL.createObjectURL(imagePath);
+      image.onload = () => {
+         context.drawImage(image, 0, 0, canvas.width, canvas.height);
+      };
    };
 
    const FilterResetHandler = () => {
@@ -24,7 +38,7 @@ const App = () => {
                <div className="left_top row">
                   <label className="btn" role="button">
                      Choose Image
-                     <input type="file" hidden />
+                     <input type="file" onChange={hangleImageUploadInCanvas} hidden />
                   </label>
 
                   <button className="btn" aria-label="Reset" onClick={FilterResetHandler}>
@@ -41,13 +55,17 @@ const App = () => {
                      <i className="ri-image-fill"></i>
                      <p>No Image Chosen...</p>
                   </div>
+
+                  <canvas id="image-canvas" ref={canvasRef}>
+                     {/* <img src={URL.createObjectURL(file)} alt="image choosen by user" /> */}
+                  </canvas>
                </div>
             </div>
 
             <div className="right">
                <h1>Filters</h1>
 
-               <div class="filters">
+               <div className="filters">
                   {filterSettings.map((filter) => (
                      <RangeSlider
                         key={filter.name}
