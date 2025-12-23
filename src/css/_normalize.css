@@ -52,17 +52,9 @@ video,
    width: 100%;
 }
 
-img,
-figure,
-video {
-   display: block;
-   width: 100%;
-}
-
 img {
    max-width: 100%;
-   width: auto;
-   height: auto;
+   object-fit: cover;
 }
 
 /* remove animations for people who've turned them off */

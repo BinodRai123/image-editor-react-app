@@ -3,6 +3,12 @@
 @import url(_components.css);
 @import url(_theme.css);
 
+/* ---- error Message ---- */
+.errorMessage {
+   font-size: var(--font-size-md);
+   color: var(--text-error-color);
+}
+
 /*------ left top ------ */
 .top_left {
    width: 100%;
@@ -20,13 +26,14 @@
    color: var(--text-primary-color);
 }
 
-/*------ left bottom ------ */
+/*------ Left_Bottom ------ */
 .left {
    width: 60%;
 }
 
 .left_bottom {
-   margin: var(--margin-lg) 0;
+   position: relative;
+   /* margin: var(--margin-lg) 0; */
    padding: var(--margin-lg);
    display: flex;
    justify-content: center;
@@ -58,6 +65,12 @@
    font-weight: 400;
 }
 
+.left_bottom_image_errorMessage {
+   position: absolute;
+   top: 0;
+   right: 20px;
+}
+
 /*------ Right part(Filter part) ------ */
 
 .right {
@@ -84,6 +97,6 @@
 
 /* ----- Canvas for Image ---- */
 #image-canvas {
-   height: 200px;
-   width: 200px;
+   max-height: 500px;
+   max-width: 600px;
 }

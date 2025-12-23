@@ -4,7 +4,7 @@ import RangeSlider from "./components/RangeSlider";
 
 const App = () => {
    const [filterSettings, setFilterSettings] = useState(Filter_Settings);
-
+   const [imageStatus, setImageStatus] = useState({ sucess: false, uploading: false, errorMessage: null });
    const canvasRef = useRef(null);
    // console.log(image);
 
@@ -17,14 +17,46 @@ const App = () => {
    };
 
    const hangleImageUploadInCanvas = (e) => {
-      const imagePath = e.target.files[0];
+      const file = e.target?.files[0];
+      // If user click "choose file" and cancles
+      // then it will return from here
+      if (!file) return;
+
+      if (!file.type.startsWith("image/")) {
+         setImageStatus({
+            sucess: false,
+            uploading: false,
+            errorMessage: "only image file are supported",
+         });
+         return;
+      }
+
+      //Selecting canvas div using canvasRef
+      //and making it 2d for image upload
       const canvas = canvasRef.current;
       const context = canvas.getContext("2d");
+
+      //Creating new image tag
+      //In Src of it will first create url path
+      //from file that user has choosed
       let image = new Image();
-      image.src = URL.createObjectURL(imagePath);
+      image.src = URL.createObjectURL(file);
+
+      //image.onload will wait until the image fully
+      //loaded in the website and after that it will
+      //do set height , width and drawimage in canvas
       image.onload = () => {
+         canvas.width = image.width;
+         canvas.height = image.height;
          context.drawImage(image, 0, 0, canvas.width, canvas.height);
       };
+
+      image.onerror = (error) => {
+         console.log(error);
+      };
+
+      //This will tell the image has sucessfully uploaded
+      setImageStatus((prev) => ({ ...prev, sucess: true }));
    };
 
    const FilterResetHandler = () => {
@@ -51,14 +83,23 @@ const App = () => {
                </div>
 
                <div className="left_bottom">
-                  <div className="image-preview">
-                     <i className="ri-image-fill"></i>
-                     <p>No Image Chosen...</p>
-                  </div>
+                  <canvas
+                     id="image-canvas"
+                     style={{ display: imageStatus.sucess ? "block" : "none" }}
+                     ref={canvasRef}
+                  ></canvas>
 
-                  <canvas id="image-canvas" ref={canvasRef}>
-                     {/* <img src={URL.createObjectURL(file)} alt="image choosen by user" /> */}
-                  </canvas>
+                  {!imageStatus.sucess && (
+                     <>
+                        <span className="left_bottom_image_errorMessage errorMessage">
+                           {imageStatus.errorMessage}
+                        </span>
+                        <div className="image-preview">
+                           <i className="ri-image-fill"></i>
+                           <p>No Image Chosen...</p>
+                        </div>
+                     </>
+                  )}
                </div>
             </div>
 

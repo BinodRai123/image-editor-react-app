@@ -11,6 +11,8 @@
    --text-secondary-color: rgb(200, 200, 200);
    --text-tertiary-color: rgb(150, 150, 150);
    --text-active-color: rgb(24, 24, 24);
+   --text-error-color: rgb(243, 1, 1);
+   --text-sucess-color: rgb(30, 175, 30);
 
    /* ---- padding ---- */
    --padding-sm: 0.5rem;
