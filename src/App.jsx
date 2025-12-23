@@ -1,14 +1,38 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Filter_Settings } from "./constants/filtersdata";
 import RangeSlider from "./components/RangeSlider";
 
 const App = () => {
    const [filterSettings, setFilterSettings] = useState(Filter_Settings);
    const [imageStatus, setImageStatus] = useState({ sucess: false, uploading: false, errorMessage: null });
+   const [image, setImage] = useState(null);
    const canvasRef = useRef(null);
-   // console.log(image);
+   const canvasContext = useRef(null);
 
-   const handleFilterChange = (filterName, value) => {
+   useEffect(() => {
+      //Hold the context 2d value, which will not lost while rendering
+      canvasContext.current = canvasRef.current?.getContext("2d");
+   }, []);
+
+   //apply filters
+   const applyFilters = (filterName, value, unit) => {
+      //if there is no image then return from here
+      if (image == null) return;
+      let allfiltervalue = "";
+
+      filterSettings.forEach((filter) => {
+         allfiltervalue += `${filter.name}(${filter.value}${filter.unit}) `;
+      });
+
+      let canvasCtx = canvasContext.current;
+      canvasCtx.filter = `${allfiltervalue}`;
+      canvasCtx.drawImage(image, 0, 0);
+   };
+
+   //This function Search the Filter by it's name
+   //and change the value of it
+   const handleFilterChange = (filterName, value, unit) => {
+      applyFilters(filterName, value, unit);
       setFilterSettings((prev) => {
          return prev.map((filter) => {
             return filter.name === filterName ? { ...filter, value: value } : filter;
@@ -16,6 +40,7 @@ const App = () => {
       });
    };
 
+   //This function upload the image into canvas
    const hangleImageUploadInCanvas = (e) => {
       const file = e.target?.files[0];
       // If user click "choose file" and cancles
@@ -34,24 +59,25 @@ const App = () => {
       //Selecting canvas div using canvasRef
       //and making it 2d for image upload
       const canvas = canvasRef.current;
-      const context = canvas.getContext("2d");
+      let canvasCtx = canvasContext.current;
 
       //Creating new image tag
       //In Src of it will first create url path
       //from file that user has choosed
-      let image = new Image();
-      image.src = URL.createObjectURL(file);
+      let img = new Image();
+      img.src = URL.createObjectURL(file);
 
       //image.onload will wait until the image fully
       //loaded in the website and after that it will
       //do set height , width and drawimage in canvas
-      image.onload = () => {
-         canvas.width = image.width;
-         canvas.height = image.height;
-         context.drawImage(image, 0, 0, canvas.width, canvas.height);
+      img.onload = () => {
+         setImage(img);
+         canvas.width = img.width;
+         canvas.height = img.height;
+         canvasCtx.drawImage(img, 0, 0, canvas.width, canvas.height);
       };
 
-      image.onerror = (error) => {
+      img.onerror = (error) => {
          console.log(error);
       };
 
@@ -59,8 +85,13 @@ const App = () => {
       setImageStatus((prev) => ({ ...prev, sucess: true }));
    };
 
+   //Reset the Range input to Default
+   //by rendering the first default value of filter Settings
    const FilterResetHandler = () => {
       setFilterSettings(Filter_Settings);
+      if (!image) return;
+      canvasContext.current.filter = "none";
+      canvasContext.current.drawImage(image, 0, 0);
    };
 
    return (
@@ -114,6 +145,7 @@ const App = () => {
                         value={filter.value}
                         min={filter.min}
                         max={filter.max}
+                        unit={filter.unit}
                         onChange={handleFilterChange}
                      />
                   ))}

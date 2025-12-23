@@ -97,6 +97,6 @@
 
 /* ----- Canvas for Image ---- */
 #image-canvas {
-   max-height: 500px;
-   max-width: 600px;
+   max-height: 100%;
+   max-width: 100%;
 }
