@@ -18,9 +18,9 @@ const Filter_Presets = {
       "hue-rotate": 0,
       blur: 0,
       grayscale: 0,
-      sepia: 0,
+      Sepia: 0,
       opacity: 100,
-      invert: 0,
+      Invert: 0,
    },
 
    drama: {
@@ -30,9 +30,9 @@ const Filter_Presets = {
       "hue-rotate": 0,
       blur: 0,
       grayscale: 0,
-      sepia: 5,
+      Sepia: 5,
       opacity: 100,
-      invert: 0,
+      Invert: 0,
    },
 
    vintage: {
@@ -42,9 +42,9 @@ const Filter_Presets = {
       "hue-rotate": -10,
       blur: 0,
       grayscale: 10,
-      sepia: 30,
+      Sepia: 30,
       opacity: 100,
-      invert: 0,
+      Invert: 0,
    },
 
    cinematic: {
@@ -54,9 +54,9 @@ const Filter_Presets = {
       "hue-rotate": -5,
       blur: 0,
       grayscale: 0,
-      sepia: 8,
+      Sepia: 8,
       opacity: 100,
-      invert: 0,
+      Invert: 0,
    },
 
    moody: {
@@ -66,9 +66,9 @@ const Filter_Presets = {
       "hue-rotate": 0,
       blur: 0,
       grayscale: 5,
-      sepia: 10,
+      Sepia: 10,
       opacity: 100,
-      invert: 0,
+      Invert: 0,
    },
 
    warm: {
@@ -78,9 +78,9 @@ const Filter_Presets = {
       "hue-rotate": -15,
       blur: 0,
       grayscale: 0,
-      sepia: 15,
+      Sepia: 15,
       opacity: 100,
-      invert: 0,
+      Invert: 0,
    },
 
    cool: {
@@ -90,9 +90,9 @@ const Filter_Presets = {
       "hue-rotate": 15,
       blur: 0,
       grayscale: 0,
-      sepia: 0,
+      Sepia: 0,
       opacity: 100,
-      invert: 0,
+      Invert: 0,
    },
 
    blackAndWhite: {
@@ -102,9 +102,9 @@ const Filter_Presets = {
       "hue-rotate": 0,
       blur: 0,
       grayscale: 100,
-      sepia: 0,
+      Sepia: 0,
       opacity: 100,
-      invert: 0,
+      Invert: 0,
    },
 
    faded: {
@@ -114,9 +114,9 @@ const Filter_Presets = {
       "hue-rotate": 0,
       blur: 0,
       grayscale: 5,
-      sepia: 10,
+      Sepia: 10,
       opacity: 100,
-      invert: 0,
+      Invert: 0,
    },
 
    cyberpunk: {
@@ -126,9 +126,9 @@ const Filter_Presets = {
       "hue-rotate": 25,
       blur: 0,
       grayscale: 0,
-      sepia: 0,
+      Sepia: 0,
       opacity: 100,
-      invert: 0,
+      Invert: 0,
    },
 };
 

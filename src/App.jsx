@@ -12,6 +12,10 @@ const App = () => {
    const canvasContext = useRef(null);
 
    useEffect(() => {
+      applyFilters();
+   }, [filterSettings, image]);
+
+   useEffect(() => {
       //Hold the context 2d value, which will not lost while react render
       canvasContext.current = canvasRef.current?.getContext("2d");
    }, []);
@@ -19,7 +23,7 @@ const App = () => {
    //apply filters
    const applyFilters = () => {
       //if there is no image then return from here
-      if (image == null) return;
+      if (image === null) return;
       let allfiltervalue = "";
 
       filterSettings.forEach((filter) => {
@@ -35,7 +39,6 @@ const App = () => {
    //This function Search the Filter by it's name
    //and change the value of it
    const handleFilterChange = (filterName, value) => {
-      applyFilters();
       setFilterSettings((prev) => {
          return prev.map((filter) => {
             return filter.name === filterName ? { ...filter, value: value } : filter;
@@ -94,18 +97,19 @@ const App = () => {
    const FilterResetHandler = () => {
       setFilterSettings(Filter_Settings);
       if (!image) return;
+      canvasContext.current.clearRect(0, 0, image.width, image.height);
       canvasContext.current.filter = "none";
       canvasContext.current.drawImage(image, 0, 0);
    };
 
    const handleFilterPreset = (presetName) => {
+      let canvasCtx = canvasContext.current;
+      canvasCtx.clearRect(0, 0, image.width, image.height);
       //Detach data of preset from the filter_presets Object by name
       const preset = Filter_Presets[presetName];
       setFilterSettings((prev) =>
          prev.map((filter) => ({ ...filter, value: preset[filter.name] ?? filter.value }))
       );
-      applyFilters();
-      handleFilterChange();
    };
 
    return (
