@@ -25,6 +25,7 @@ const App = () => {
       });
 
       let canvasCtx = canvasContext.current;
+      canvasCtx.clearRect(0, 0, image.width, image.height);
       canvasCtx.filter = `${allfiltervalue}`;
       canvasCtx.drawImage(image, 0, 0);
    };
@@ -75,6 +76,7 @@ const App = () => {
          canvas.width = img.width;
          canvas.height = img.height;
          canvasCtx.drawImage(img, 0, 0, canvas.width, canvas.height);
+         setFilterSettings(Filter_Settings);
       };
 
       img.onerror = (error) => {
