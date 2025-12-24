@@ -26,7 +26,7 @@ const App = () => {
 
       let canvasCtx = canvasContext.current;
       canvasCtx.clearRect(0, 0, image.width, image.height);
-      canvasCtx.filter = `${allfiltervalue}`;
+      canvasCtx.filter = `${allfiltervalue.trim()}`;
       canvasCtx.drawImage(image, 0, 0);
    };
 
@@ -110,7 +110,21 @@ const App = () => {
                      Reset
                   </button>
 
-                  <button className="btn" aria-label="Download Image">
+                  <button
+                     className="btn"
+                     aria-label="Download Image"
+                     //It Generate a link to download while clicking the button
+                     //cause browser don't understand image data(base64 as canvas generate) it only understand
+                     //user interaction of clicking <a> element and through that
+                     //<a> element we pass the fake link of image by <.toDataURL()> and attribute
+                     //Finally Download Sucess!!
+                     onClick={() => {
+                        const link = document.createElement("a");
+                        link.download = "download-edited-image.png";
+                        link.href = canvasRef.current.toDataURL("image/png");
+                        link.click();
+                     }}
+                  >
                      Download
                   </button>
                </div>
