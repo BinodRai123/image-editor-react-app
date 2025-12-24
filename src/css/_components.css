@@ -1,8 +1,23 @@
 /* ---- button ---- */
 
+/* left-side button */
 .left_top > .btn {
    border: none;
    outline: none;
+   border-radius: var(--border-radius-md);
+   background-color: var(--bg-active-color);
+   padding: var(--padding-sm);
+   font-size: var(--font-size-sm);
+   cursor: pointer;
+   color: var(--text-active-color);
+}
+
+/* right-side button */
+.right .presets-buttons .btn {
+   border: none;
+   outline: none;
+   font-weight: bold;
+   text-transform: uppercase;
    border-radius: var(--border-radius-md);
    background-color: var(--bg-active-color);
    padding: var(--padding-sm);

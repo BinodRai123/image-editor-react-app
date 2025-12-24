@@ -9,6 +9,12 @@
    color: var(--text-error-color);
 }
 
+/* ----- left part ---- */
+.left {
+   width: 80%;
+   flex-grow: 2;
+}
+
 /*------ left top ------ */
 .top_left {
    width: 100%;
@@ -27,9 +33,6 @@
 }
 
 /*------ Left_Bottom ------ */
-.left {
-   width: 60%;
-}
 
 .left_bottom {
    position: relative;
@@ -93,6 +96,16 @@
 .right .filters .filter .progress-counter {
    display: flex;
    justify-content: space-between;
+}
+
+.right #image-presets {
+   margin-top: var(--margin-xl);
+}
+
+.right .presets-buttons {
+   display: flex;
+   flex-wrap: wrap;
+   gap: var(--gutter-sm);
 }
 
 /* ----- Canvas for Image ---- */

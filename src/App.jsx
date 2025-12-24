@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { Filter_Settings } from "./constants/filtersdata";
+import FilterConstants from "./constants/filtersdata";
 import RangeSlider from "./components/RangeSlider";
+
+const { Filter_Settings, Filter_Presets } = FilterConstants;
 
 const App = () => {
    const [filterSettings, setFilterSettings] = useState(Filter_Settings);
@@ -10,12 +12,12 @@ const App = () => {
    const canvasContext = useRef(null);
 
    useEffect(() => {
-      //Hold the context 2d value, which will not lost while rendering
+      //Hold the context 2d value, which will not lost while react render
       canvasContext.current = canvasRef.current?.getContext("2d");
    }, []);
 
    //apply filters
-   const applyFilters = (filterName, value, unit) => {
+   const applyFilters = () => {
       //if there is no image then return from here
       if (image == null) return;
       let allfiltervalue = "";
@@ -32,8 +34,8 @@ const App = () => {
 
    //This function Search the Filter by it's name
    //and change the value of it
-   const handleFilterChange = (filterName, value, unit) => {
-      applyFilters(filterName, value, unit);
+   const handleFilterChange = (filterName, value) => {
+      applyFilters();
       setFilterSettings((prev) => {
          return prev.map((filter) => {
             return filter.name === filterName ? { ...filter, value: value } : filter;
@@ -94,6 +96,16 @@ const App = () => {
       if (!image) return;
       canvasContext.current.filter = "none";
       canvasContext.current.drawImage(image, 0, 0);
+   };
+
+   const handleFilterPreset = (presetName) => {
+      //Detach data of preset from the filter_presets Object by name
+      const preset = Filter_Presets[presetName];
+      setFilterSettings((prev) =>
+         prev.map((filter) => ({ ...filter, value: preset[filter.name] ?? filter.value }))
+      );
+      applyFilters();
+      handleFilterChange();
    };
 
    return (
@@ -164,6 +176,16 @@ const App = () => {
                         unit={filter.unit}
                         onChange={handleFilterChange}
                      />
+                  ))}
+               </div>
+
+               <h1 id="image-presets">Presets</h1>
+
+               <div className="presets-buttons">
+                  {Object.keys(Filter_Presets).map((name) => (
+                     <button onClick={() => handleFilterPreset(name)} key={name} className="btn">
+                        {name}
+                     </button>
                   ))}
                </div>
             </div>
