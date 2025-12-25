@@ -1,0 +1,115 @@
+/* ---- button ---- */
+
+.btn {
+   padding: 12px 24px;
+   border-radius: var(--border-radius-sm);
+   font-weight: 400;
+   cursor: pointer;
+   transition: all 0.2s ease;
+}
+
+/* Primary */
+.btn-primary {
+   background: var(--text-primary);
+   font-weight: 600;
+   font-size: var(--font-size-sm);
+   border: none;
+}
+
+.btn-primary:hover {
+   background: var(--text-primary-dark);
+   box-shadow: var(--box-shadow-soft);
+}
+
+/* Outline */
+/* .btn-outline {
+   background: transparent;
+   color: var(--text-primary);
+   border: 1px solid var(--border-subtle);
+}
+
+.btn-outline:hover {
+   background: var(--bg-light);
+} */
+
+/* Text Link */
+.text-link {
+   padding: 0;
+   background: transparent;
+   color: var(--text-primary);
+   text-decoration: none;
+   border: none;
+}
+
+.text-link:focus {
+   outline: none;
+}
+
+.text-link:hover {
+   text-decoration: underline;
+}
+
+/* ===============================
+   CARD
+   =============================== */
+.card {
+   padding: var(--gutter-md);
+   background: var(--text-white);
+   border-radius: var(--border-radius-md);
+   box-shadow: var(--box-shadow-soft);
+   margin: var(--margin-md);
+}
+
+/* ===============================
+   INPUT
+   =============================== */
+.input {
+   width: 100%;
+   padding: var(--padding-sm) var(--padding-md); /* px-4 py-3 */
+   border-radius: var(--border-radius-sm); /* rounded-xl */
+   border: 1px solid #e5e7eb; /* border-gray-200 */
+   background-color: rgba(255, 255, 255, 0.5); /* bg-white/50 */
+   color: var(--text-black); /* text-text-main */
+   box-shadow: var(--box-shadow-soft);
+   transition: all 0.2s ease;
+}
+
+/* Placeholder */
+.input::placeholder {
+   color: #9ca3af; /* placeholder-gray-400 */
+}
+
+/* Focus state */
+.input:focus {
+   background-color: #ffffff;
+   outline: none;
+   border-color: var(--text-primary);
+   box-shadow: var(--box-shadow-glass);
+}
+
+/* ===============================
+   MODAL
+   "Message that popup and cover whole window screen" 
+   "It Removed when we touch outside of it's message content"
+   =============================== */
+/* Overlay */
+.modal-overlay {
+   position: fixed;
+   inset: 0;
+   background-color: var(--color-overlay);
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   z-index: 1000;
+}
+
+/* Modal */
+.modal {
+   background-color: var(--color-white);
+   color: #1f2937;
+   padding: var(--padding-md);
+   border-radius: var(--border-radius-md);
+   box-shadow: var(--box-shadow-soft);
+   width: 100%;
+   max-width: 420px;
+}

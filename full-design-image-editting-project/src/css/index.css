@@ -1,0 +1,16 @@
+@import url("_font.css"); /*font family file*/
+@import url("_theme.css"); /*CSS root Variables*/
+@import url("_normalize.css"); /*CSS Reset */
+@import url("_layouts.css"); /*CSS Custom Layout*/
+@import url("_components.css"); /*CSS Custom Components*/
+
+h1 {
+   font-family: "space-grotesk";
+   font-weight: 800;
+   color: black;
+}
+
+p {
+   font-size: var(--font-size-sm);
+   color: var(--text-gray);
+}
