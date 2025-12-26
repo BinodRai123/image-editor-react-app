@@ -18,6 +18,7 @@
    --font-size-md: 1.5rem;
    --font-size-lg: 1.75rem;
    --font-size-xl: 2rem;
+   --font-size-2xl: 3rem;
 
    /* ---- padding ---- */
    --padding-sm: 0.5rem;
@@ -48,6 +49,10 @@
    --border-radius-full: 9999px;
 
    --border-subtle: #e5e7eb;
+
+   /* ---- input range slider ---- */
+   --range-track-bg: #ffffff;
+   --acent-color: #ee9d2b;
 
    /* ---- modal overlay ---- */
    --color-overlay: rgba(0, 0, 0, 0.45);
