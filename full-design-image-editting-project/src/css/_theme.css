@@ -9,7 +9,7 @@
    --text-primary-dark: #d98210;
    --text-primary-hover: #ffb74d;
    --text-black: #181511;
-   --text-gray: #897961;
+   --text-gray: #4b5563;
    --text-error-color: rgb(243, 1, 1);
    --text-sucess-color: rgb(30, 175, 30);
 
@@ -21,7 +21,7 @@
    --font-size-2xl: 3rem;
 
    /* ---- padding ---- */
-   --padding-sm: 0.5rem;
+   --padding-sm: 0.7rem;
    --padding-md: 1rem;
    --padding-lg: 1.5rem;
    --padding-xl: 2rem;

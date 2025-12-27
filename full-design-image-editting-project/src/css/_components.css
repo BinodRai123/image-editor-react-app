@@ -4,7 +4,8 @@
    padding: 12px 24px;
    border-radius: var(--border-radius-sm);
    cursor: pointer;
-   transition: all 0.2s ease;
+   transition: all 0.1s ease-in-out;
+   user-select: none;
 }
 
 /* Primary */
@@ -16,8 +17,12 @@
 }
 
 .btn-primary:hover {
-   background: var(--text-primary-dark);
+   background: var(--text-primary-hover);
    box-shadow: var(--box-shadow-soft);
+}
+
+.btn-primary:active {
+   background-color: var(--text-primary-dark);
 }
 
 /* Outline */
@@ -125,4 +130,18 @@ input[type="range"] {
    box-shadow: var(--box-shadow-soft);
    width: 100%;
    max-width: 420px;
+}
+
+/* ===============================
+   NAVBAR
+   =============================== */
+#navbar {
+   padding: var(--padding-sm) var(--padding-xl);
+   background-color: var(--color-white);
+}
+
+.navbar__left {
+   display: flex;
+   align-items: center;
+   gap: var(--gutter-xl);
 }

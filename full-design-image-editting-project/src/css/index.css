@@ -5,6 +5,10 @@
 @import url("_layouts.css"); /*CSS Custom Layout*/
 @import url("_components.css"); /*CSS Custom Components*/
 
+/* =====================
+Background Checker Board style
+of black and white boxes
+======================== */
 .checkerboard-container {
    height: 100vh;
    position: relative;
@@ -46,16 +50,19 @@ span {
    color: var(--text-gray);
 }
 
-.card h1 {
+h1 {
    font-size: var(--font-size-xl);
+   font-weight: 800;
 }
 
-.card h2 {
+h2 {
    font-size: var(--font-size-lg);
+   font-weight: 800;
 }
 
-.card h3 {
+h3 {
    font-size: var(--font-size-md);
+   font-weight: 800;
 }
 
 .card p {
@@ -79,4 +86,10 @@ span {
    gap: 12px;
    align-items: center;
    margin-bottom: 12px;
+}
+
+@media (width < 80rem) {
+   .container {
+      padding: var(--padding-sm);
+   }
 }

@@ -22,7 +22,6 @@ h3,
 h4,
 h5,
 h6 {
-   margin: 0 0 10px;
    font-weight: bold;
 }
 
@@ -54,6 +53,21 @@ video,
 img {
    max-width: 100%;
    object-fit: cover;
+}
+
+ul,
+ol {
+   list-style: none;
+   font-family: inherit;
+}
+
+ul > li {
+   cursor: pointer;
+   user-select: none;
+}
+
+li:hover > span {
+   color: var(--text-black);
 }
 
 /* remove animations for people who've turned them off */
