@@ -14,7 +14,7 @@
    --text-sucess-color: rgb(30, 175, 30);
 
    /* ---- font-sie ---- */
-   --font-size-sm: 0.9rem;
+   --font-size-sm: 1rem;
    --font-size-md: 1.5rem;
    --font-size-lg: 1.75rem;
    --font-size-xl: 2rem;
@@ -40,6 +40,7 @@
    --gutter-lg: 1.5rem;
    --gutter-xl: 2rem;
    --gutter-2xl: 3rem;
+   --gutter-3xl: 6rem;
 
    /* ---- Border Radius ---- */
    --border-radius-sm: 0.5rem;
@@ -61,4 +62,10 @@
    /* --box-shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.04); */
    --box-shadow-glass: 0 4px 30px rgba(0, 0, 0, 0.1);
    --box-shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+@media (width < 750px) {
+   :root {
+      --font-size-sm: 0.9rem;
+   }
 }

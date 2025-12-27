@@ -143,5 +143,5 @@ input[type="range"] {
 .navbar__left {
    display: flex;
    align-items: center;
-   gap: var(--gutter-xl);
+   gap: var(--gutter-3xl);
 }

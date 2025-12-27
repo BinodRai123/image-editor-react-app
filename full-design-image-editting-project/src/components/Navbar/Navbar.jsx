@@ -7,9 +7,9 @@ const Navbar = () => {
          <div className="navbar__left">
             <div className=".navbar__left_logo row">
                <BrushIcon size="30" color="#ee9d2b" />
-               <h3 style={{ letterSpacing: "-0.1rem" }}>FuturisticEditor</h3>
+               <h2 style={{ letterSpacing: "-0.1rem" }}>FuturisticEditor</h2>
             </div>
-            <ul className="row" style={{ "--gap": "1rem" }}>
+            <ul className="row" style={{ "--gap": "2.5em" }}>
                <li>
                   <span>File</span>
                </li>
