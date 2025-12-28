@@ -143,7 +143,7 @@ input[type="range"] {
    NAVBAR
    =============================== */
 #navbar {
-   padding: var(--padding-sm) var(--padding-xl);
+   padding: var(--padding-md);
    background-color: var(--color-white);
    box-shadow: var(--box-shadow-soft);
    border-bottom: 1.5px solid #f5f4f2;
@@ -152,5 +152,5 @@ input[type="range"] {
 .navbar__left {
    display: flex;
    align-items: center;
-   gap: var(--gutter-3xl);
+   gap: var(--gutter-2xl);
 }

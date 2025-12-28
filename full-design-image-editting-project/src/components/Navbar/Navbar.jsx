@@ -7,7 +7,7 @@ const Navbar = () => {
          <div className="navbar__left">
             <div className=".navbar__left_logo row">
                <BrushIcon size="30" color="#ee9d2b" />
-               <h2 style={{ letterSpacing: "-0.1rem" }}>FuturisticEditor</h2>
+               <h1 style={{ letterSpacing: "-0.1rem" }}>FuturisticEditor</h1>
             </div>
             <ul className="row" style={{ "--gap": "2em" }}>
                <li>

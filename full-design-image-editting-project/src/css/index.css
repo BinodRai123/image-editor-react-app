@@ -43,10 +43,9 @@ of black and white boxes
 }
 
 span {
-   font-family: sans-serif;
-   font-weight: 500;
-   letter-spacing: 0.1rem;
-   font-size: var(--font-size-sm);
+   font-weight: 600;
+   letter-spacing: -0.01rem;
+   font-size: var(--font-size-md);
    color: var(--text-gray);
 }
 
@@ -95,7 +94,7 @@ h3 {
 
 #main .main__left {
    height: 100%;
-   width: 4rem;
+   width: 3.65rem;
    background-color: var(--color-white);
    box-shadow: var(--box-shadow-soft);
 }
@@ -106,8 +105,8 @@ h3 {
 .main__left__features {
    display: flex;
    flex-direction: column;
-   gap: var(--gutter-md);
-   padding: var(--padding-xl) var(--padding-sm);
+   gap: var(--gutter-sm);
+   padding: var(--padding-md) var(--padding-sm);
 }
 
 .feature-icon {
@@ -115,7 +114,7 @@ h3 {
    display: flex;
    justify-content: center;
    align-items: center;
-   border-radius: var(--border-radius-sm);
+   border-radius: var(--border-radius-md);
    opacity: 0.7;
    cursor: pointer;
 }
@@ -124,7 +123,7 @@ h3 {
    background-color: hsla(35, 85%, 55%, 0.4);
 }
 
-.feature-icon:hover {
+.inactive-feature-icon:hover {
    background-color: hsla(35, 85%, 55%, 0.2);
 }
 

@@ -15,10 +15,14 @@ const Featureicon = () => {
                return (
                   <div
                      key={id}
-                     className={activeIconId === id ? "feature-icon active-feature-icon" : "feature-icon"}
+                     className={
+                        activeIconId === id
+                           ? "feature-icon active-feature-icon"
+                           : "feature-icon inactive-feature-icon"
+                     }
                      onClick={() => setActiveIconId(id)}
                   >
-                     <Icon size="30" color="hsla(34, 100%, 50%, 1.00)" />
+                     <Icon size="30" color={activeIconId == id ? "#EE9D2B" : "#111827"} />
                   </div>
                );
             })}
