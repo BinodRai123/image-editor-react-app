@@ -81,11 +81,51 @@ h3 {
    color: black;
 }
 
-.button-group {
+#image-generator-page {
+   height: 100vh;
+}
+
+/* ===============================
+   Main Section
+   =============================== */
+#image-generator-page > #main {
+   height: 100%;
+   background-color: var(--bg-white);
+}
+
+#main .main__left {
+   height: 100%;
+   width: 4rem;
+   background-color: var(--color-white);
+   box-shadow: var(--box-shadow-soft);
+}
+
+/* ===============================
+   Feature Icon
+   =============================== */
+.main__left__features {
    display: flex;
-   gap: 12px;
+   flex-direction: column;
+   gap: var(--gutter-md);
+   padding: var(--padding-xl) var(--padding-sm);
+}
+
+.feature-icon {
+   padding: var(--padding-sm);
+   display: flex;
+   justify-content: center;
    align-items: center;
-   margin-bottom: 12px;
+   border-radius: var(--border-radius-sm);
+   opacity: 0.7;
+   cursor: pointer;
+}
+
+.active-feature-icon {
+   background-color: hsla(35, 85%, 55%, 0.4);
+}
+
+.feature-icon:hover {
+   background-color: hsla(35, 85%, 55%, 0.2);
 }
 
 @media (width < 80rem) {

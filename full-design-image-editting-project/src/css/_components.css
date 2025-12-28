@@ -1,7 +1,7 @@
 /* ---- button ---- */
 
 .btn {
-   padding: 12px 24px;
+   padding: var(--padding-sm) var(--padding-md);
    border-radius: var(--border-radius-sm);
    cursor: pointer;
    transition: all 0.1s ease-in-out;
@@ -23,6 +23,13 @@
 
 .btn-primary:active {
    background-color: var(--text-primary-dark);
+}
+
+.button-group {
+   display: flex;
+   gap: 12px;
+   align-items: center;
+   margin-bottom: 12px;
 }
 
 /* Outline */
@@ -138,6 +145,8 @@ input[type="range"] {
 #navbar {
    padding: var(--padding-sm) var(--padding-xl);
    background-color: var(--color-white);
+   box-shadow: var(--box-shadow-soft);
+   border-bottom: 1.5px solid #f5f4f2;
 }
 
 .navbar__left {

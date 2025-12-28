@@ -9,7 +9,7 @@ const Navbar = () => {
                <BrushIcon size="30" color="#ee9d2b" />
                <h2 style={{ letterSpacing: "-0.1rem" }}>FuturisticEditor</h2>
             </div>
-            <ul className="row" style={{ "--gap": "2.5em" }}>
+            <ul className="row" style={{ "--gap": "2em" }}>
                <li>
                   <span>File</span>
                </li>
