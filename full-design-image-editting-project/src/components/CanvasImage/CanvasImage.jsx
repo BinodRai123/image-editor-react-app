@@ -21,7 +21,7 @@ const CanvasImage = () => {
       canvasContext.current = canvasRef.current?.getContext("2d");
    }, []);
 
-   const hangleImageUploadInCanvas = useCallback((e) => {
+   const hangleImageUploadInCanvas = (e) => {
       const file = e.target?.files[0];
       // If user click "choose file" and cancles
       // then it will return from here
@@ -30,13 +30,18 @@ const CanvasImage = () => {
       //retrun if user donot select image file
       //and update the setimagestatus
       if (!file.type.startsWith("image/")) {
+         //input file store here to reset
+         //when another file is selected
+         const input = e.target;
          setImageStatus({
             sucess: false,
             uploading: false,
             errorMessage: "only image file are supported",
          });
          setModal(true);
-         console.log("setmodal is true now");
+
+         //Reset file input
+         input.value = "";
          return;
       }
 
@@ -67,7 +72,7 @@ const CanvasImage = () => {
 
       //This will tell the image has sucessfully uploaded
       setImageStatus((prev) => ({ ...prev, sucess: true }));
-   }, []);
+   };
 
    return (
       <>
@@ -89,17 +94,19 @@ const CanvasImage = () => {
             </div>
 
             {/* Error Message */}
-            {modal && (
+            {modal ? (
                <div onClick={toggleModalOverlay} className="modal-overlay">
                   {/*
-            //e.stopPropagation() prevent it from clicking 
-            //while it's parent has onClick //which is called
-            preventing event bubbling 
-            */}
+                  //e.stopPropagation() prevent it from clicking 
+                  //while it's parent has onClick //which is called
+                  preventing event bubbling 
+                  */}
                   <div className="modal" onClick={(e) => e.stopPropagation()}>
                      <h1 align="center">{imageStauts.errorMessage}</h1>
                   </div>
                </div>
+            ) : (
+               <div></div>
             )}
          </section>
       </>
