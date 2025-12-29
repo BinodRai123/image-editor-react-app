@@ -1,3 +1,4 @@
+import CanvasImage from "./components/CanvasImage/CanvasImage";
 import Navbar from "./components/Navbar/Navbar";
 import PhotoEditorSidebar from "./components/PhotoEditorSidebar/PhotoEditorSidebar";
 import Featureicon from "./components/featureIcon/Featureicon";
@@ -11,7 +12,7 @@ const App = () => {
             <section className="main__left">
                <Featureicon />
             </section>
-            <section className="main__center" style={{ flexGrow: "1" }}></section>
+            <CanvasImage />
             <PhotoEditorSidebar />
          </main>
       </section>

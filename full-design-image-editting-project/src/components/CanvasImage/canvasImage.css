@@ -1,0 +1,11 @@
+/* ---- canvas image container ----- */
+.canvas-image-container {
+   flex-grow: 1;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+input[type="file"] {
+   display: none;
+}

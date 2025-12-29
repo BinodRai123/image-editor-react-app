@@ -33,7 +33,7 @@ const filterData = [
    },
    {
       SectionName: "Effects",
-      icon: <BrushIcon size="20" color="#ee9d2b" />,
+      icon: <BrushIcon size="25" color="#ee9d2b" />,
       controls: [
          {
             id: "hue",
