@@ -1,7 +1,9 @@
+import BrushIcon from "../icons/BrushIcon";
+import TuneIcon from "../icons/TuneIcon";
 const filterData = [
    {
       SectionName: "Adjust",
-      icon: "",
+      icon: <TuneIcon size={25} color="#ee9d2b" />,
       controls: [
          {
             id: "brightness",
@@ -31,7 +33,7 @@ const filterData = [
    },
    {
       SectionName: "Effects",
-      icon: "",
+      icon: <BrushIcon size="20" color="#ee9d2b" />,
       controls: [
          {
             id: "hue",

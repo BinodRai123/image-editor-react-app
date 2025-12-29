@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
-import "./PhotoEditorSidebar.css";
 import FilterConstants from "./filtersData";
+import "./PhotoEditorSidebar.css";
 
 const { filterData, PresetData } = FilterConstants;
 
@@ -87,7 +87,10 @@ const PhotoEditorSidebar = () => {
             {activeTab === "Adjust" &&
                filterData.map((section) => (
                   <div key={section.SectionName} className="card">
-                     <h4>{section.SectionName}</h4>
+                     <div className="row">
+                        {section.icon ? <>{section.icon}</> : "error"}
+                        <h4>{section.SectionName}</h4>
+                     </div>
 
                      <div className="slider-stack">
                         {section.controls.map((control) => (
