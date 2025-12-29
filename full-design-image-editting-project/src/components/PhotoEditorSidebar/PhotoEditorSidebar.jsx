@@ -1,54 +1,33 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "./PhotoEditorSidebar.css";
-const filterData = [
-   {
-      SectionName: "Adjust",
-      icon: "",
-      controls: [
-         { id: "brightness", label: "Brightness", min: -100, max: 100, defaultValue: 0, unit: "" },
-         { id: "contrast", label: "Contrast", min: -100, max: 100, defaultValue: 15, unit: "", prefix: "+" },
-         { id: "exposure", label: "Exposure", min: -100, max: 100, defaultValue: 20, displayValue: "+0.2" },
-         { id: "saturation", label: "Saturation", min: -100, max: 100, defaultValue: 0, unit: "" },
-      ],
-   },
-   {
-      SectionName: "Effects",
-      icon: "",
-      controls: [
-         { id: "hue", label: "Hue Rotate", min: 0, max: 360, defaultValue: 0, unit: "°" },
-         { id: "blur", label: "Blur", min: 0, max: 20, defaultValue: 0, unit: "px" },
-         { id: "grayscale", label: "Grayscale", min: 0, max: 100, defaultValue: 0, unit: "%" },
-         { id: "sepia", label: "Sepia", min: 0, max: 100, defaultValue: 0, unit: "%" },
-         { id: "opacity", label: "Opacity", min: 0, max: 100, defaultValue: 100, unit: "%" },
-         { id: "invert", label: "Invert", min: 0, max: 100, defaultValue: 0, unit: "%" },
-      ],
-   },
-];
+import FilterConstants from "./filtersData";
+
+const { filterData, PresetData } = FilterConstants;
+
+const getInitialFilterState = (data) => {
+   return data.reduce((acc, section) => {
+      section.controls.forEach((control) => {
+         acc[control.id] = control.defaultValue;
+      });
+      return acc;
+   }, {});
+};
 
 const PhotoEditorSidebar = () => {
    const [activeTab, setActiveTab] = useState("Adjust");
+   const [filterDatas, setFilterDatas] = useState(() => getInitialFilterState(filterData));
    const tabs = ["Adjust", "Layers", "History"];
 
-   const filters = [
-      { name: "Original", class: "filter-original", style: {} },
-      {
-         name: "Vintage",
-         class: "filter-vintage",
-         style: { backgroundColor: "#f4e4bc", filter: "sepia(0.5)" },
-      },
-      {
-         name: "Cold",
-         class: "filter-cold",
-         style: { backgroundColor: "#e0f2fe", filter: "hue-rotate(180deg)" },
-      },
-      { name: "Warm", class: "filter-warm", style: { backgroundColor: "#ffedd5", filter: "saturate(1.5)" } },
-      {
-         name: "Dramatic",
-         class: "filter-dramatic",
-         style: { backgroundColor: "#18181b", filter: "contrast(1.2)" },
-      },
-      { name: "Darken", class: "filter-darken", style: { backgroundColor: "#0f172a", opacity: 0.6 } },
-   ];
+   console.log(filterDatas);
+
+   const handleFilterRangeChange = (id) => (event) => {
+      const value = Number(event.target.value);
+
+      setFilterDatas((prev) => ({
+         ...prev,
+         [id]: value,
+      }));
+   };
 
    return (
       <aside className="editor-sidebar">
@@ -79,18 +58,16 @@ const PhotoEditorSidebar = () => {
                      {filter.controls.map((control) => (
                         <div key={control.id} className="slider-container">
                            <div className="slider-info">
-                              <label>{control.label}</label>
-                              <span style={{ fontSize: "0.8rem" }}>
-                                 {control.displayValue ||
-                                    `${control.prefix || ""}${control.defaultValue}${control.unit}`}
-                              </span>
+                              <span>{control.label}</span>
+                              <span>{filterDatas[control.id]}</span>
                            </div>
                            <input
                               type="range"
                               className="custom-range"
                               min={control.min}
                               max={control.max}
-                              defaultValue={control.defaultValue}
+                              value={filterDatas[control.id]}
+                              onChange={handleFilterRangeChange(control.id)}
                            />
                         </div>
                      ))}
@@ -101,7 +78,7 @@ const PhotoEditorSidebar = () => {
             <section className="control-group">
                <h3>Filter Presets</h3>
                <div className="filter-grid">
-                  {filters.map((filter) => (
+                  {PresetData.map((filter) => (
                      <button
                         key={filter.name}
                         className={`preset-card ${filter.name === "Original" ? "active" : ""}`}
@@ -125,8 +102,6 @@ const PhotoEditorSidebar = () => {
                </div>
             </section>
          </div>
-
-         {/* Filter Presets */}
 
          {/* Footer Action */}
          <div className="sidebar-footer">

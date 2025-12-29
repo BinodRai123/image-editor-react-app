@@ -69,8 +69,9 @@
 .card {
    padding: var(--gutter-md);
    background: var(--color-white);
+   border: 1px solid var(--bg-light);
    border-radius: var(--border-radius-md);
-   box-shadow: var(--box-shadow-card);
+   box-shadow: var(--box-shadow-soft);
    margin: var(--margin-md);
 }
 
