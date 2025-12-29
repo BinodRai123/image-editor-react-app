@@ -1,109 +1,145 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import "./PhotoEditorSidebar.css";
 import FilterConstants from "./filtersData";
 
 const { filterData, PresetData } = FilterConstants;
 
-const getInitialFilterState = (data) => {
-   return data.reduce((acc, section) => {
+/* -----------------------------------------
+   Utils
+------------------------------------------ */
+const getInitialFilterState = (data) =>
+   data.reduce((acc, section) => {
       section.controls.forEach((control) => {
          acc[control.id] = control.defaultValue;
       });
       return acc;
    }, {});
-};
 
+/* return this in object
+{ 
+ brightness: 0, 
+   contrast: 15, 
+   exposure: 20, 
+   saturation: 0, 
+   hue: 0, 
+   blur: 0, 
+   grayscale: 0, 
+   sepia: 0, 
+   opacity: 100, 
+   invert: 0 
+  } */
+
+/* -----------------------------------------
+   Component
+------------------------------------------ */
 const PhotoEditorSidebar = () => {
-   const [activeTab, setActiveTab] = useState("Adjust");
-   const [filterDatas, setFilterDatas] = useState(() => getInitialFilterState(filterData));
    const tabs = ["Adjust", "Layers", "History"];
 
-   console.log(filterDatas);
+   const [activeTab, setActiveTab] = useState("Adjust");
+   const [filters, setFilters] = useState(() => getInitialFilterState(filterData));
+   const [activePreset, setActivePreset] = useState("Original");
 
-   const handleFilterRangeChange = (id) => (event) => {
-      const value = Number(event.target.value);
+   /* ---- useCallback help to memorize the function ----*/
+   /* ---- on every re-render which will avoid ----*/
+   /* ---- Creating new function when react re-render ----*/
+   const handleRangeChange = useCallback((event) => {
+      const { id, value } = event.target;
 
-      setFilterDatas((prev) => ({
+      setFilters((prev) => ({
          ...prev,
-         [id]: value,
+         [id]: Number(value),
       }));
-   };
+   }, []);
+
+   /* Memoized preset preview style */
+   const getPresetPreviewStyle = useCallback(
+      (preset) => ({
+         backgroundImage:
+            "url('https://lh3.googleusercontent.com/aida-public/AB6AXuDa1tDzYwxRMFylULhlUaolLWmx7rDkhJphX3fZt4bXLmfa054Xp0zEW-DjyEjtfbEUiSraqZGaUQ4C8D9uefXMrQ6lwVnP5WIAlXUvhf-PPVhNEBU2RJ98xsqdo6dCHfZRBqUuIKSDTGO15Q8Sp-h94B4grd22p5QuBrcst5XYAejlazFPPy68wvtDXYVSfGeb6f0LZ8tJRiOhwlvV3Kjl7j-bfWzDki2MzBNz_nSZNRSqDWYMxPMqFpkWe9PcJKm-dz7YZLY4vQ')",
+         filter: preset.style.filter,
+         opacity: preset.style.opacity ?? 0.8,
+      }),
+      []
+   );
+
+   /* ---- Show which preset is active ----  */
+   const handleActivePreset = useCallback((name) => {
+      setActivePreset(name);
+   }, []);
 
    return (
       <aside className="editor-sidebar">
-         {/* Tab Navigation */}
+         {/* Tabs */}
          <div className="tab-header">
             {tabs.map((tab) => (
                <button
                   key={tab}
-                  onClick={() => setActiveTab(tab)}
                   className={`tab-button ${activeTab === tab ? "active" : ""}`}
+                  onClick={() => setActiveTab(tab)}
                >
                   {tab}
                </button>
             ))}
          </div>
 
-         {/* Scrollable Content */}
          <div className="sidebar-content">
-            {filterData.map((filter) => (
-               <div key={filter.SectionName} className="card">
-                  {/* SectionName Header */}
-                  <div>
-                     <h4>{filter.SectionName}</h4>
-                  </div>
+            {/* Adjust Tab */}
+            {activeTab === "Adjust" &&
+               filterData.map((section) => (
+                  <div key={section.SectionName} className="card">
+                     <h4>{section.SectionName}</h4>
 
-                  {/* Slider List */}
-                  <div className="slider-stack">
-                     {filter.controls.map((control) => (
-                        <div key={control.id} className="slider-container">
-                           <div className="slider-info">
-                              <span>{control.label}</span>
-                              <span>{filterDatas[control.id]}</span>
+                     <div className="slider-stack">
+                        {section.controls.map((control) => (
+                           <div key={control.id} className="slider-container">
+                              <div className="slider-info">
+                                 <span>{control.label}</span>
+                                 <span>{filters[control.id]}</span>
+                              </div>
+
+                              <input
+                                 id={control.id}
+                                 type="range"
+                                 className="custom-range"
+                                 min={control.min}
+                                 max={control.max}
+                                 value={filters[control.id]}
+                                 onChange={handleRangeChange}
+                              />
                            </div>
-                           <input
-                              type="range"
-                              className="custom-range"
-                              min={control.min}
-                              max={control.max}
-                              value={filterDatas[control.id]}
-                              onChange={handleFilterRangeChange(control.id)}
-                           />
-                        </div>
-                     ))}
+                        ))}
+                     </div>
                   </div>
-               </div>
-            ))}
+               ))}
 
-            <section className="control-group">
-               <h3>Filter Presets</h3>
-               <div className="filter-grid">
-                  {PresetData.map((filter) => (
-                     <button
-                        key={filter.name}
-                        className={`preset-card ${filter.name === "Original" ? "active" : ""}`}
-                     >
-                        <div
-                           className="filter-preview"
-                           style={{ backgroundColor: filter.style.backgroundColor }}
+            {/* Presets */}
+            {activeTab === "Adjust" && (
+               <section className="control-group">
+                  <h3>Filter Presets</h3>
+
+                  <div className="filter-grid">
+                     {PresetData.map((preset) => (
+                        <button
+                           key={preset.name}
+                           className={`preset-card ${preset.name === activePreset ? "active" : ""}`}
+                           onClick={() => handleActivePreset(preset.name)}
                         >
                            <div
-                              className="preview-image"
-                              style={{
-                                 backgroundImage: `url('https://lh3.googleusercontent.com/aida-public/AB6AXuDa1tDzYwxRMFylULhlUaolLWmx7rDkhJphX3fZt4bXLmfa054Xp0zEW-DjyEjtfbEUiSraqZGaUQ4C8D9uefXMrQ6lwVnP5WIAlXUvhf-PPVhNEBU2RJ98xsqdo6dCHfZRBqUuIKSDTGO15Q8Sp-h94B4grd22p5QuBrcst5XYAejlazFPPy68wvtDXYVSfGeb6f0LZ8tJRiOhwlvV3Kjl7j-bfWzDki2MzBNz_nSZNRSqDWYMxPMqFpkWe9PcJKm-dz7YZLY4vQ')`,
-                                 filter: filter.style.filter,
-                                 opacity: filter.style.opacity || 0.8,
-                              }}
-                           ></div>
-                        </div>
-                        <span style={{ fontSize: "0.7rem" }}>{filter.name}</span>
-                     </button>
-                  ))}
-               </div>
-            </section>
+                              className="filter-preview"
+                              style={{ backgroundColor: preset.style.backgroundColor }}
+                           >
+                              <div className="preview-image" style={getPresetPreviewStyle(preset)} />
+                           </div>
+
+                           <span style={{ fontSize: "0.7rem" }}>{preset.name}</span>
+                        </button>
+                     ))}
+                  </div>
+               </section>
+            )}
          </div>
 
-         {/* Footer Action */}
+         {/* Footer */}
          <div className="sidebar-footer">
             <button className="btn-auto-enhance">Auto Enhance</button>
          </div>
