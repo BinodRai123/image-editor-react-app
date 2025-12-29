@@ -1,11 +1,4 @@
-
-
-const ModalOverlay = () => {
-   const [modal, setModal] = useState(false);
-
-   const toggleModalOverlay = () => {
-      setModal(!modal);
-   };
+const ModalOverlay = ({ modal, toggleModalOverlay, value }) => {
    return (
       <>
          {modal && (
@@ -16,8 +9,7 @@ const ModalOverlay = () => {
             preventing event bubbling 
             */}
                <div className="modal" onClick={(e) => e.stopPropagation()}>
-                  <h1>hello everyone</h1>
-                  <h2>this is me</h2>
+                  <h1 align="center">{value}</h1>
                </div>
             </div>
          )}

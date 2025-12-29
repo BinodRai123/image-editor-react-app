@@ -1,6 +1,6 @@
 /* -------Container Style ----------- */
 .container {
-   padding: var(--padding-md);
+   padding: var(--padding-sm);
    margin-inline: auto;
    max-width: 80rem;
    display: flex;

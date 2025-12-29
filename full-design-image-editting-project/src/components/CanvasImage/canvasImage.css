@@ -1,5 +1,6 @@
 /* ---- canvas image container ----- */
 .canvas-image-container {
+   position: relative;
    flex-grow: 1;
    display: flex;
    justify-content: center;
@@ -8,4 +9,40 @@
 
 input[type="file"] {
    display: none;
+}
+
+/* ---- UPLOAD BUTTON ---- */
+.upload-btn {
+   position: absolute;
+   margin: var(--margin-sm);
+   top: 0;
+   left: 0;
+   padding: var(--padding-sm) var(--padding-sm);
+   background-color: #43a330; /* primary color */
+   color: var(--color-white);
+   font-weight: 800;
+   font-size: var(--font-size-md);
+   border-radius: var(--border-radius-md);
+   border: none;
+   outline: none;
+   cursor: pointer;
+   transition: all ease 0.2s;
+}
+
+.upload-btn:hover {
+   background-color: #2d8a1aec; /* slightly darker on hover */
+}
+
+.upload-btn:active {
+   background-color: #188502; /* active click effect */
+}
+
+/* ====================
+   Canvas Image 
+==================== */
+
+#canvas-image-preview {
+   max-height: 80%;
+   max-width: 80%;
+   /* aspect-ratio: 16/9; */
 }

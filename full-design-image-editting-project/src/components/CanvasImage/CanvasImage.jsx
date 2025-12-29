@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./canvasImage.css";
+import ModalOverlay from "../modalOverlay/ModalOverlay";
 
 const CanvasImage = () => {
    const [imageStauts, setImageStatus] = useState({ sucess: false, uploading: false, errorMessage: null });
@@ -7,6 +8,12 @@ const CanvasImage = () => {
    //holds the canvas element
    const canvasRef = useRef(null);
    const canvasContext = useRef(null);
+   const [modal, setModal] = useState(false);
+   console.log(modal);
+
+   const toggleModalOverlay = () => {
+      setModal(!modal);
+   };
 
    useEffect(() => {
       //It hold the value of getContext("2d"), which will not
@@ -14,7 +21,7 @@ const CanvasImage = () => {
       canvasContext.current = canvasRef.current?.getContext("2d");
    }, []);
 
-   const hangleImageUploadInCanvas = (e) => {
+   const hangleImageUploadInCanvas = useCallback((e) => {
       const file = e.target?.files[0];
       // If user click "choose file" and cancles
       // then it will return from here
@@ -28,6 +35,8 @@ const CanvasImage = () => {
             uploading: false,
             errorMessage: "only image file are supported",
          });
+         setModal(true);
+         console.log("setmodal is true now");
          return;
       }
 
@@ -58,27 +67,39 @@ const CanvasImage = () => {
 
       //This will tell the image has sucessfully uploaded
       setImageStatus((prev) => ({ ...prev, sucess: true }));
-   };
+   }, []);
 
    return (
       <>
          <section className="canvas-image-container">
             {/* Canvas element donot show until imageStaus is true */}
             <canvas
-               id="image-canvas"
+               id="canvas-image-preview"
                style={{ display: imageStauts.sucess == true ? "block" : "none" }}
                ref={canvasRef}
             ></canvas>
-
-            {imageStauts.sucess === false && (
-               <>
-                  <label htmlFor="image-upload" className="btn upload-btn">
-                     Choose File
-                  </label>
-                  {/* //hides the input field and style 
+            {/* Upload Image Button */}
+            <div>
+               <label htmlFor="image-upload" className="btn upload-btn">
+                  Upload Image
+               </label>
+               {/* //hides the input field and style 
                   //the label for uploading images */}
-                  <input type="file" id="image-upload" onChange={hangleImageUploadInCanvas} />
-               </>
+               <input type="file" id="image-upload" onChange={hangleImageUploadInCanvas} />
+            </div>
+
+            {/* Error Message */}
+            {modal && (
+               <div onClick={toggleModalOverlay} className="modal-overlay">
+                  {/*
+            //e.stopPropagation() prevent it from clicking 
+            //while it's parent has onClick //which is called
+            preventing event bubbling 
+            */}
+                  <div className="modal" onClick={(e) => e.stopPropagation()}>
+                     <h1 align="center">{imageStauts.errorMessage}</h1>
+                  </div>
+               </div>
             )}
          </section>
       </>
