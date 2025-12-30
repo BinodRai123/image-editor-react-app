@@ -164,6 +164,7 @@ const CanvasImage = () => {
                   {/* Action Button */}
                   <button
                      className="btn-again"
+                     //Click the uploadBtn when click try again button
                      onClick={() => {
                         toggleModalOverlay();
                         uploadBtnRef?.current?.click();

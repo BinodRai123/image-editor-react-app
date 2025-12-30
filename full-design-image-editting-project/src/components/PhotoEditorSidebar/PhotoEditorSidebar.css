@@ -2,7 +2,7 @@
 .editor-sidebar {
    display: flex;
    flex-direction: column;
-   width: fit-content;
+   width: 23rem;
    background-color: var(--color-white);
    border-left: 1px solid #f4f3f0;
    z-index: 20;

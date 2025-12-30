@@ -59,9 +59,9 @@ function parseFilters(filterString) {
    Component
 ------------------------------------------ */
 const PhotoEditorSidebar = () => {
-   const tabs = ["Adjust", "Layers", "History"];
+   const tabs = ["All", "Filters", "Presets"];
    const { globalFilterData, setGlobalFilterData } = useContext(reactContext);
-   const [activeTab, setActiveTab] = useState("Adjust");
+   const [activeTab, setActiveTab] = useState("All");
    const [activePreset, setActivePreset] = useState("Original");
 
    /* ---- useCallback help to memorize the function ----*/
@@ -122,7 +122,7 @@ const PhotoEditorSidebar = () => {
 
          <div className="sidebar-content">
             {/* Adjust Tab */}
-            {activeTab === "Adjust" &&
+            {(activeTab === "All" || activeTab === "Filters") &&
                filterData.map((section) => (
                   <div key={section.SectionName} className="card">
                      <div className="row">
@@ -154,7 +154,7 @@ const PhotoEditorSidebar = () => {
                ))}
 
             {/* Presets */}
-            {activeTab === "Adjust" && (
+            {(activeTab === "All" || activeTab === "Presets") && (
                <section className="control-group">
                   <h3>Filter Presets</h3>
 
