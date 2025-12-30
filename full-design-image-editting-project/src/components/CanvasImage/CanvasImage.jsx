@@ -1,26 +1,36 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import "./canvasImage.css";
 import ModalOverlay from "../modalOverlay/ModalOverlay";
+import { reactContext } from "../../WrapFilterData/WrapperFilters";
 
 const CanvasImage = () => {
+   const [filterData, setFiltersData] = useContext(reactContext);
    const [imageStauts, setImageStatus] = useState({ sucess: false, uploading: false, errorMessage: null });
    const [image, setImage] = useState(null);
    //holds the canvas element
    const canvasRef = useRef(null);
    const canvasContext = useRef(null);
    const [modal, setModal] = useState(false);
-   console.log(modal);
+   console.log(filterData);
 
+   //Toggle Modal components which will appear and disappear
    const toggleModalOverlay = () => {
       setModal(!modal);
    };
 
+   //It hold the value of getContext("2d"), which will not
+   //lost while re-rendering
    useEffect(() => {
-      //It hold the value of getContext("2d"), which will not
-      //lost while re-rendering
       canvasContext.current = canvasRef.current?.getContext("2d");
    }, []);
 
+   //Apply Filter to Image immediately when
+   //Filter Data or Image Change
+   useEffect(() => {
+      applyFilters();
+   }, [filterData, image]);
+
+   //Upload Image in Canvas
    const hangleImageUploadInCanvas = (e) => {
       const file = e.target?.files[0];
       // If user click "choose file" and cancles
@@ -74,10 +84,29 @@ const CanvasImage = () => {
       setImageStatus((prev) => ({ ...prev, sucess: true }));
    };
 
+   //Applying Filters in Canvas Image
+   const applyFilters = () => {
+      //if there is no image then return from here
+      if (image === null) return;
+      let allfiltervalue = "";
+
+      for (const key in filterData) {
+         // console.log(`${key} : ${filterData[key]}`);
+         allfiltervalue += `${key}(${filterData[key]["value"]}${filterData[key]["unit"]}) `;
+      }
+
+      console.log(allfiltervalue);
+
+      let canvasCtx = canvasContext.current;
+      canvasCtx.clearRect(0, 0, image.width, image.height);
+      canvasCtx.filter = `${allfiltervalue.trim()}`;
+      canvasCtx.drawImage(image, 0, 0, canvasRef.current.width, canvasRef.current.height);
+   };
+
    return (
       <>
          <section className="canvas-image-container">
-            {/* Canvas element donot show until imageStaus is true */}
+            {/* Canvas element willnot show until imageStaus is true */}
             <canvas
                id="canvas-image-preview"
                style={{ display: imageStauts.sucess == true ? "block" : "none" }}
@@ -94,20 +123,11 @@ const CanvasImage = () => {
             </div>
 
             {/* Error Message */}
-            {modal ? (
-               <div onClick={toggleModalOverlay} className="modal-overlay">
-                  {/*
-                  //e.stopPropagation() prevent it from clicking 
-                  //while it's parent has onClick //which is called
-                  preventing event bubbling 
-                  */}
-                  <div className="modal" onClick={(e) => e.stopPropagation()}>
-                     <h1 align="center">{imageStauts.errorMessage}</h1>
-                  </div>
-               </div>
-            ) : (
-               <div></div>
-            )}
+            <ModalOverlay
+               modal={modal}
+               toggleModalOverlay={toggleModalOverlay}
+               value={imageStauts.errorMessage}
+            />
          </section>
       </>
    );

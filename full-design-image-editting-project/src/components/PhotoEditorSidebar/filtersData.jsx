@@ -22,8 +22,8 @@ const filterData = [
             unit: "%",
          },
          {
-            id: "saturation",
-            label: "Saturation",
+            id: "saturate",
+            label: "saturation",
             min: 0,
             max: 200,
             defaultValue: 100,
@@ -36,12 +36,12 @@ const filterData = [
       icon: <BrushIcon size="25" color="#ee9d2b" />,
       controls: [
          {
-            id: "hue",
+            id: "hue-rotate",
             label: "Hue Rotate",
             min: 0,
             max: 360,
             defaultValue: 0,
-            unit: "°",
+            unit: "deg",
          },
          {
             id: "blur",
