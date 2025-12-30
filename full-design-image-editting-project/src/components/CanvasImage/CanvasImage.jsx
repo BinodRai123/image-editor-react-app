@@ -28,6 +28,7 @@ const CanvasImage = () => {
    //Apply Filter to Image immediately when
    //Filter Data or Image Change
    useEffect(() => {
+      if (!image) return;
       applyFilters();
       // Only generate the expensive DataURL after the user stops sliding (200ms)
       const handler = setTimeout(() => {

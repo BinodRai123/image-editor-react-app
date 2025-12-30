@@ -1,0 +1,6 @@
+# Allow all crawlers to access the entire site
+User-agent: *
+Allow: /
+
+# Link to your sitemap (Crucial for SEO)
+Sitemap: http://localhost:5173/

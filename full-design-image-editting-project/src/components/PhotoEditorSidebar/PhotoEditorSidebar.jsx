@@ -79,6 +79,7 @@ const PhotoEditorSidebar = () => {
             [id]: { ...prev[id], value: Number(value) },
          };
       });
+
       setActivePreset("");
    }, []);
 
@@ -91,8 +92,7 @@ const PhotoEditorSidebar = () => {
    /* Memoized preset preview style */
    const getPresetPreviewStyle = useCallback((preset) => {
       return {
-         backgroundImage:
-            "url('https://lh3.googleusercontent.com/aida-public/AB6AXuDa1tDzYwxRMFylULhlUaolLWmx7rDkhJphX3fZt4bXLmfa054Xp0zEW-DjyEjtfbEUiSraqZGaUQ4C8D9uefXMrQ6lwVnP5WIAlXUvhf-PPVhNEBU2RJ98xsqdo6dCHfZRBqUuIKSDTGO15Q8Sp-h94B4grd22p5QuBrcst5XYAejlazFPPy68wvtDXYVSfGeb6f0LZ8tJRiOhwlvV3Kjl7j-bfWzDki2MzBNz_nSZNRSqDWYMxPMqFpkWe9PcJKm-dz7YZLY4vQ')",
+         backgroundImage: "",
          filter: preset.style.filters ?? "gray(10px)",
          opacity: preset.style.opacity ?? 1,
       };
@@ -127,14 +127,16 @@ const PhotoEditorSidebar = () => {
                   <div key={section.SectionName} className="card">
                      <div className="row">
                         {section.icon ? <>{section.icon}</> : "error"}
-                        <h4>{section.SectionName}</h4>
+                        <h1>{section.SectionName}</h1>
                      </div>
 
                      <div className="slider-stack">
                         {section.controls.map((control) => (
                            <div key={control.id} className="slider-container">
                               <div className="slider-info">
-                                 <span>{control.label}</span>
+                                 <label htmlFor={`${control.id}`} aria-label={`${control.id}`}>
+                                    {control.label}
+                                 </label>
                                  <span>{globalFilterData[`${control?.id}`]["value"]}</span>
                               </div>
 
@@ -156,7 +158,7 @@ const PhotoEditorSidebar = () => {
             {/* Presets */}
             {(activeTab === "All" || activeTab === "Presets") && (
                <section className="control-group">
-                  <h3>Filter Presets</h3>
+                  <h1 style={{ marginBottom: "0.5rem" }}>Filter Presets</h1>
 
                   <div className="filter-grid">
                      {PresetData.map((preset, id) => (
@@ -169,7 +171,11 @@ const PhotoEditorSidebar = () => {
                               className="filter-preview"
                               style={{ backgroundColor: preset.style.backgroundColor }}
                            >
-                              <div className="preview-image" style={getPresetPreviewStyle(preset)} />
+                              <div
+                                 className="preview-image"
+                                 style={getPresetPreviewStyle(preset)}
+                                 alt="Preset Background Image"
+                              />
                            </div>
 
                            <span style={{ fontSize: "0.7rem" }}>{preset.name}</span>

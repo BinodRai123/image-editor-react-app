@@ -19,7 +19,7 @@ input[type="file"] {
    top: 0;
    left: 0;
    padding: var(--padding-sm) var(--padding-sm);
-   background-color: #43a330; /* primary color */
+   background-color: var(--text-success-color); /* primary color */
    color: var(--color-white);
    font-weight: 800;
    font-size: var(--font-size-md);

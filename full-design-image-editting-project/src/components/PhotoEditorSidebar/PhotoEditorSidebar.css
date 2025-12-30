@@ -2,7 +2,7 @@
 .editor-sidebar {
    display: flex;
    flex-direction: column;
-   width: 23rem;
+   min-width: 22rem;
    background-color: var(--color-white);
    border-left: 1px solid #f4f3f0;
    z-index: 20;
@@ -44,7 +44,7 @@
    display: flex;
    flex-direction: column;
    gap: var(--gutter-sm);
-   overflow-y: auto;
+   overflow-y: auto; /* Make it's inside content scrollable */
    padding: var(--padding-xs);
 }
 
@@ -89,21 +89,24 @@ presets
 
 .filter-grid {
    display: grid;
-   grid-template-columns: repeat(3, 6rem);
+   justify-content: center;
+   grid-template-columns: repeat(3, 5.8rem);
    grid-template-rows: repeat(2, 7rem);
    gap: var(--gutter-md); /* Optional: adds spacing between items */
-   aspect-ratio: 3 / 2;
+   aspect-ratio: 1 / 1;
 }
 
 .preset-card {
+   background-color: var(--bg-light);
+
    display: flex;
    flex-direction: column;
    align-items: center;
    gap: 8px;
    padding: 8px;
    border-radius: 8px;
-   border: 1px solid #f3f4f6;
-   background: none;
+   border: 1px solid #b6b6b6c4;
+   /* background: none; */
    cursor: pointer;
    transition: background 0.2s;
 }
@@ -123,6 +126,14 @@ presets
 }
 
 .preview-image {
+   background-image: -webkit-image-set(
+      url("/public/background-image/presets-backgroundImage.webp") 1x,
+      url("/public/background-image/presets-backgroundImage.webp") 2x
+   );
+   background-image: image-set(
+      url("/public/background-image/presets-backgroundImage.webp") 1x,
+      url("/public/background-image/presets-backgroundImage.webp") 2x
+   );
    width: 100%;
    height: 100%;
    background-size: cover;
