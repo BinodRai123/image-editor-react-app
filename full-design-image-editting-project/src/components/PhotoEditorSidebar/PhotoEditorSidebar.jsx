@@ -20,8 +20,6 @@ const getInitialFilterState = (filterData) => {
    }, {});
 };
 
-console.log(getInitialFilterState(filterData));
-
 /* return this in object
 { 
  brightness: 0, 
@@ -41,10 +39,9 @@ console.log(getInitialFilterState(filterData));
 ------------------------------------------ */
 const PhotoEditorSidebar = () => {
    const tabs = ["Adjust", "Layers", "History"];
-   const [filtr, setGlobalFilterData] = useContext(reactContext);
+   const [globalFilterData, setGlobalFilterData] = useContext(reactContext);
 
    const [activeTab, setActiveTab] = useState("Adjust");
-   const [filters, setFilters] = useState(() => getInitialFilterState(filterData));
    const [activePreset, setActivePreset] = useState("Original");
 
    /* ---- useCallback help to memorize the function ----*/
@@ -52,20 +49,16 @@ const PhotoEditorSidebar = () => {
    /* ---- Creating new function when react re-render ----*/
    const handleRangeChange = useCallback((event) => {
       const { id, value } = event.target;
-
-      setFilters((prev) => ({
+      setGlobalFilterData((prev) => ({
          ...prev,
          [id]: { ...prev[id], value: Number(value) },
       }));
    }, []);
 
    useEffect(() => {
-      setGlobalFilterData(filters);
-   }, [filters]);
+      setGlobalFilterData(() => getInitialFilterState(filterData));
+   }, []);
 
-   // console.log("filters => ", filters);
-   // // console.log(filterData);
-   // console.log("global filter => ", filtr);
    /* Memoized preset preview style */
    const getPresetPreviewStyle = useCallback(
       (preset) => ({
@@ -112,7 +105,7 @@ const PhotoEditorSidebar = () => {
                            <div key={control.id} className="slider-container">
                               <div className="slider-info">
                                  <span>{control.label}</span>
-                                 <span>{filters[control.id]["value"]}</span>
+                                 <span>{globalFilterData[`${control?.id}`]["value"]}</span>
                               </div>
 
                               <input
@@ -121,7 +114,7 @@ const PhotoEditorSidebar = () => {
                                  className="custom-range"
                                  min={control.min}
                                  max={control.max}
-                                 value={filters[control.id]["value"]}
+                                 value={globalFilterData[`${control.id}`]["value"]}
                                  onChange={handleRangeChange}
                               />
                            </div>

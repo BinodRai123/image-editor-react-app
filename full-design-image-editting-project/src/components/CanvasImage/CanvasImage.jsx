@@ -11,7 +11,6 @@ const CanvasImage = () => {
    const canvasRef = useRef(null);
    const canvasContext = useRef(null);
    const [modal, setModal] = useState(false);
-   console.log(filterData);
 
    //Toggle Modal components which will appear and disappear
    const toggleModalOverlay = () => {
@@ -39,6 +38,7 @@ const CanvasImage = () => {
 
       //retrun if user donot select image file
       //and update the setimagestatus
+
       if (!file.type.startsWith("image/")) {
          //input file store here to reset
          //when another file is selected
@@ -49,7 +49,6 @@ const CanvasImage = () => {
             errorMessage: "only image file are supported",
          });
          setModal(true);
-
          //Reset file input
          input.value = "";
          return;
@@ -74,6 +73,7 @@ const CanvasImage = () => {
          canvas.width = img.width;
          canvas.height = img.height;
          canvasCtx.drawImage(img, 0, 0, canvas.width, canvas.height);
+         ResetFilter();
       };
 
       img.onerror = () => {
@@ -91,17 +91,29 @@ const CanvasImage = () => {
       let allfiltervalue = "";
 
       for (const key in filterData) {
-         // console.log(`${key} : ${filterData[key]}`);
          allfiltervalue += `${key}(${filterData[key]["value"]}${filterData[key]["unit"]}) `;
       }
-
-      console.log(allfiltervalue);
 
       let canvasCtx = canvasContext.current;
       canvasCtx.clearRect(0, 0, image.width, image.height);
       canvasCtx.filter = `${allfiltervalue.trim()}`;
       canvasCtx.drawImage(image, 0, 0, canvasRef.current.width, canvasRef.current.height);
    };
+
+   //Reset Filter to Default Value
+   const ResetFilter = useCallback(() => {
+      setFiltersData({
+         brightness: { value: 100, unit: "%" },
+         contrast: { value: 100, unit: "%" },
+         saturate: { value: 100, unit: "%" },
+         "hue-rotate": { value: 0, unit: "deg" },
+         blur: { value: 0, unit: "px" },
+         grayscale: { value: 0, unit: "%" },
+         sepia: { value: 0, unit: "%" },
+         opacity: { value: 100, unit: "%" },
+         invert: { value: 0, unit: "%" },
+      });
+   });
 
    return (
       <>

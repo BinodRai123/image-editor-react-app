@@ -1,16 +1,15 @@
 import { createContext, useState } from "react";
 
 const initialFilterData = {
-   brightness: 0,
-   contrast: 15,
-   exposure: 20,
-   saturation: 0,
-   hue: 0,
-   blur: 0,
-   grayscale: 0,
-   sepia: 0,
-   opacity: 100,
-   invert: 0,
+   brightness: { value: 0, unit: "%" },
+   contrast: { value: 15, unit: "%" },
+   saturate: { value: 0, unit: "%" },
+   "hue-rotate": { value: 0, unit: "°" },
+   blur: { value: 0, unit: "px" },
+   grayscale: { value: 0, unit: "%" },
+   sepia: { value: 0, unit: "%" },
+   opacity: { value: 100, unit: "%" },
+   invert: { value: 0, unit: "%" },
 };
 
 export const reactContext = createContext(null);
