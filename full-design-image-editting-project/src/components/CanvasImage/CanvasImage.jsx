@@ -5,13 +5,13 @@ import { reactContext } from "../../WrapFilterData/WrapperFilters";
 
 const CanvasImage = () => {
    const { globalFilterData, setGlobalFilterData, setCanvasUrl } = useContext(reactContext);
-   console.log("rendered");
 
    const [imageStauts, setImageStatus] = useState({ sucess: false, uploading: false, errorMessage: null });
    const [image, setImage] = useState(null);
    //holds the canvas element
    const canvasRef = useRef(null);
    const canvasContext = useRef(null);
+   const uploadBtnRef = useRef(null);
    const [modal, setModal] = useState(false);
 
    //Toggle Modal components which will appear and disappear
@@ -29,6 +29,13 @@ const CanvasImage = () => {
    //Filter Data or Image Change
    useEffect(() => {
       applyFilters();
+      // Only generate the expensive DataURL after the user stops sliding (200ms)
+      const handler = setTimeout(() => {
+         const url = canvasRef?.current?.toDataURL("image/png");
+         setCanvasUrl(url);
+      }, 200);
+
+      return () => clearTimeout(handler);
    }, [globalFilterData, image]);
 
    //Upload Image in Canvas
@@ -104,8 +111,6 @@ const CanvasImage = () => {
       canvasCtx.drawImage(image, 0, 0, canvasRef.current.width, canvasRef.current.height);
       //Set the Canvas image into Url for downloading
       //everytime when the filter data change
-      const url = canvasRef?.current?.toDataURL("image/png");
-      setCanvasUrl(url);
    };
 
    //Reset Filter to Default Value
@@ -139,15 +144,35 @@ const CanvasImage = () => {
                </label>
                {/* //hides the input field and style 
                   //the label for uploading images */}
-               <input type="file" id="image-upload" onChange={hangleImageUploadInCanvas} />
+               <input ref={uploadBtnRef} type="file" id="image-upload" onChange={hangleImageUploadInCanvas} />
             </div>
 
             {/* Error Message */}
-            <ModalOverlay
-               modal={modal}
-               toggleModalOverlay={toggleModalOverlay}
-               value={imageStauts.errorMessage}
-            />
+            <ModalOverlay modal={modal} toggleModalOverlay={toggleModalOverlay}>
+               <div className="error-modal-container" onClick={(e) => e.stopPropagation()}>
+                  {/* Icon Container */}
+                  <div className="icon-circle" aria-hidden="true">
+                     <span className="cross-icon">×</span>
+                  </div>
+
+                  {/* Text Content */}
+                  <div className="text-group">
+                     <h2 className="title">ERROR</h2>
+                     <p className="description">Only Image File are Supported</p>
+                  </div>
+
+                  {/* Action Button */}
+                  <button
+                     className="btn-again"
+                     onClick={() => {
+                        toggleModalOverlay();
+                        uploadBtnRef?.current?.click();
+                     }}
+                  >
+                     Try Again
+                  </button>
+               </div>
+            </ModalOverlay>
          </section>
       </>
    );

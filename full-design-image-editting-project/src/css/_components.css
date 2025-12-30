@@ -128,7 +128,10 @@ input[type="range"]::-webkit-slider-thumb {
 .modal-overlay {
    position: fixed;
    inset: 0;
-   background-color: var(--color-overlay);
+   background: var(--color-overlay);
+   backdrop-filter: blur(10px);
+   -webkit-backdrop-filter: blur(10px); /* For Safari support */
+
    display: flex;
    align-items: center;
    justify-content: center;

@@ -4,7 +4,6 @@ import DownloadIcon from "../icons/DownloadIcon";
 
 const ExportButton = () => {
    const { canvasUrl } = useContext(reactContext);
-   console.log("canvasurl", canvasUrl);
    return (
       <>
          <button

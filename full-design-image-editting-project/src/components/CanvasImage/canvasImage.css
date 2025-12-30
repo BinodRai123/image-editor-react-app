@@ -1,6 +1,7 @@
 /* ---- canvas image container ----- */
 .canvas-image-container {
    position: relative;
+   /* padding: var(--padding-xl); */
    flex-grow: 1;
    display: flex;
    justify-content: center;
@@ -42,7 +43,91 @@ input[type="file"] {
 ==================== */
 
 #canvas-image-preview {
-   max-height: 80%;
    max-width: 80%;
-   /* aspect-ratio: 16/9; */
+   max-height: 80%;
+}
+
+/* Container for the content inside your .modal div */
+.error-modal-container {
+   background-color: var(--bg-light);
+   border-radius: var(--border-radius-md);
+   padding: 60px 30px 40px;
+   text-align: center;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   position: relative; /* Essential for the icon positioning */
+   width: 100%;
+   max-width: 320px;
+   /* border: 2px solid var(--text-error-color); */
+}
+
+/* The Red Circle Icon */
+.icon-circle {
+   position: absolute;
+   top: -45px; /* Pulls it halfway out of the top */
+   left: 50%;
+   transform: translateX(-50%);
+   background-color: var(--text-error-color);
+   width: 90px;
+   height: 90px;
+   border-radius: 50%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.cross-icon {
+   color: white;
+   font-size: 50px;
+   font-weight: 300;
+   line-height: 1;
+}
+
+/* Typography */
+.text-group {
+   margin-bottom: 25px;
+}
+
+.title {
+   font-family: sans-serif;
+   font-weight: 700;
+   color: #2f3542;
+   margin: 0 0 10px 0;
+   letter-spacing: 1px;
+}
+
+.description {
+   font-family: sans-serif;
+   font-size: 14px;
+   color: var(--text-gray);
+   line-height: 1.4;
+   margin: 0;
+}
+
+/* Button */
+.btn-again {
+   background-color: var(--text-error-color);
+   color: white;
+   border: none;
+   border-radius: 50px;
+   width: 100%;
+   padding: 14px 0;
+   font-weight: bold;
+   font-size: 16px;
+   cursor: pointer;
+   transition: background 0.2s ease;
+}
+
+.btn-again:hover {
+   background-color: var(--text-error-color);
+}
+
+@media (width < 800px) {
+   #canvas-image-preview {
+      height: 40rem;
+      width: 40rem;
+      /* aspect-ratio: 16/9; */
+   }
 }
