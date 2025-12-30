@@ -4,7 +4,9 @@ import ModalOverlay from "../modalOverlay/ModalOverlay";
 import { reactContext } from "../../WrapFilterData/WrapperFilters";
 
 const CanvasImage = () => {
-   const [filterData, setFiltersData] = useContext(reactContext);
+   const { globalFilterData, setGlobalFilterData, setCanvasUrl } = useContext(reactContext);
+   console.log("rendered");
+
    const [imageStauts, setImageStatus] = useState({ sucess: false, uploading: false, errorMessage: null });
    const [image, setImage] = useState(null);
    //holds the canvas element
@@ -27,7 +29,7 @@ const CanvasImage = () => {
    //Filter Data or Image Change
    useEffect(() => {
       applyFilters();
-   }, [filterData, image]);
+   }, [globalFilterData, image]);
 
    //Upload Image in Canvas
    const hangleImageUploadInCanvas = (e) => {
@@ -48,6 +50,8 @@ const CanvasImage = () => {
             uploading: false,
             errorMessage: "only image file are supported",
          });
+         setCanvasUrl(null);
+         //modal will appear
          setModal(true);
          //Reset file input
          input.value = "";
@@ -90,19 +94,23 @@ const CanvasImage = () => {
       if (image === null) return;
       let allfiltervalue = "";
 
-      for (const key in filterData) {
-         allfiltervalue += `${key}(${filterData[key]["value"]}${filterData[key]["unit"]}) `;
+      for (const key in globalFilterData) {
+         allfiltervalue += `${key}(${globalFilterData[key]["value"]}${globalFilterData[key]["unit"]}) `;
       }
 
       let canvasCtx = canvasContext.current;
       canvasCtx.clearRect(0, 0, image.width, image.height);
       canvasCtx.filter = `${allfiltervalue.trim()}`;
       canvasCtx.drawImage(image, 0, 0, canvasRef.current.width, canvasRef.current.height);
+      //Set the Canvas image into Url for downloading
+      //everytime when the filter data change
+      const url = canvasRef?.current?.toDataURL("image/png");
+      setCanvasUrl(url);
    };
 
    //Reset Filter to Default Value
    const ResetFilter = useCallback(() => {
-      setFiltersData({
+      setGlobalFilterData({
          brightness: { value: 100, unit: "%" },
          contrast: { value: 100, unit: "%" },
          saturate: { value: 100, unit: "%" },

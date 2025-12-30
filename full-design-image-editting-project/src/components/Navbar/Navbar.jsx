@@ -1,7 +1,8 @@
 import BrushIcon from "../icons/BrushIcon";
-import DownloadIcon from "../icons/DownloadIcon";
+import ExportButton from "./ExportButton";
 
 const Navbar = () => {
+   console.log("navbar Renderd");
    return (
       <nav id="navbar" className="row" style={{ width: "100%", justifyContent: "space-between" }}>
          <div className="navbar__left">
@@ -22,10 +23,7 @@ const Navbar = () => {
             </ul>
          </div>
          <div className="navbar__right">
-            <div className="btn btn-primary row" style={{ "--gap": "0.2rem" }}>
-               <DownloadIcon size={"20"} color="black" />
-               Export
-            </div>
+            <ExportButton />
          </div>
       </nav>
    );

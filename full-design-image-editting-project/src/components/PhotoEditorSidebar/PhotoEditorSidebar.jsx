@@ -39,7 +39,7 @@ const getInitialFilterState = (filterData) => {
 ------------------------------------------ */
 const PhotoEditorSidebar = () => {
    const tabs = ["Adjust", "Layers", "History"];
-   const [globalFilterData, setGlobalFilterData] = useContext(reactContext);
+   const { globalFilterData, setGlobalFilterData } = useContext(reactContext);
 
    const [activeTab, setActiveTab] = useState("Adjust");
    const [activePreset, setActivePreset] = useState("Original");
