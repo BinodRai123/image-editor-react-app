@@ -126,8 +126,8 @@ h3 {
    background-color: #f3f4f6;
 }
 
-@media (width < 80rem) {
-   .container {
-      padding: var(--padding-sm);
+@media (width < 900px) {
+   .main__left {
+      display: none;
    }
 }

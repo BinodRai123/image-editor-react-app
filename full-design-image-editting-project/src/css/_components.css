@@ -164,3 +164,21 @@ input[type="range"]::-webkit-slider-thumb {
    align-items: center;
    gap: var(--gutter-2xl);
 }
+
+@media (width < 900px) {
+   .menubar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+   }
+
+   .navbar__right > * {
+      margin-right: 4em;
+   }
+}
+
+@media (width < 600px) {
+   .navbar__left ul {
+      display: none;
+   }
+}

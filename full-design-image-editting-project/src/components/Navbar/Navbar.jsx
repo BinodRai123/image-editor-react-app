@@ -22,7 +22,7 @@ const Navbar = () => {
                </li>
             </ul>
          </div>
-         <div className="navbar__right">
+         <div className="navbar__right row" style={{ "--gap": "0.5rem" }}>
             <ExportButton />
          </div>
       </nav>

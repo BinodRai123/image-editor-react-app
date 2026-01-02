@@ -123,11 +123,3 @@ input[type="file"] {
 .btn-again:hover {
    background-color: var(--text-error-color);
 }
-
-@media (width < 800px) {
-   #canvas-image-preview {
-      height: 40rem;
-      width: 40rem;
-      /* aspect-ratio: 16/9; */
-   }
-}

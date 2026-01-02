@@ -2,6 +2,7 @@ import { useState, useCallback, useContext, useEffect } from "react";
 import FilterConstants from "./filtersData";
 import "./PhotoEditorSidebar.css";
 import { reactContext } from "../../WrapFilterData/WrapperFilters";
+import MenuIcon from "../icons/MenuIcon";
 
 const { filterData, PresetData } = FilterConstants;
 
@@ -63,6 +64,7 @@ const PhotoEditorSidebar = () => {
    const { globalFilterData, setGlobalFilterData } = useContext(reactContext);
    const [activeTab, setActiveTab] = useState("All");
    const [activePreset, setActivePreset] = useState("Original");
+   const [isOpen, setIsOpen] = useState(false);
 
    /* ---- useCallback help to memorize the function ----*/
    /* ---- on every re-render which will avoid ----*/
@@ -105,92 +107,104 @@ const PhotoEditorSidebar = () => {
       setGlobalFilterData(ParsedPresetStringtoObj);
    }, []);
 
+   const toggleSidebar = () => {
+      setIsOpen(!isOpen);
+   };
+
    return (
-      <aside className="editor-sidebar">
-         {/* Tabs */}
-         <div className="tab-header">
-            {tabs.map((tab) => (
-               <button
-                  key={tab}
-                  className={`tab-button ${activeTab === tab ? "active" : ""}`}
-                  onClick={() => setActiveTab(tab)}
-               >
-                  {tab}
-               </button>
-            ))}
+      <>
+         {/* ---- Menubar Icon ----- */}
+         <div className="menubar" onClick={toggleSidebar}>
+            <MenuIcon size="35" color="black" />
          </div>
 
-         <div className="sidebar-content">
-            {/* Adjust Tab */}
-            {(activeTab === "All" || activeTab === "Filters") &&
-               filterData.map((section) => (
-                  <div key={section.SectionName} className="card">
-                     <div className="row">
-                        {section.icon ? <>{section.icon}</> : "error"}
-                        <h1>{section.SectionName}</h1>
-                     </div>
-
-                     <div className="slider-stack">
-                        {section.controls.map((control) => (
-                           <div key={control.id} className="slider-container">
-                              <div className="slider-info">
-                                 <label htmlFor={`${control.id}`} aria-label={`${control.id}`}>
-                                    {control.label}
-                                 </label>
-                                 <span>{globalFilterData[`${control?.id}`]["value"]}</span>
-                              </div>
-
-                              <input
-                                 id={control.id}
-                                 type="range"
-                                 className="custom-range"
-                                 min={control.min}
-                                 max={control.max}
-                                 value={globalFilterData[`${control.id}`]["value"]}
-                                 onChange={handleRangeChange}
-                              />
-                           </div>
-                        ))}
-                     </div>
-                  </div>
+         {/* ----- Filter & Presets Sidebar ----- */}
+         <aside className={`editor-sidebar ${isOpen ? "editor-sidebar-open" : ""}`}>
+            {/* Tabs */}
+            <div className="tab-header">
+               {tabs.map((tab) => (
+                  <button
+                     key={tab}
+                     className={`tab-button ${activeTab === tab ? "active" : ""}`}
+                     onClick={() => setActiveTab(tab)}
+                  >
+                     {tab}
+                  </button>
                ))}
+            </div>
 
-            {/* Presets */}
-            {(activeTab === "All" || activeTab === "Presets") && (
-               <section className="control-group">
-                  <h1 style={{ marginBottom: "0.5rem" }}>Filter Presets</h1>
+            <div className="sidebar-content">
+               {/* Adjust Tab */}
+               {(activeTab === "All" || activeTab === "Filters") &&
+                  filterData.map((section) => (
+                     <div key={section.SectionName} className="card">
+                        <div className="row">
+                           {section.icon ? <>{section.icon}</> : "error"}
+                           <h1>{section.SectionName}</h1>
+                        </div>
 
-                  <div className="filter-grid">
-                     {PresetData.map((preset, id) => (
-                        <button
-                           key={preset.name}
-                           className={`preset-card ${preset.name === activePreset ? "active" : ""}`}
-                           onClick={() => handleActivePreset(preset.name, id)}
-                        >
-                           <div
-                              className="filter-preview"
-                              style={{ backgroundColor: preset.style.backgroundColor }}
+                        <div className="slider-stack">
+                           {section.controls.map((control) => (
+                              <div key={control.id} className="slider-container">
+                                 <div className="slider-info">
+                                    <label htmlFor={`${control.id}`} aria-label={`${control.id}`}>
+                                       {control.label}
+                                    </label>
+                                    <span>{globalFilterData[`${control?.id}`]["value"]}</span>
+                                 </div>
+
+                                 <input
+                                    id={control.id}
+                                    type="range"
+                                    className="custom-range"
+                                    min={control.min}
+                                    max={control.max}
+                                    value={globalFilterData[`${control.id}`]["value"]}
+                                    onChange={handleRangeChange}
+                                 />
+                              </div>
+                           ))}
+                        </div>
+                     </div>
+                  ))}
+
+               {/* Presets */}
+               {(activeTab === "All" || activeTab === "Presets") && (
+                  <section className="control-group">
+                     <h1 style={{ marginBottom: "0.5rem" }}>Filter Presets</h1>
+
+                     <div className="filter-grid">
+                        {PresetData.map((preset, id) => (
+                           <button
+                              key={preset.name}
+                              className={`preset-card ${preset.name === activePreset ? "active" : ""}`}
+                              onClick={() => handleActivePreset(preset.name, id)}
                            >
                               <div
-                                 className="preview-image"
-                                 style={getPresetPreviewStyle(preset)}
-                                 alt="Preset Background Image"
-                              />
-                           </div>
+                                 className="filter-preview"
+                                 style={{ backgroundColor: preset.style.backgroundColor }}
+                              >
+                                 <div
+                                    className="preview-image"
+                                    style={getPresetPreviewStyle(preset)}
+                                    alt="Preset Background Image"
+                                 />
+                              </div>
 
-                           <span style={{ fontSize: "0.7rem" }}>{preset.name}</span>
-                        </button>
-                     ))}
-                  </div>
-               </section>
-            )}
-         </div>
+                              <span style={{ fontSize: "0.7rem" }}>{preset.name}</span>
+                           </button>
+                        ))}
+                     </div>
+                  </section>
+               )}
+            </div>
 
-         {/* Footer */}
-         <div className="sidebar-footer">
-            <button className="btn-auto-enhance">Auto Enhance</button>
-         </div>
-      </aside>
+            {/* Footer */}
+            <div className="sidebar-footer">
+               <button className="btn-auto-enhance">Auto Enhance</button>
+            </div>
+         </aside>
+      </>
    );
 };
 
