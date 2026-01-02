@@ -166,6 +166,10 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 @media (width < 900px) {
+   #navbar {
+      padding: var(--padding-sm);
+   }
+
    .menubar {
       display: flex;
       justify-content: center;
@@ -180,5 +184,9 @@ input[type="range"]::-webkit-slider-thumb {
 @media (width < 600px) {
    .navbar__left ul {
       display: none;
+   }
+
+   .navbar__right > * {
+      margin-right: 3em;
    }
 }

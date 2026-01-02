@@ -130,4 +130,8 @@ h3 {
    .main__left {
       display: none;
    }
+
+   h1 {
+      font-size: var(--font-size-md);
+   }
 }
