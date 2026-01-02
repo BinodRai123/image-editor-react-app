@@ -15,6 +15,7 @@ input[type="file"] {
 /* ---- UPLOAD BUTTON ---- */
 .upload-btn {
    position: absolute;
+   z-index: 10;
    margin: var(--margin-sm);
    top: 0;
    left: 0;
