@@ -64,5 +64,6 @@
    :root {
       --font-size-sm: 0.8rem;
       --padding-xl: 1rem; /* Collapse large paddings on mobile */
+      --paddimg-md: 0.75rem;
    }
 }
