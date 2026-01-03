@@ -1,7 +1,3 @@
-// you are a professional web developer who can solve any problem efficiently like in production
-
-// this is my code
-
 import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import "./canvasImage.css";
 import ModalOverlay from "../modalOverlay/ModalOverlay";
@@ -74,6 +70,8 @@ const CanvasImage = () => {
          return;
       }
 
+      setImageStatus((prev) => ({ ...prev, uploading: true }));
+
       //Selecting canvas div using canvasRef
       //and making it 2d for image upload
       const canvas = canvasRef.current;
@@ -104,6 +102,8 @@ const CanvasImage = () => {
          canvas.height = height;
          // canvasCtx.drawImage(img, 0, 0, canvas.width, canvas.height);
          ResetFilter();
+
+         setImageStatus((prev) => ({ ...prev, uploading: false }));
       };
 
       img.onerror = () => {
@@ -154,10 +154,18 @@ const CanvasImage = () => {
    return (
       <>
          <section className="canvas-image-container">
+            {/* SKELETON LOADER */}
+            {imageStauts.uploading && (
+               <div className="canvas-skeleton">
+                  <div className="skeleton-shimmer"></div>
+                  <p>Optimizing Image...</p>
+               </div>
+            )}
+
             {/* Canvas element willnot show until imageStaus is true */}
             <canvas
                id="canvas-image-preview"
-               style={{ display: imageStauts.sucess == true ? "block" : "none" }}
+               style={{ display: imageStauts.sucess && !imageStauts.uploading ? "block" : "none" }}
                ref={canvasRef}
             ></canvas>
             {/* Upload Image Button */}
@@ -203,5 +211,3 @@ const CanvasImage = () => {
 };
 
 export default CanvasImage;
-
-// here all the thing work but when user select heavy photo like 10 mb the website lags how to fix it ?
