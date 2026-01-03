@@ -1,7 +1,13 @@
+// you are a professional web developer who can solve any problem efficiently like in production
+
+// this is my code
+
 import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import "./canvasImage.css";
 import ModalOverlay from "../modalOverlay/ModalOverlay";
 import { reactContext } from "../../WrapFilterData/WrapperFilters";
+
+const MAX_PREVIEW_SIZE = 1200;
 
 const CanvasImage = () => {
    const { globalFilterData, setGlobalFilterData, setCanvasUrl } = useContext(reactContext);
@@ -13,6 +19,7 @@ const CanvasImage = () => {
    const canvasContext = useRef(null);
    const uploadBtnRef = useRef(null);
    const [modal, setModal] = useState(false);
+   const requestRef = useRef();
 
    //Toggle Modal components which will appear and disappear
    const toggleModalOverlay = () => {
@@ -36,7 +43,10 @@ const CanvasImage = () => {
          setCanvasUrl(url);
       }, 200);
 
-      return () => clearTimeout(handler);
+      return () => {
+         clearTimeout(handler);
+         cancelAnimationFrame(requestRef.current);
+      };
    }, [globalFilterData, image]);
 
    //Upload Image in Canvas
@@ -71,9 +81,6 @@ const CanvasImage = () => {
       const canvas = canvasRef.current;
       let canvasCtx = canvasContext.current;
 
-      //Creating new image tag
-      //In Src of it will first create url path
-      //from file that user has choosed
       let img = new Image();
       img.src = URL.createObjectURL(file);
 
@@ -81,10 +88,23 @@ const CanvasImage = () => {
       //loaded in the website and after that it will
       //set height , width and drawimage in canvas
       img.onload = () => {
+         // Calculate scaling to prevent lagging on 10MB+ files
+         let width = img.width;
+         let height = img.height;
+
+         if (width > MAX_PREVIEW_SIZE || height > MAX_PREVIEW_SIZE) {
+            if (width > height) {
+               height = (MAX_PREVIEW_SIZE / width) * height;
+               width = MAX_PREVIEW_SIZE;
+            } else {
+               width = (MAX_PREVIEW_SIZE / height) * width;
+               height = MAX_PREVIEW_SIZE;
+            }
+         }
          setImage(img);
-         canvas.width = img.width;
-         canvas.height = img.height;
-         canvasCtx.drawImage(img, 0, 0, canvas.width, canvas.height);
+         canvas.width = width;
+         canvas.height = height;
+         // canvasCtx.drawImage(img, 0, 0, canvas.width, canvas.height);
          ResetFilter();
       };
 
@@ -97,22 +117,26 @@ const CanvasImage = () => {
    };
 
    //Applying Filters in Canvas Image
-   const applyFilters = () => {
+   const applyFilters = useCallback(() => {
       //if there is no image then return from here
-      if (image === null) return;
-      let allfiltervalue = "";
+      if (!image) return;
 
-      for (const key in globalFilterData) {
-         allfiltervalue += `${key}(${globalFilterData[key]["value"]}${globalFilterData[key]["unit"]}) `;
-      }
+      const drawInCanvas = () => {
+         let allfiltervalue = "";
 
-      let canvasCtx = canvasContext.current;
-      canvasCtx.clearRect(0, 0, image.width, image.height);
-      canvasCtx.filter = `${allfiltervalue.trim()}`;
-      canvasCtx.drawImage(image, 0, 0, canvasRef.current.width, canvasRef.current.height);
-      //Set the Canvas image into Url for downloading
-      //everytime when the filter data change
-   };
+         for (const key in globalFilterData) {
+            allfiltervalue += `${key}(${globalFilterData[key]["value"]}${globalFilterData[key]["unit"]}) `;
+         }
+
+         let canvasCtx = canvasContext.current;
+         canvasCtx.clearRect(0, 0, image.width, image.height);
+         canvasCtx.filter = `${allfiltervalue.trim()}`;
+         canvasCtx.drawImage(image, 0, 0, canvasRef.current.width, canvasRef.current.height);
+      };
+
+      cancelAnimationFrame(requestRef.current);
+      requestRef.current = requestAnimationFrame(drawInCanvas);
+   }, [globalFilterData, image]);
 
    //Reset Filter to Default Value
    const ResetFilter = useCallback(() => {
@@ -181,3 +205,5 @@ const CanvasImage = () => {
 };
 
 export default CanvasImage;
+
+// here all the thing work but when user select heavy photo like 10 mb the website lags how to fix it ?

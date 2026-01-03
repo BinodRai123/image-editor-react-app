@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext, useEffect } from "react";
+import React, { useState, useCallback, useContext, useEffect } from "react";
 import FilterConstants from "./filtersData";
 import "./PhotoEditorSidebar.css";
 import { reactContext } from "../../WrapFilterData/WrapperFilters";
@@ -59,7 +59,7 @@ function parseFilters(filterString) {
 /* -----------------------------------------
    Component
 ------------------------------------------ */
-const PhotoEditorSidebar = () => {
+const PhotoEditorSidebar = React.memo(() => {
    const tabs = ["All", "Filters", "Presets"];
    const { globalFilterData, setGlobalFilterData } = useContext(reactContext);
    const [activeTab, setActiveTab] = useState("All");
@@ -206,6 +206,6 @@ const PhotoEditorSidebar = () => {
          </aside>
       </>
    );
-};
+});
 
 export default PhotoEditorSidebar;

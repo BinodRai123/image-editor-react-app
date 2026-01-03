@@ -178,7 +178,7 @@ presets
       position: fixed;
       right: 0;
       z-index: 1000000;
-      height: calc(100vh - 68.89px);
+      height: calc(100vh - 53px);
       /* width: 300px; Default width for tablets */
       transform: translateX(100%);
       transition: transform 0.3s ease-in-out;
