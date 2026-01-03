@@ -2,7 +2,6 @@ import BrushIcon from "../icons/BrushIcon";
 import ExportButton from "./ExportButton";
 
 const Navbar = () => {
-   console.log("navbar Renderd");
    return (
       <nav id="navbar" className="row" style={{ width: "100%", justifyContent: "space-between" }}>
          <div className="navbar__left">

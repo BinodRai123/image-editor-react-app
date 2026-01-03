@@ -114,7 +114,7 @@ const PhotoEditorSidebar = React.memo(() => {
    return (
       <>
          {/* ---- Menubar Icon ----- */}
-         <div className="menubar" onClick={toggleSidebar}>
+         <div className="menubar" onClick={toggleSidebar} style={{ userSelect: "none" }}>
             <MenuIcon size="35" color="black" />
          </div>
 

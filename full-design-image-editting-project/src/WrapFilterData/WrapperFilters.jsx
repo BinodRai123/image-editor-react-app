@@ -15,11 +15,13 @@ const initialFilterData = {
 export const reactContext = createContext(null);
 
 const WrapperFilters = ({ children }) => {
-   const [canvasUrl, setCanvasUrl] = useState(null);
+   const [originalImage, setOriginalImage] = useState(null);
    const [globalFilterData, setGlobalFilterData] = useState(initialFilterData);
    return (
       <>
-         <reactContext.Provider value={{ globalFilterData, setGlobalFilterData, canvasUrl, setCanvasUrl }}>
+         <reactContext.Provider
+            value={{ globalFilterData, setGlobalFilterData, originalImage, setOriginalImage }}
+         >
             {children}
          </reactContext.Provider>
       </>

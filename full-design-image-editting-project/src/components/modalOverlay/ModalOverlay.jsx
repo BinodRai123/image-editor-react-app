@@ -1,5 +1,4 @@
 const ModalOverlay = ({ modal, toggleModalOverlay, children }) => {
-   // console.log(Children);
    return (
       <>
          {modal && (

@@ -4,7 +4,6 @@ import PhotoEditorSidebar from "./components/PhotoEditorSidebar/PhotoEditorSideb
 import Featureicon from "./components/featureIcon/Featureicon";
 
 const App = () => {
-   console.log("rendered");
    return (
       <section id="image-generator-page">
          <Navbar />

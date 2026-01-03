@@ -10,7 +10,7 @@ import { reactContext } from "../../WrapFilterData/WrapperFilters";
 const MAX_PREVIEW_SIZE = 1200;
 
 const CanvasImage = () => {
-   const { globalFilterData, setGlobalFilterData, setCanvasUrl } = useContext(reactContext);
+   const { globalFilterData, setGlobalFilterData, setOriginalImage } = useContext(reactContext);
 
    const [imageStauts, setImageStatus] = useState({ sucess: false, uploading: false, errorMessage: null });
    const [image, setImage] = useState(null);
@@ -37,10 +37,9 @@ const CanvasImage = () => {
    useEffect(() => {
       if (!image) return;
       applyFilters();
-      // Only generate the expensive DataURL after the user stops sliding (200ms)
+      // Only set the Original image after the user stops sliding (200ms)
       const handler = setTimeout(() => {
-         const url = canvasRef?.current?.toDataURL("image/png");
-         setCanvasUrl(url);
+         setOriginalImage(image);
       }, 200);
 
       return () => {
@@ -58,7 +57,6 @@ const CanvasImage = () => {
 
       //retrun if user donot select image file
       //and update the setimagestatus
-
       if (!file.type.startsWith("image/")) {
          //input file store here to reset
          //when another file is selected
@@ -68,7 +66,7 @@ const CanvasImage = () => {
             uploading: false,
             errorMessage: "only image file are supported",
          });
-         setCanvasUrl(null);
+         setOriginalImage(null);
          //modal will appear
          setModal(true);
          //Reset file input
