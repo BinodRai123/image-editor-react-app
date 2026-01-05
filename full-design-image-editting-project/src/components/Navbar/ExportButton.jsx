@@ -60,6 +60,7 @@ const ExportButton = () => {
          }}
          onClick={handleExport}
          disabled={isExporting}
+         title="Export Image"
       >
          <DownloadIcon size={"20"} color="black" />
          {isExporting ? "Exporting..." : "Export"}

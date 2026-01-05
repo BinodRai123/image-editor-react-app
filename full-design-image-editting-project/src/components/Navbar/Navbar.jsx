@@ -11,13 +11,13 @@ const Navbar = () => {
             </div>
             <ul className="row" style={{ "--gap": "2em" }}>
                <li>
-                  <span>File</span>
+                  <span title="file">File</span>
                </li>
                <li>
-                  <span>Edit</span>
+                  <span title="edit">Edit</span>
                </li>
                <li>
-                  <span>Image</span>
+                  <span title="Image">Image</span>
                </li>
             </ul>
          </div>

@@ -5,10 +5,10 @@ import LayersIcon from "../icons/Layers";
 import TuneIcon from "../icons/TuneIcon";
 
 const allIcon = [
-   { name: "brush", icon: BrushIcon },
-   { name: "crop", icon: CropIcon },
-   { name: "layers", icon: LayersIcon },
-   { name: "tune", icon: TuneIcon },
+   { name: "brush", icon: BrushIcon, title: "Image Filter" },
+   { name: "crop", icon: CropIcon, title: "under construction" },
+   { name: "layers", icon: LayersIcon, title: "under construction" },
+   { name: "tune", icon: TuneIcon, title: "under construction" },
 ];
 
 const Featureicon = ({ activeFeature, setActiveFeature }) => {
@@ -17,8 +17,9 @@ const Featureicon = ({ activeFeature, setActiveFeature }) => {
          <div className="main__left__features">
             {allIcon.map((feature, id) => {
                return (
-                  <div
+                  <a
                      key={id}
+                     title={feature.title}
                      className={
                         activeFeature === allIcon.name
                            ? "feature-icon active-feature-icon"
@@ -27,7 +28,7 @@ const Featureicon = ({ activeFeature, setActiveFeature }) => {
                      onClick={() => setActiveFeature(feature.name)}
                   >
                      <feature.icon size="30" color={activeFeature === feature.name ? "#EE9D2B" : "#111827"} />
-                  </div>
+                  </a>
                );
             })}
          </div>

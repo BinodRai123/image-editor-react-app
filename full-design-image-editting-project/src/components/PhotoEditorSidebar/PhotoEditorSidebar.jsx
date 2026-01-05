@@ -127,6 +127,7 @@ const PhotoEditorSidebar = React.memo(() => {
                      key={tab}
                      className={`tab-button ${activeTab === tab ? "active" : ""}`}
                      onClick={() => setActiveTab(tab)}
+                     title={tab}
                   >
                      {tab}
                   </button>
