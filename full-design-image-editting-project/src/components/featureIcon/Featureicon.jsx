@@ -4,25 +4,29 @@ import CropIcon from "../icons/CropIcon";
 import LayersIcon from "../icons/Layers";
 import TuneIcon from "../icons/TuneIcon";
 
-const allIcon = [BrushIcon, CropIcon, LayersIcon, TuneIcon];
+const allIcon = [
+   { name: "brush", icon: BrushIcon },
+   { name: "crop", icon: CropIcon },
+   { name: "layers", icon: LayersIcon },
+   { name: "tune", icon: TuneIcon },
+];
 
-const Featureicon = () => {
-   const [activeIconId, setActiveIconId] = useState(0);
+const Featureicon = ({ activeFeature, setActiveFeature }) => {
    return (
       <>
          <div className="main__left__features">
-            {allIcon.map((Icon, id) => {
+            {allIcon.map((feature, id) => {
                return (
                   <div
                      key={id}
                      className={
-                        activeIconId === id
+                        activeFeature === allIcon.name
                            ? "feature-icon active-feature-icon"
                            : "feature-icon inactive-feature-icon"
                      }
-                     onClick={() => setActiveIconId(id)}
+                     onClick={() => setActiveFeature(feature.name)}
                   >
-                     <Icon size="30" color={activeIconId == id ? "#EE9D2B" : "#111827"} />
+                     <feature.icon size="30" color={activeFeature === feature.name ? "#EE9D2B" : "#111827"} />
                   </div>
                );
             })}

@@ -2,10 +2,11 @@ import React, { useCallback, useContext, useEffect, useRef, useState } from "rea
 import "./canvasImage.css";
 import ModalOverlay from "../modalOverlay/ModalOverlay";
 import { reactContext } from "../../WrapFilterData/WrapperFilters";
+import UnderConstruction from "../../pages/underConstruction";
 
 const MAX_PREVIEW_SIZE = 1200;
 
-const CanvasImage = () => {
+const CanvasImage = ({ activeFeature }) => {
    const { globalFilterData, setGlobalFilterData, setOriginalImage } = useContext(reactContext);
 
    const [imageStauts, setImageStatus] = useState({ sucess: false, uploading: false, errorMessage: null });
@@ -161,22 +162,34 @@ const CanvasImage = () => {
                   <p>Optimizing Image...</p>
                </div>
             )}
-
-            {/* Canvas element willnot show until imageStaus is true */}
             <canvas
                id="canvas-image-preview"
-               style={{ display: imageStauts.sucess && !imageStauts.uploading ? "block" : "none" }}
+               style={{
+                  display:
+                     imageStauts.sucess && !imageStauts.uploading && activeFeature == "brush"
+                        ? "block"
+                        : "none",
+               }}
                ref={canvasRef}
             ></canvas>
+
+            {activeFeature != "brush" && <UnderConstruction />}
             {/* Upload Image Button */}
-            <div>
-               <label htmlFor="image-upload" className="btn upload-btn">
-                  Upload Image
-               </label>
-               {/* //hides the input field and style 
+            {activeFeature === "brush" && (
+               <div>
+                  <label htmlFor="image-upload" className="btn upload-btn">
+                     Upload Image
+                  </label>
+                  {/* //hides the input field and style 
                   //the label for uploading images */}
-               <input ref={uploadBtnRef} type="file" id="image-upload" onChange={hangleImageUploadInCanvas} />
-            </div>
+                  <input
+                     ref={uploadBtnRef}
+                     type="file"
+                     id="image-upload"
+                     onChange={hangleImageUploadInCanvas}
+                  />
+               </div>
+            )}
 
             {/* Error Message */}
             <ModalOverlay modal={modal} toggleModalOverlay={toggleModalOverlay}>
