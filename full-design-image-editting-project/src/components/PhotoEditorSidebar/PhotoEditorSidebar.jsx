@@ -139,6 +139,10 @@ const PhotoEditorSidebar = React.memo(() => {
             </div>
          </button>
 
+         {/* This div is used for overloady where  */}
+         {/* when client clicks outside the sidebar, it closed the sidebar */}
+         {isOpen && <div className="sidebar-overlay" onClick={() => setIsOpen(!isOpen)} />}
+
          {/* ----- Filter & Presets Sidebar ----- */}
          <aside className={`editor-sidebar ${isOpen ? "editor-sidebar-open" : ""}`}>
             {/* Tabs */}

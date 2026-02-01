@@ -207,6 +207,17 @@ presets
    }
 }
 
+/* The semi-transparent layer behind the sidebar */
+.sidebar-overlay {
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100vw;
+   height: 100vh;
+   background-color: transparent; /* Dim the background */
+   z-index: 100; /* Just below the sidebar */
+}
+
 /* --- Tablet & Mobile (Everything 900px and below) --- */
 @media (width <= 900px) {
    .editor-sidebar {

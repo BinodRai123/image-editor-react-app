@@ -1,4 +1,3 @@
-import { useState } from "react";
 import BrushIcon from "../icons/BrushIcon";
 import CropIcon from "../icons/CropIcon";
 import LayersIcon from "../icons/Layers";
@@ -19,6 +18,7 @@ const Featureicon = ({ activeFeature, setActiveFeature }) => {
                return (
                   <a
                      key={id}
+                     href="#"
                      title={feature.title}
                      className={
                         activeFeature === allIcon.name
