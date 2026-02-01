@@ -176,7 +176,7 @@ const CanvasImage = ({ activeFeature }) => {
             {activeFeature != "brush" && <UnderConstruction />}
             {/* Upload Image Button */}
             {activeFeature === "brush" && (
-               <button>
+               <button style={{ border: "none" }}>
                   <label htmlFor="image-upload" className="btn upload-btn">
                      Upload Image
                   </label>
