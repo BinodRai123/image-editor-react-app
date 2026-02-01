@@ -2,8 +2,8 @@ import React, { useState, useCallback, useContext, useEffect } from "react";
 import FilterConstants from "./filtersData";
 import "./PhotoEditorSidebar.css";
 import { reactContext } from "../../WrapFilterData/WrapperFilters";
-import MenuIcon from "../icons/MenuIcon";
 
+// Destructuring filterData and PresetData from FilterConstants
 const { filterData, PresetData } = FilterConstants;
 
 /* -----------------------------------------
@@ -116,8 +116,16 @@ const PhotoEditorSidebar = React.memo(() => {
    return (
       <>
          {/* ---- Menubar Icon ----- */}
-         <button className="menubar" onClick={toggleSidebar} style={{ userSelect: "none" }}>
-            <MenuIcon size="35" color="black" />
+         <button
+            className="menubar"
+            onClick={toggleSidebar}
+            style={{ background: "none", border: "none", padding: 0 }}
+         >
+            <div className={`menu-container ${isOpen ? "open" : ""}`}>
+               <div className="bar"></div>
+               <div className="bar"></div>
+               <div className="bar"></div>
+            </div>
          </button>
 
          {/* ----- Filter & Presets Sidebar ----- */}
