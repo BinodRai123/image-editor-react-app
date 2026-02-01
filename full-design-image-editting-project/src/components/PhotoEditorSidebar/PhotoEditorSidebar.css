@@ -193,16 +193,17 @@ presets
       /* Transform logic */
    }
    .open .bar:nth-child(1) {
-      transform: translateY(10.3px) rotate(45deg);
+      transform: translateY(7.9px) rotate(45deg);
    }
 
    .open .bar:nth-child(2) {
       opacity: 0;
+      display: none;
       transform: translateX(20px);
    }
 
    .open .bar:nth-child(3) {
-      transform: translateY(-10.3px) rotate(-45deg);
+      transform: translateY(-7.9px) rotate(-45deg);
    }
 }
 
