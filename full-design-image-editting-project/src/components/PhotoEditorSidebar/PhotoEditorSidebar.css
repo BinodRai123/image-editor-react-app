@@ -168,6 +168,8 @@ presets
 }
 
 .menubar {
+   border: none;
+   background-color: transparent;
    display: none;
    cursor: pointer;
 }

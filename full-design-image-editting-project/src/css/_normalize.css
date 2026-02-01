@@ -37,6 +37,17 @@ button {
    margin: 0;
 }
 
+button,
+input {
+   -webkit-tap-highlight-color: transparent;
+   outline: none;
+   user-select: none;
+}
+
+input[type="range"]:focus {
+   outline: none;
+}
+
 p {
    text-wrap: pretty;
 }

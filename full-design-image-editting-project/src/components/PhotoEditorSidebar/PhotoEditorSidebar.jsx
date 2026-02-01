@@ -9,6 +9,8 @@ const { filterData, PresetData } = FilterConstants;
 /* -----------------------------------------
 Utils
 ------------------------------------------ */
+//this function will return initial filter state object
+// like this { brightness: {value:0, unit: '%'}, contrast: {value:15, unit: '%'} ...}
 const getInitialFilterState = (filterData) => {
    return filterData.reduce((acc, section) => {
       section.controls.forEach(({ id, defaultValue, unit }) => {
@@ -114,9 +116,9 @@ const PhotoEditorSidebar = React.memo(() => {
    return (
       <>
          {/* ---- Menubar Icon ----- */}
-         <div className="menubar" onClick={toggleSidebar} style={{ userSelect: "none" }}>
+         <button className="menubar" onClick={toggleSidebar} style={{ userSelect: "none" }}>
             <MenuIcon size="35" color="black" />
-         </div>
+         </button>
 
          {/* ----- Filter & Presets Sidebar ----- */}
          <aside className={`editor-sidebar ${isOpen ? "editor-sidebar-open" : ""}`}>

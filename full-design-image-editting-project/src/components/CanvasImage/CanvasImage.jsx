@@ -176,7 +176,7 @@ const CanvasImage = ({ activeFeature }) => {
             {activeFeature != "brush" && <UnderConstruction />}
             {/* Upload Image Button */}
             {activeFeature === "brush" && (
-               <div>
+               <button>
                   <label htmlFor="image-upload" className="btn upload-btn">
                      Upload Image
                   </label>
@@ -188,7 +188,7 @@ const CanvasImage = ({ activeFeature }) => {
                      id="image-upload"
                      onChange={hangleImageUploadInCanvas}
                   />
-               </div>
+               </button>
             )}
 
             {/* Error Message */}
