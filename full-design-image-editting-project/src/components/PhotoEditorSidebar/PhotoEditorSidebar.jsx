@@ -109,8 +109,19 @@ const PhotoEditorSidebar = React.memo(() => {
       setGlobalFilterData(ParsedPresetStringtoObj);
    }, []);
 
+   /* ---- toggle sidebar ---- */
    const toggleSidebar = () => {
       setIsOpen(!isOpen);
+   };
+
+   /* ---- Auto Enhancer button functionality ----  */
+   const handleAutoEnhancer = () => {
+      let min = 0,
+         max = PresetData.length - 1;
+      const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+      setActivePreset(PresetData[randomNumber].name);
+      const ParsedPresetStringtoObj = parseFilters(PresetData[randomNumber].style.filters);
+      setGlobalFilterData(ParsedPresetStringtoObj);
    };
 
    return (
@@ -212,7 +223,9 @@ const PhotoEditorSidebar = React.memo(() => {
 
             {/* Footer */}
             <div className="sidebar-footer">
-               <button className="btn-auto-enhance">Auto Enhance</button>
+               <button onClick={handleAutoEnhancer} className="btn-auto-enhance">
+                  Auto Enhance
+               </button>
             </div>
          </aside>
       </>
