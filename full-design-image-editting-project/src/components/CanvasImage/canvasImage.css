@@ -125,6 +125,51 @@ input[type="file"] {
    background-color: var(--text-error-color);
 }
 
+/* ========================== 
+    Upload Drag and Drop Styles
+    if there is no image uploaded
+========================== */
+
+.upload-placeholder {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   border: 2px dashed #ccc;
+   border-radius: 8px;
+   padding: 40px;
+   transition: all 0.3s ease;
+   background: #f8f9fa;
+   cursor: pointer;
+   position: relative;
+   min-height: 300px;
+}
+
+.upload-placeholder.active {
+   border-color: #007bff;
+   background: #e9ecef;
+}
+
+.upload-text h3 {
+   margin: 10px 0 5px;
+   color: #4a5568;
+   font-size: 1.25rem;
+}
+
+.upload-text p {
+   color: #718096;
+   font-size: 0.9rem;
+}
+
+.full-area-label {
+   position: absolute;
+   top: 0;
+   left: 0;
+   right: 0;
+   bottom: 0;
+   cursor: pointer;
+}
+
 /* ====================
    Canvas Skeleton 
 ==================== */
@@ -170,6 +215,10 @@ input[type="file"] {
 }
 
 @media (width <= 490px) {
+   .upload-placeholder {
+      padding: var(--padding-md);
+   }
+
    #canvas-image-preview {
       max-width: 100%;
       max-height: 100%;

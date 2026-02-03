@@ -1,213 +1,165 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import "./canvasImage.css";
 import ModalOverlay from "../modalOverlay/ModalOverlay";
 import { reactContext } from "../../WrapFilterData/WrapperFilters";
 import UnderConstruction from "../../pages/underConstruction";
-
-const MAX_PREVIEW_SIZE = 1200;
+import { processImageUpload, DEFAULT_FILTERS } from "../../utils/imageUtils.js";
+import { useCanvasLogic } from "../../hooks/useCanvasLogic.js";
 
 const CanvasImage = ({ activeFeature }) => {
    const { globalFilterData, setGlobalFilterData, setOriginalImage } = useContext(reactContext);
-
-   const [imageStauts, setImageStatus] = useState({ sucess: false, uploading: false, errorMessage: null });
+   const [imageStatus, setImageStatus] = useState({ success: false, uploading: false });
    const [image, setImage] = useState(null);
-   const [isDragging, setIsDragging] = useState(false); // New state for UI feedback
-   console.log(imageStauts.sucess, activeFeature);
-
-   const canvasRef = useRef(null);
-   const canvasContext = useRef(null);
-   const uploadBtnRef = useRef(null);
+   const [isDragging, setIsDragging] = useState(false);
    const [modal, setModal] = useState(false);
-   const requestRef = useRef();
+   const uploadBtnRef = useRef(null);
 
-   const toggleModalOverlay = () => setModal(!modal);
+   const { canvasRef, applyFilters, calculateDimensions, resetCanvas } = useCanvasLogic(
+      image,
+      globalFilterData,
+   );
+
+   const toggleModalOverlay = () => setModal((prev) => !prev);
 
    useEffect(() => {
-      canvasContext.current = canvasRef.current?.getContext("2d");
-   }, []);
+      if (!image) return; //if there is no image then return
+      applyFilters(); // if ther is image then apply this filter
+      const handler = setTimeout(() => setOriginalImage(image), 200);
+      return () => clearTimeout(handler);
+   }, [globalFilterData, image, applyFilters, setOriginalImage]);
 
-   useEffect(() => {
-      if (!image) return;
-      applyFilters();
-      const handler = setTimeout(() => {
-         setOriginalImage(image);
-      }, 200);
+   // Inside CanvasImage.jsx
 
-      return () => {
-         clearTimeout(handler);
-         cancelAnimationFrame(requestRef.current);
-      };
-   }, [globalFilterData, image]);
-
-   // --- OPTIMIZED FILE PROCESSING CORE ---
-   const processFile = (file) => {
+   const handleFileAction = async (file) => {
       if (!file) return;
 
-      if (!file.type.startsWith("image/")) {
-         setImageStatus({
-            sucess: false,
-            uploading: false,
-            errorMessage: "only image file are supported",
-         });
-         setOriginalImage(null);
+      //Initializing the image uploading states
+      setImageStatus({ success: false, uploading: true, errorMessage: null });
+
+      try {
+         //when user click then it will
+         const { img, width, height } = await processImageUpload(file);
+
+         // 1. Set Canvas size
+         canvasRef.current.width = width;
+         canvasRef.current.height = height;
+
+         // 2. Update States
+         setImage(img); //updating image state
+         setGlobalFilterData(DEFAULT_FILTERS); //making the global filter value to default
+         setImageStatus({ success: true, uploading: false, errorMessage: null });
+      } catch (error) {
+         setImageStatus({ success: false, uploading: false, errorMessage: error });
          setModal(true);
-         if (uploadBtnRef.current) uploadBtnRef.current.value = "";
-         return;
-      }
-
-      setImageStatus((prev) => ({ ...prev, uploading: true }));
-
-      const canvas = canvasRef.current;
-      let img = new Image();
-      img.src = URL.createObjectURL(file);
-
-      img.onload = () => {
-         let width = img.width;
-         let height = img.height;
-
-         if (width > MAX_PREVIEW_SIZE || height > MAX_PREVIEW_SIZE) {
-            const ratio = Math.min(MAX_PREVIEW_SIZE / width, MAX_PREVIEW_SIZE / height);
-            width *= ratio;
-            height *= ratio;
+      } finally {
+         // 3. RESET THE INPUT FILE
+         if (uploadBtnRef.current) {
+            //after uploading the image
+            //reseting the upload image button value
+            uploadBtnRef.current.value = "";
          }
-
-         setImage(img);
-         canvas.width = width;
-         canvas.height = height;
-         ResetFilter();
-         setImageStatus({ sucess: true, uploading: false, errorMessage: null });
-      };
-
-      img.onerror = () => {
-         setImageStatus({ sucess: false, uploading: false, errorMessage: "something went wrong" });
-      };
+      }
    };
 
-   // --- DRAG AND DROP HANDLERS ---
+   // UI Handlers
    const handleDrag = (e) => {
       e.preventDefault();
-      e.stopPropagation();
-      if (e.type === "dragenter" || e.type === "dragover") {
-         setIsDragging(true);
-      } else if (e.type === "dragleave") {
-         setIsDragging(false);
-      }
+      setIsDragging(e.type === "dragenter" || e.type === "dragover");
    };
 
    const handleDrop = (e) => {
       e.preventDefault();
-      e.stopPropagation();
       setIsDragging(false);
-
-      const file = e.dataTransfer.files[0];
-      processFile(file);
+      handleFileAction(e.dataTransfer.files[0]);
    };
-
-   const hangleImageUploadInCanvas = (e) => {
-      processFile(e.target?.files[0]);
-   };
-
-   const applyFilters = useCallback(() => {
-      if (!image) return;
-
-      const drawInCanvas = () => {
-         let allfiltervalue = "";
-         for (const key in globalFilterData) {
-            allfiltervalue += `${key}(${globalFilterData[key]["value"]}${globalFilterData[key]["unit"]}) `;
-         }
-
-         let canvasCtx = canvasContext.current;
-         canvasCtx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-         canvasCtx.filter = allfiltervalue.trim();
-         canvasCtx.drawImage(image, 0, 0, canvasRef.current.width, canvasRef.current.height);
-      };
-
-      cancelAnimationFrame(requestRef.current);
-      requestRef.current = requestAnimationFrame(drawInCanvas);
-   }, [globalFilterData, image]);
-
-   const ResetFilter = useCallback(() => {
-      setGlobalFilterData({
-         brightness: { value: 100, unit: "%" },
-         contrast: { value: 100, unit: "%" },
-         saturate: { value: 100, unit: "%" },
-         "hue-rotate": { value: 0, unit: "deg" },
-         blur: { value: 0, unit: "px" },
-         grayscale: { value: 0, unit: "%" },
-         sepia: { value: 0, unit: "%" },
-         opacity: { value: 100, unit: "%" },
-         invert: { value: 0, unit: "%" },
-      });
-   }, [setGlobalFilterData]);
 
    return (
-      <>
-         <section
-            className={`canvas-image-container ${isDragging ? "drag-active" : ""}`}
-            onDragEnter={handleDrag}
-            onDragLeave={handleDrag}
-            onDragOver={handleDrag}
-            onDrop={handleDrop}
-         >
-            {imageStauts.uploading && (
-               <div className="canvas-skeleton">
-                  <div className="skeleton-shimmer"></div>
-                  <p>Optimizing Image...</p>
+      <section
+         className={`canvas-image-container ${isDragging ? "drag-active" : ""}`}
+         onDragOver={handleDrag}
+         onDrop={handleDrop}
+      >
+         {/* When image is uploading this will show up to inform */}
+         {imageStatus.uploading && <div className="canvas-skeleton">Uploading...</div>}
+
+         {/* Canvas will display only when an image is uploaded */}
+         <canvas
+            id="canvas-image-preview"
+            className={isDragging ? "canvas-blur" : ""}
+            ref={canvasRef}
+            style={{
+               display:
+                  imageStatus.success && !imageStatus.uploading && activeFeature === "brush"
+                     ? "block"
+                     : "none",
+            }}
+         />
+
+         {/* 2. THE EMPTY STATE (Show only if no image is loaded) */}
+         {!imageStatus.success && !imageStatus.uploading && <EmptyState isDragging={isDragging} />}
+
+         {activeFeature === "brush" ? (
+            <div className="upload-zone">
+               <label htmlFor="image-upload" className="btn upload-btn">
+                  {isDragging ? "Drop to Upload" : "Upload or Drag Image"}
+               </label>
+               <input
+                  ref={uploadBtnRef}
+                  type="file"
+                  id="image-upload"
+                  onChange={(e) => handleFileAction(e.target.files[0])}
+                  accept="image/*"
+               />
+            </div>
+         ) : (
+            <UnderConstruction />
+         )}
+
+         <ModalOverlay modal={modal} toggleModalOverlay={toggleModalOverlay}>
+            <div className="error-modal-container" onClick={(e) => e.stopPropagation()}>
+               <div className="icon-circle">
+                  <span className="cross-icon">×</span>
                </div>
-            )}
 
-            <canvas
-               id="canvas-image-preview"
-               className={isDragging ? "canvas-blur" : ""}
-               style={{
-                  display:
-                     imageStauts.sucess && !imageStauts.uploading && activeFeature === "brush"
-                        ? "block"
-                        : "none",
-               }}
-               ref={canvasRef}
-            ></canvas>
+               <div className="text-group">
+                  <h2 className="title">ERROR</h2>
 
-            {activeFeature !== "brush" && <UnderConstruction />}
-
-            {activeFeature === "brush" && (
-               <div className="upload-zone">
-                  <label htmlFor="image-upload" className="btn upload-btn">
-                     {isDragging ? "Drop to Upload" : "Upload or Drag Image"}
-                  </label>
-                  <input
-                     ref={uploadBtnRef}
-                     type="file"
-                     id="image-upload"
-                     onChange={hangleImageUploadInCanvas}
-                     accept="image/*"
-                  />
+                  <p className="description">Only Image Files are Supported</p>
                </div>
-            )}
 
-            {/* Error Modal */}
-            <ModalOverlay modal={modal} toggleModalOverlay={toggleModalOverlay}>
-               <div className="error-modal-container" onClick={(e) => e.stopPropagation()}>
-                  <div className="icon-circle">
-                     <span className="cross-icon">×</span>
-                  </div>
-                  <div className="text-group">
-                     <h2 className="title">ERROR</h2>
-                     <p className="description">Only Image Files are Supported</p>
-                  </div>
-                  <button
-                     className="btn-again"
-                     onClick={() => {
-                        toggleModalOverlay();
-                        uploadBtnRef.current?.click(); // Trigger upload image button on try again
-                     }}
-                  >
-                     Try Again
-                  </button>
-               </div>
-            </ModalOverlay>
-         </section>
-      </>
+               <button
+                  className="btn-again"
+                  onClick={() => {
+                     toggleModalOverlay();
+                     uploadBtnRef.current?.click(); // Trigger upload image button on try again
+                  }}
+               >
+                  Try Again
+               </button>
+            </div>
+         </ModalOverlay>
+      </section>
+   );
+};
+
+// Empty State Component
+// if there is no image uploaded yet
+const EmptyState = ({ isDragging }) => {
+   return (
+      <div className={`upload-placeholder ${isDragging ? "active" : ""}`}>
+         <div className="upload-icon-container">
+            {/* You can replace this with an SVG or the image you provided */}
+            <div className="icon-cloud">
+               <span className="arrow-up">↑</span>
+            </div>
+         </div>
+         <div className="upload-text">
+            <h3>Drag and drop or click here</h3>
+            <p>to upload your image (max 1200px)</p>
+         </div>
+         {/* This invisible label covers the whole area to make it clickable */}
+         <label htmlFor="image-upload" className="full-area-label" />
+      </div>
    );
 };
 
