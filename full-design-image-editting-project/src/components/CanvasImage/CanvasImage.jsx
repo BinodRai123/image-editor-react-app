@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import "./canvasImage.css";
 import ModalOverlay from "../modalOverlay/ModalOverlay";
 import { reactContext } from "../../WrapFilterData/WrapperFilters";
@@ -14,45 +14,46 @@ const CanvasImage = ({ activeFeature }) => {
    const [modal, setModal] = useState(false);
    const uploadBtnRef = useRef(null);
 
-   const { canvasRef, applyFilters, calculateDimensions, resetCanvas } = useCanvasLogic(
-      image,
-      globalFilterData,
-   );
+   const { canvasRef, applyFilters, resetCanvas } = useCanvasLogic(image, globalFilterData);
 
    const toggleModalOverlay = () => setModal((prev) => !prev);
 
    useEffect(() => {
       if (!image) return; //if there is no image then return
+
       applyFilters(); // if ther is image then apply this filter
       const handler = setTimeout(() => setOriginalImage(image), 200);
-      return () => clearTimeout(handler);
+      return () => {
+         clearTimeout(handler);
+      };
    }, [globalFilterData, image, applyFilters, setOriginalImage]);
 
    // Inside CanvasImage.jsx
 
    const handleFileAction = async (file) => {
-      if (!file) return;
+      if (!file) return; // check if there is any file uploaded
 
       //Initializing the image uploading states
       setImageStatus({ success: false, uploading: true, errorMessage: null });
 
       try {
-         //when user click then it will
+         //This function Create image, check if it is valid
+         //calculate the height and width of image and return it
          const { img, width, height } = await processImageUpload(file);
 
          // 1. Set Canvas size
          canvasRef.current.width = width;
          canvasRef.current.height = height;
 
-         // 2. Update States
          setImage(img); //updating image state
+         resetCanvas();
          setGlobalFilterData(DEFAULT_FILTERS); //making the global filter value to default
          setImageStatus({ success: true, uploading: false, errorMessage: null });
       } catch (error) {
          setImageStatus({ success: false, uploading: false, errorMessage: error });
          setModal(true);
       } finally {
-         // 3. RESET THE INPUT FILE
+         // 2. RESET THE INPUT FILE
          if (uploadBtnRef.current) {
             //after uploading the image
             //reseting the upload image button value
@@ -61,12 +62,13 @@ const CanvasImage = ({ activeFeature }) => {
       }
    };
 
-   // UI Handlers
+   // Drag the file functionality
    const handleDrag = (e) => {
       e.preventDefault();
       setIsDragging(e.type === "dragenter" || e.type === "dragover");
    };
 
+   // Drop The file functionality
    const handleDrop = (e) => {
       e.preventDefault();
       setIsDragging(false);
@@ -95,9 +97,6 @@ const CanvasImage = ({ activeFeature }) => {
             }}
          />
 
-         {/* 2. THE EMPTY STATE (Show only if no image is loaded) */}
-         {!imageStatus.success && !imageStatus.uploading && <EmptyState isDragging={isDragging} />}
-
          {activeFeature === "brush" ? (
             <div className="upload-zone">
                <label htmlFor="image-upload" className="btn upload-btn">
@@ -110,6 +109,8 @@ const CanvasImage = ({ activeFeature }) => {
                   onChange={(e) => handleFileAction(e.target.files[0])}
                   accept="image/*"
                />
+               {/* 2. THE EMPTY STATE (Show only if no image is loaded) */}
+               {!imageStatus.success && !imageStatus.uploading && <EmptyState isDragging={isDragging} />}
             </div>
          ) : (
             <UnderConstruction />
@@ -142,8 +143,8 @@ const CanvasImage = ({ activeFeature }) => {
    );
 };
 
-// Empty State Component
-// if there is no image uploaded yet
+// Empty State Component(if there is no image uploaded yet)
+// Then it will appear
 const EmptyState = ({ isDragging }) => {
    return (
       <div className={`upload-placeholder ${isDragging ? "active" : ""}`}>

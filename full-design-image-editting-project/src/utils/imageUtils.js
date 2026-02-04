@@ -1,6 +1,6 @@
 // utils/imageUtils.js
 
-export const MAX_PREVIEW_SIZE = 1200;
+const MAX_PREVIEW_SIZE = 1200;
 
 // utils/imageUtils.js
 
@@ -19,12 +19,11 @@ export const processImageUpload = (file) => {
          // 2.storign img width and height in variables
          let width = img.width;
          let height = img.height;
-         const MAX_SIZE = 1200;
 
          //This check whether the image size is greater than
-         //MAX_SIZE and if yes then it will resize width and height
-         if (width > MAX_SIZE || height > MAX_SIZE) {
-            const ratio = Math.min(MAX_SIZE / width, MAX_SIZE / height);
+         //MAX_PREVIEW_SIZE and if yes then it will resize width and height
+         if (width > MAX_PREVIEW_SIZE || height > MAX_PREVIEW_SIZE) {
+            const ratio = Math.min(MAX_PREVIEW_SIZE / width, MAX_PREVIEW_SIZE / height);
             width *= ratio;
             height *= ratio;
          }
@@ -38,7 +37,7 @@ export const processImageUpload = (file) => {
    });
 };
 
-export const getFilterString = (filterData) => {
+export const generateCSSFilterString = (filterData) => {
    return Object.entries(filterData)
       .map(([key, config]) => `${key}(${config.value}${config.unit})`)
       .join(" ");

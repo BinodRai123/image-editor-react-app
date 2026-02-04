@@ -1,39 +1,31 @@
 // hooks/useCanvasLogic.js
 import { useCallback, useRef } from "react";
-import { getFilterString, MAX_PREVIEW_SIZE } from "../utils/imageUtils";
+import { generateCSSFilterString } from "../utils/imageUtils";
 
+//canvas logic (canvasRef, applyingFilter, resetingCanvas)
 export const useCanvasLogic = (image, globalFilterData) => {
    const canvasRef = useRef(null);
    const requestRef = useRef();
 
    const applyFilters = useCallback(() => {
+      //check image and canvas
       if (!image || !canvasRef.current) return;
 
       const drawInCanvas = () => {
          const canvas = canvasRef.current;
          const ctx = canvas.getContext("2d");
-         const filterString = getFilterString(globalFilterData);
 
-         ctx.clearRect(0, 0, canvas.width, canvas.height);
-         ctx.filter = filterString;
-         ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+         //convert globalFilter into css Filter string
+         const filterString = generateCSSFilterString(globalFilterData);
+
+         ctx.clearRect(0, 0, canvas.width, canvas.height); // reset canvas
+         ctx.filter = filterString; //apply filter
+         ctx.drawImage(image, 0, 0, canvas.width, canvas.height); //paint image on canvas
       };
 
       cancelAnimationFrame(requestRef.current);
       requestRef.current = requestAnimationFrame(drawInCanvas);
    }, [globalFilterData, image]);
-
-   const calculateDimensions = (img) => {
-      let width = img.width;
-      let height = img.height;
-
-      if (width > MAX_PREVIEW_SIZE || height > MAX_PREVIEW_SIZE) {
-         const ratio = Math.min(MAX_PREVIEW_SIZE / width, MAX_PREVIEW_SIZE / height);
-         width *= ratio;
-         height *= ratio;
-      }
-      return { width, height };
-   };
 
    const resetCanvas = useCallback(() => {
       if (canvasRef.current) {
@@ -43,5 +35,5 @@ export const useCanvasLogic = (image, globalFilterData) => {
       }
    }, []);
 
-   return { canvasRef, applyFilters, calculateDimensions, resetCanvas };
+   return { canvasRef, applyFilters, resetCanvas };
 };
