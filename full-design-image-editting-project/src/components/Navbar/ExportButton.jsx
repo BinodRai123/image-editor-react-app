@@ -7,8 +7,8 @@ import "./exportButton.css";
 const ExportButton = () => {
    const { originalImage, globalFilterData } = useContext(reactContext);
    const [isExporting, setIsExporting] = useState(false);
+   const [exportProgress, setExportProgress] = useState(0); // Track 0-100%
 
-   // State for the Modal
    const [showModal, setShowModal] = useState(false);
    const [fileName, setFileName] = useState("edited-image");
 
@@ -16,44 +16,74 @@ const ExportButton = () => {
       if (!originalImage || isExporting) return;
 
       setIsExporting(true);
-      setShowModal(false); // Close modal immediately when processing starts
+      setShowModal(false);
+      setExportProgress(0);
 
-      // Wraped in a small timeout to allow the UI to update/disable the button
-      // before the heavy canvas processing starts
+      // 1. Start a fake progress interval to make the UI feel alive
+      const progressInterval = setInterval(() => {
+         setExportProgress((prev) => {
+            if (prev >= 95) {
+               clearInterval(progressInterval);
+               return 95;
+            }
+            return prev + 5;
+         });
+      }, 50);
+
       setTimeout(() => {
          try {
             const Image = originalImage;
             const ExportCanvas = document.createElement("canvas");
             const ctx = ExportCanvas.getContext("2d");
 
-            ExportCanvas.width = Image.width;
-            ExportCanvas.height = Image.height;
+            // Use natural dimensions to prevent size loss
+            const width = Image.naturalWidth || Image.width;
+            const height = Image.naturalHeight || Image.height;
+            ExportCanvas.width = width;
+            ExportCanvas.height = height;
 
             ctx.filter = generateCSSFilterString(globalFilterData);
-            ctx.drawImage(Image, 0, 0, Image.width, Image.height);
+            ctx.drawImage(Image, 0, 0, width, height);
 
             const link = document.createElement("a");
-
-            // Use user name or fallback
             const finalName = fileName.trim() || `image-${Date.now()}`;
             link.download = `${finalName}.jpg`;
 
-            // OPTIMIZATION: Use image/jpeg and quality settings (0.8 - 0.9)
-            // This will significantly reduce the 24MB size.
-            link.href = ExportCanvas.toDataURL("image/jpeg", 0.9);
+            // Using 0.95 to keep quality high (closer to your 16mb original)
+            link.href = ExportCanvas.toDataURL("image/jpeg", 0.95);
 
-            link.click();
+            setExportProgress(100); // Finish progress
+
+            setTimeout(() => {
+               link.click();
+               clearInterval(progressInterval);
+               setIsExporting(false);
+               setExportProgress(0);
+            }, 300); // Brief pause at 100% for visual satisfaction
          } catch (error) {
             console.error("Export failed:", error);
-         } finally {
+            clearInterval(progressInterval);
             setIsExporting(false);
          }
-      }, 100);
+      }, 500); // Slight delay so user sees the "Exporting" state start
    };
 
    return (
       <>
-         {/* Main Export Trigger */}
+         {/* Lockout Progress Overlay */}
+         {isExporting && (
+            <div className="export-lockout-overlay">
+               <div className="progress-container">
+                  <div className="spinner"></div>
+                  <h2>Processing Image...</h2>
+                  <div className="progress-bar-bg">
+                     <div className="progress-bar-fill" style={{ width: `${exportProgress}%` }}></div>
+                  </div>
+                  <span>{exportProgress}%</span>
+               </div>
+            </div>
+         )}
+
          <button
             className="btn btn-primary row"
             style={{
@@ -72,7 +102,6 @@ const ExportButton = () => {
             {isExporting ? "Exporting..." : "Export"}
          </button>
 
-         {/* User Friendly Overlay Modal */}
          {showModal && (
             <div className="modalOverlayStyle">
                <div className="modalContentStyle">
