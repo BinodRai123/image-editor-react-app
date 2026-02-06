@@ -1,8 +1,9 @@
-import { useContext, useState, useRef } from "react";
+import { useContext, useState } from "react";
 import { reactContext } from "../../WrapFilterData/WrapperFilters";
 import DownloadIcon from "../icons/DownloadIcon";
 import { generateCSSFilterString } from "../../utils/imageUtils.js";
 import "./exportButton.css";
+import ModalOverlay from "../modalOverlay/ModalOverlay.jsx";
 
 const ExportButton = () => {
    const { originalImage, globalFilterData } = useContext(reactContext);
@@ -72,16 +73,18 @@ const ExportButton = () => {
       <>
          {/* Lockout Progress Overlay */}
          {isExporting && (
-            <div className="export-lockout-overlay">
-               <div className="progress-container">
-                  <div className="spinner"></div>
-                  <h2>Processing Image...</h2>
-                  <div className="progress-bar-bg">
-                     <div className="progress-bar-fill" style={{ width: `${exportProgress}%` }}></div>
+            <>
+               <h2>Processing Image...</h2>
+               <div className="export-lockout-overlay">
+                  <div className="progress-container">
+                     <div className="spinner"></div>
+                     <div className="progress-bar-bg">
+                        <div className="progress-bar-fill" style={{ width: `${exportProgress}%` }}></div>
+                     </div>
+                     <span>{exportProgress}%</span>
                   </div>
-                  <span>{exportProgress}%</span>
                </div>
-            </div>
+            </>
          )}
 
          {/* EXPORT BUTTON */}
@@ -104,40 +107,46 @@ const ExportButton = () => {
          </button>
 
          {/* Naming the folder Functionality */}
-         {showModal && (
-            <div className="modalOverlayStyle">
-               <div className="modalContentStyle">
-                  <h3 style={{ marginTop: 0 }}>Name your file</h3>
-                  <p style={{ fontSize: "0.9rem", color: "#666" }}>
-                     Choose a name for your edited masterpiece.
-                  </p>
+         <ModalOverlay modal={showModal} toggleModalOverlay={() => setShowModal(false)}>
+            <div
+               className="modalContentStyle"
+               tabIndex={0}
+               onClick={(e) => e.stopPropagation()}
+               // onKeyDown={(e) => console.log(e)}
+            >
+               <h3 style={{ marginTop: 0 }}>Name your file</h3>
+               <p style={{ fontSize: "0.9rem", color: "#666" }}>Choose a name for your edited masterpiece.</p>
 
-                  <input
-                     type="text"
-                     className="inputStyle"
-                     value={fileName}
-                     onChange={(e) => setFileName(e.target.value)}
-                     onKeyDown={(e) => e.key === "Enter" && handleExport()}
-                     autoFocus
-                  />
+               <input
+                  type="text"
+                  className="inputStyle"
+                  value={fileName}
+                  onChange={(e) => setFileName(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleExport()}
+                  autoFocus
+               />
 
-                  <div
-                     style={{ display: "flex", gap: "10px", justifyContent: "flex-end", marginTop: "20px" }}
+               <div
+                  style={{
+                     display: "flex",
+                     gap: "10px",
+                     justifyContent: "flex-end",
+                     marginTop: "20px",
+                  }}
+               >
+                  <button
+                     className="btn"
+                     style={{ background: "#eee", color: "#333" }}
+                     onClick={() => setShowModal(false)}
                   >
-                     <button
-                        className="btn"
-                        style={{ background: "#eee", color: "#333" }}
-                        onClick={() => setShowModal(false)}
-                     >
-                        Cancel
-                     </button>
-                     <button className="btn btn-primary" onClick={handleExport}>
-                        Download
-                     </button>
-                  </div>
+                     Cancel
+                  </button>
+                  <button className="btn btn-primary" onClick={handleExport}>
+                     Download
+                  </button>
                </div>
             </div>
-         )}
+         </ModalOverlay>
       </>
    );
 };
