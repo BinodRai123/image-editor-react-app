@@ -1,5 +1,4 @@
 const DropZone = ({ image, isDragging, handleFileAction, uploadBtnRef, showEmptyState }) => {
-   console.log(showEmptyState);
    return (
       <div className="upload-zone">
          {/* Upload Button */}

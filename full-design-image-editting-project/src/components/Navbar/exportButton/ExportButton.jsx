@@ -107,12 +107,7 @@ const ExportButton = () => {
 
          {/* Naming the folder Functionality */}
          <ModalOverlay modal={NamingFileModal} toggleModalOverlay={() => setNamingFileModal(false)}>
-            <div
-               className="modalContentStyle"
-               tabIndex={0}
-               onClick={(e) => e.stopPropagation()}
-               // onKeyDown={(e) => console.log(e)}
-            >
+            <div className="modalContentStyle" tabIndex={0} onClick={(e) => e.stopPropagation()}>
                <h3 style={{ marginTop: 0 }}>Name your file</h3>
                <p style={{ fontSize: "0.9rem", color: "#666" }}>Choose a name for your edited masterpiece.</p>
 
