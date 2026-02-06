@@ -1,23 +1,23 @@
 import { useContext, useState } from "react";
-import { reactContext } from "../../WrapFilterData/WrapperFilters";
-import DownloadIcon from "../icons/DownloadIcon";
-import { generateCSSFilterString } from "../../utils/imageUtils.js";
+import { reactContext } from "../../../WrapFilterData/WrapperFilters.jsx";
+import DownloadIcon from "../../icons/DownloadIcon.jsx";
+import { generateCSSFilterString } from "../../../utils/imageUtils.js";
 import "./exportButton.css";
-import ModalOverlay from "../modalOverlay/ModalOverlay.jsx";
+import ModalOverlay from "../../modalOverlay/ModalOverlay.jsx";
 
 const ExportButton = () => {
    const { originalImage, globalFilterData } = useContext(reactContext);
    const [isExporting, setIsExporting] = useState(false);
    const [exportProgress, setExportProgress] = useState(0); // Track 0-100%
 
-   const [showModal, setShowModal] = useState(false);
+   const [NamingFileModal, setNamingFileModal] = useState(false);
    const [fileName, setFileName] = useState("edited-image");
 
    const handleExport = async () => {
       if (!originalImage || isExporting) return;
 
       setIsExporting(true);
-      setShowModal(false);
+      setNamingFileModal(false);
       setExportProgress(0);
 
       // 1. Start a fake progress interval to make the UI feel alive
@@ -71,7 +71,7 @@ const ExportButton = () => {
 
    return (
       <>
-         {/* Lockout Progress Overlay */}
+         {/* Exporting Progress Overlay */}
          {isExporting && (
             <>
                <h2>Processing Image...</h2>
@@ -92,22 +92,21 @@ const ExportButton = () => {
             className="btn btn-primary row"
             style={{
                "--gap": "0.2rem",
-               opacity: isExporting ? 0.7 : 1,
-               cursor: isExporting ? "not-allowed" : "pointer",
+               cursor: isExporting || !originalImage ? "not-allowed" : "pointer",
             }}
             onClick={() => {
                if (!originalImage) return;
-               setShowModal(true);
+               setNamingFileModal(true);
             }}
-            disabled={isExporting}
+            disabled={isExporting || !originalImage}
             title="Export Image"
          >
-            <DownloadIcon size={"20"} color="black" />
+            <DownloadIcon size={"20"} color={`${originalImage ? "black" : "gray"}`} />
             {isExporting ? "Exporting..." : "Export"}
          </button>
 
          {/* Naming the folder Functionality */}
-         <ModalOverlay modal={showModal} toggleModalOverlay={() => setShowModal(false)}>
+         <ModalOverlay modal={NamingFileModal} toggleModalOverlay={() => setNamingFileModal(false)}>
             <div
                className="modalContentStyle"
                tabIndex={0}
@@ -137,7 +136,7 @@ const ExportButton = () => {
                   <button
                      className="btn"
                      style={{ background: "#eee", color: "#333" }}
-                     onClick={() => setShowModal(false)}
+                     onClick={() => setNamingFileModal(false)}
                   >
                      Cancel
                   </button>

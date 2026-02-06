@@ -2,13 +2,13 @@ const ModalOverlay = ({ modal, toggleModalOverlay, children }) => {
    return (
       <>
          {modal && (
-            <div
+            <section
                onKeyDown={(e) => e.code === "Escape" && toggleModalOverlay()}
                onClick={toggleModalOverlay}
                className="modal-overlay"
             >
                {children}
-            </div>
+            </section>
          )}
       </>
    );

@@ -6,61 +6,11 @@ import { reactContext } from "../../WrapFilterData/WrapperFilters";
 // Destructuring filterData and PresetData from FilterConstants
 const { filterData, PresetData } = FilterConstants;
 
-/* -----------------------------------------
-Utils
------------------------------------------- */
-//this function will return initial filter state object
-// like this { brightness: {value:0, unit: '%'}, contrast: {value:15, unit: '%'} ...}
-const getInitialFilterState = (filterData) => {
-   return filterData.reduce((acc, section) => {
-      section.controls.forEach(({ id, defaultValue, unit }) => {
-         acc[id] = {
-            value: defaultValue,
-            unit,
-         };
-      });
-      return acc;
-   }, {});
-};
+//Importing parse functions for filter data
+import { parseFilters, getInitialFilterState } from "../../utils/inputRangeUtils";
+import PresetCard from "../presetCard/PresetCard";
+import AutoEnchancerBtn from "./AutoEnhancerBtn/AutoEnchancerBtn";
 
-/* return this in object
-{ 
- brightness: 0, 
-   contrast: 15, 
-   exposure: 20, 
-   saturation: 0, 
-   hue: 0, 
-   blur: 0, 
-   grayscale: 0, 
-   sepia: 0, 
-   opacity: 100, 
-   invert: 0 
-  } */
-
-// parse/convert the preset filter string into
-// nested objected for globalfilterdata
-function parseFilters(filterString) {
-   const result = {};
-
-   // Regex: matches 'filter-name(number unit)'
-   // group 1: name, group 2: value, group 3: unit
-   const regex = /([\w-]+)\(([\d.]+)([^)]*)\)/g;
-   let match;
-
-   while ((match = regex.exec(filterString)) !== null) {
-      const [_, name, value, unit] = match;
-      result[name] = {
-         value: parseFloat(value),
-         unit: unit.trim(),
-      };
-   }
-
-   return result;
-}
-
-/* -----------------------------------------
-   Component
------------------------------------------- */
 const PhotoEditorSidebar = React.memo(() => {
    const tabs = ["All", "Filters", "Presets"];
    const { globalFilterData, setGlobalFilterData } = useContext(reactContext);
@@ -93,15 +43,6 @@ const PhotoEditorSidebar = React.memo(() => {
       setGlobalFilterData(() => getInitialFilterState(filterData));
    }, []);
 
-   /* Memoized preset preview style */
-   const getPresetPreviewStyle = useCallback((preset) => {
-      return {
-         backgroundImage: "",
-         filter: preset.style.filters ?? "gray(10px)",
-         opacity: preset.style.opacity ?? 1,
-      };
-   }, []);
-
    /* ---- Show which preset is active ----  */
    const handleActivePreset = useCallback((name, id) => {
       setActivePreset(name);
@@ -114,15 +55,14 @@ const PhotoEditorSidebar = React.memo(() => {
       setIsOpen(!isOpen);
    };
 
-   /* ---- Auto Enhancer button functionality ----  */
-   const handleAutoEnhancer = () => {
-      let min = 0,
-         max = PresetData.length - 1;
-      const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
-      setActivePreset(PresetData[randomNumber].name);
-      const ParsedPresetStringtoObj = parseFilters(PresetData[randomNumber].style.filters);
-      setGlobalFilterData(ParsedPresetStringtoObj);
-   };
+   /* Apply Filter To Preset Card for each preset card  */
+   const getPresetPreviewStyle = useCallback((preset) => {
+      return {
+         backgroundImage: "",
+         filter: preset.style.filters ?? "gray(10px)",
+         opacity: preset.style.opacity ?? 1,
+      };
+   }, []);
 
    return (
       <>
@@ -202,24 +142,13 @@ const PhotoEditorSidebar = React.memo(() => {
 
                      <div className="filter-grid">
                         {PresetData.map((preset, id) => (
-                           <button
-                              key={preset.name}
-                              className={`preset-card ${preset.name === activePreset ? "active" : ""}`}
-                              onClick={() => handleActivePreset(preset.name, id)}
-                           >
-                              <div
-                                 className="filter-preview"
-                                 style={{ backgroundColor: preset.style.backgroundColor }}
-                              >
-                                 <div
-                                    className="preview-image"
-                                    style={getPresetPreviewStyle(preset)}
-                                    alt="Preset Background Image"
-                                 />
-                              </div>
-
-                              <span style={{ fontSize: "0.7rem" }}>{preset.name}</span>
-                           </button>
+                           <PresetCard
+                              preset={preset}
+                              id={id}
+                              activePreset={activePreset}
+                              getPresetPreviewStyle={getPresetPreviewStyle}
+                              handleActivePreset={handleActivePreset}
+                           />
                         ))}
                      </div>
                   </section>
@@ -227,11 +156,11 @@ const PhotoEditorSidebar = React.memo(() => {
             </div>
 
             {/* Footer */}
-            <div className="sidebar-footer">
-               <button onClick={handleAutoEnhancer} className="btn-auto-enhance">
-                  Auto Enhance
-               </button>
-            </div>
+            <AutoEnchancerBtn
+               setActivePreset={setActivePreset}
+               setGlobalFilterData={setGlobalFilterData}
+               PresetData={PresetData}
+            />
          </aside>
       </>
    );

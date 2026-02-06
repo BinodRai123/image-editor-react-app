@@ -1,5 +1,5 @@
 import BrushIcon from "../icons/BrushIcon";
-import ExportButton from "./ExportButton";
+import ExportButton from "./exportButton/ExportButton";
 
 const Navbar = () => {
    return (
