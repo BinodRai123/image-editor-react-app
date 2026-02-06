@@ -3,21 +3,24 @@ import "./canvasImage.css";
 import ModalOverlay from "../modalOverlay/ModalOverlay";
 import { reactContext } from "../../WrapFilterData/WrapperFilters";
 import UnderConstruction from "../../pages/underConstruction";
-import { processImageUpload, DEFAULT_FILTERS } from "../../utils/imageUtils.js";
 import { useCanvasLogic } from "../../hooks/useCanvasLogic.js";
+import { useFileHandler } from "../../hooks/useFileHandler.js"; // New Hook
+import DropZone from "../dropZone/DropZone"; // New Component
 
 const CanvasImage = ({ activeFeature }) => {
    const { globalFilterData, setGlobalFilterData, setOriginalImage } = useContext(reactContext);
-   const [imageStatus, setImageStatus] = useState({ success: false, uploading: false });
    const [image, setImage] = useState(null);
-   const [isDragging, setIsDragging] = useState(false);
-   const [modal, setModal] = useState(false);
    const uploadBtnRef = useRef(null);
 
    const { canvasRef, applyFilters, resetCanvas } = useCanvasLogic(image, globalFilterData);
 
+   //custom hook to handle file logic
+   const { imageStatus, isDragging, modal, setModal, handleFileAction, handleDrag, handleDrop } =
+      useFileHandler(canvasRef, setImage, resetCanvas, setGlobalFilterData, uploadBtnRef);
+
    const toggleModalOverlay = () => setModal((prev) => !prev);
 
+   //Pain canvas with Filter when globalFilter changed
    useEffect(() => {
       if (!image) return; //if there is no image then return
 
@@ -28,53 +31,6 @@ const CanvasImage = ({ activeFeature }) => {
       };
    }, [globalFilterData, image, applyFilters, setOriginalImage]);
 
-   // Inside CanvasImage.jsx
-
-   const handleFileAction = async (file) => {
-      if (!file) return; // check if there is any file uploaded
-
-      //Initializing the image uploading states
-      setImageStatus({ success: false, uploading: true, errorMessage: null });
-
-      try {
-         //This function Create image, check if it is valid
-         //calculate the height and width of image and return it
-         const { img, width, height } = await processImageUpload(file);
-
-         // 1. Set Canvas size
-         canvasRef.current.width = width;
-         canvasRef.current.height = height;
-
-         setImage(img); //updating image state
-         resetCanvas();
-         setGlobalFilterData(DEFAULT_FILTERS); //making the global filter value to default
-         setImageStatus({ success: true, uploading: false, errorMessage: null });
-      } catch (error) {
-         setImageStatus({ success: false, uploading: false, errorMessage: error });
-         setModal(true);
-      } finally {
-         // 2. RESET THE INPUT FILE
-         if (uploadBtnRef.current) {
-            //after uploading the image
-            //reseting the upload image button value
-            uploadBtnRef.current.value = "";
-         }
-      }
-   };
-
-   // Drag the file functionality
-   const handleDrag = (e) => {
-      e.preventDefault();
-      setIsDragging(e.type === "dragenter" || e.type === "dragover");
-   };
-
-   // Drop The file functionality
-   const handleDrop = (e) => {
-      e.preventDefault();
-      setIsDragging(false);
-      handleFileAction(e.dataTransfer.files[0]);
-   };
-
    return (
       <section
          className={`canvas-image-container ${isDragging ? "drag-active" : ""}`}
@@ -84,7 +40,6 @@ const CanvasImage = ({ activeFeature }) => {
          {/* When image is uploading this will show up to inform */}
          {imageStatus.uploading && <div className="canvas-skeleton">Uploading...</div>}
 
-         {/* Canvas will display only when an image is uploaded */}
          <canvas
             id="canvas-image-preview"
             className={isDragging ? "canvas-blur" : ""}
@@ -98,20 +53,13 @@ const CanvasImage = ({ activeFeature }) => {
          />
 
          {activeFeature === "brush" ? (
-            <div className="upload-zone">
-               <label htmlFor="image-upload" className="btn upload-btn">
-                  {isDragging ? "Drop to Upload" : "Upload or Drag Image"}
-               </label>
-               <input
-                  ref={uploadBtnRef}
-                  type="file"
-                  id="image-upload"
-                  onChange={(e) => handleFileAction(e.target.files[0])}
-                  accept="image/*"
-               />
-               {/* 2. THE EMPTY STATE (Show only if no image is loaded) */}
-               {!imageStatus.success && !imageStatus.uploading && <EmptyState isDragging={isDragging} />}
-            </div>
+            <DropZone
+               image={image}
+               isDragging={isDragging}
+               handleFileAction={handleFileAction}
+               uploadBtnRef={uploadBtnRef}
+               showEmptyState={!imageStatus.success && !imageStatus.uploading && !image}
+            />
          ) : (
             <UnderConstruction />
          )}
@@ -121,13 +69,10 @@ const CanvasImage = ({ activeFeature }) => {
                <div className="icon-circle">
                   <span className="cross-icon">×</span>
                </div>
-
                <div className="text-group">
                   <h2 className="title">ERROR</h2>
-
                   <p className="description">Only Image Files are Supported</p>
                </div>
-
                <button
                   className="btn-again"
                   onClick={() => {
@@ -140,27 +85,6 @@ const CanvasImage = ({ activeFeature }) => {
             </div>
          </ModalOverlay>
       </section>
-   );
-};
-
-// Empty State Component(if there is no image uploaded yet)
-// Then it will appear
-const EmptyState = ({ isDragging }) => {
-   return (
-      <div className={`upload-placeholder ${isDragging ? "active" : ""}`}>
-         <div className="upload-icon-container">
-            {/* You can replace this with an SVG or the image you provided */}
-            <div className="icon-cloud">
-               <span className="arrow-up">↑</span>
-            </div>
-         </div>
-         <div className="upload-text">
-            <h3>Drag and drop or click here</h3>
-            <p>to upload your image (max 1200px)</p>
-         </div>
-         {/* This invisible label covers the whole area to make it clickable */}
-         <label htmlFor="image-upload" className="full-area-label" />
-      </div>
    );
 };
 

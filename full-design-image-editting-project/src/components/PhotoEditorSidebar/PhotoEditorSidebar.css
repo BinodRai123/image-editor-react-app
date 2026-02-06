@@ -79,7 +79,7 @@ slider
 presets
 ================= */
 .control-group {
-   background-color: #fff;
+   background-color: #ffffff;
    border-radius: 12px;
    border: 1px solid #f3f4f6;
    padding: var(--padding-sm);
@@ -263,6 +263,7 @@ presets
    }
 
    .card {
+      max-width: 13rem;
       padding: var(--padding-sm);
       margin: var(--margin-sm);
    }

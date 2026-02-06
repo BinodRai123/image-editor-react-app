@@ -131,6 +131,7 @@ const PhotoEditorSidebar = React.memo(() => {
             className="menubar"
             onClick={toggleSidebar}
             style={{ background: "none", border: "none", padding: 0 }}
+            aria-label="menubar"
          >
             <div className={`menu-container ${isOpen ? "open" : ""}`}>
                <div className="bar"></div>

@@ -84,6 +84,7 @@ const ExportButton = () => {
             </div>
          )}
 
+         {/* EXPORT BUTTON */}
          <button
             className="btn btn-primary row"
             style={{
@@ -102,6 +103,7 @@ const ExportButton = () => {
             {isExporting ? "Exporting..." : "Export"}
          </button>
 
+         {/* Naming the folder Functionality */}
          {showModal && (
             <div className="modalOverlayStyle">
                <div className="modalContentStyle">
