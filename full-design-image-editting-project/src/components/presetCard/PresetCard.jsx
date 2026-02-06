@@ -1,7 +1,6 @@
 const PresetCard = ({ preset, id, activePreset, getPresetPreviewStyle, handleActivePreset }) => {
    return (
       <button
-         key={preset.name}
          className={`preset-card ${preset.name === activePreset ? "active" : ""}`}
          onClick={() => handleActivePreset(preset.name, id)}
       >

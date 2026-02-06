@@ -10,6 +10,7 @@ const { filterData, PresetData } = FilterConstants;
 import { parseFilters, getInitialFilterState } from "../../utils/inputRangeUtils";
 import PresetCard from "../presetCard/PresetCard";
 import AutoEnchancerBtn from "./AutoEnhancerBtn/AutoEnchancerBtn";
+import InputRangesCard from "./InputRangeCard/InputRangesCard";
 
 const PhotoEditorSidebar = React.memo(() => {
    const tabs = ["All", "Filters", "Presets"];
@@ -103,36 +104,14 @@ const PhotoEditorSidebar = React.memo(() => {
             <div className="sidebar-content">
                {/* Adjust Tab */}
                {(activeTab === "All" || activeTab === "Filters") &&
+                  //Input range Cards
                   filterData.map((section) => (
-                     <div key={section.SectionName} className="card">
-                        <div className="row">
-                           {section.icon ? <>{section.icon}</> : "error"}
-                           <h1>{section.SectionName}</h1>
-                        </div>
-
-                        <div className="slider-stack">
-                           {section.controls.map((control) => (
-                              <div key={control.id} className="slider-container">
-                                 <div className="slider-info">
-                                    <label htmlFor={`${control.id}`} aria-label={`${control.id}`}>
-                                       {control.label}
-                                    </label>
-                                    <span>{globalFilterData[`${control?.id}`]["value"]}</span>
-                                 </div>
-
-                                 <input
-                                    id={control.id}
-                                    type="range"
-                                    className="custom-range"
-                                    min={control.min}
-                                    max={control.max}
-                                    value={globalFilterData[`${control.id}`]["value"]}
-                                    onChange={handleRangeChange}
-                                 />
-                              </div>
-                           ))}
-                        </div>
-                     </div>
+                     <InputRangesCard
+                        key={section.SectionName}
+                        section={section}
+                        globalFilterData={globalFilterData}
+                        handleRangeChange={handleRangeChange}
+                     />
                   ))}
 
                {/* Presets */}
@@ -141,8 +120,10 @@ const PhotoEditorSidebar = React.memo(() => {
                      <h1 style={{ marginBottom: "0.5rem" }}>Filter Presets</h1>
 
                      <div className="filter-grid">
+                        {/* Preset cards */}
                         {PresetData.map((preset, id) => (
                            <PresetCard
+                              key={preset.name}
                               preset={preset}
                               id={id}
                               activePreset={activePreset}
@@ -156,6 +137,7 @@ const PhotoEditorSidebar = React.memo(() => {
             </div>
 
             {/* Footer */}
+            {/* Auto Enhancer Button */}
             <AutoEnchancerBtn
                setActivePreset={setActivePreset}
                setGlobalFilterData={setGlobalFilterData}
