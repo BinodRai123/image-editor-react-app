@@ -11,6 +11,7 @@ import { parseFilters, getInitialFilterState } from "../../utils/inputRangeUtils
 import PresetCard from "../presetCard/PresetCard";
 import AutoEnchancerBtn from "./AutoEnhancerBtn/AutoEnchancerBtn";
 import InputRangesCard from "./InputRangeCard/InputRangesCard";
+import MenuBarButton from "../menuIcon/menuIcon";
 
 const PhotoEditorSidebar = React.memo(() => {
    const tabs = ["All", "Filters", "Presets"];
@@ -68,18 +69,7 @@ const PhotoEditorSidebar = React.memo(() => {
    return (
       <>
          {/* ---- Menubar Icon ----- */}
-         <button
-            className="menubar"
-            onClick={toggleSidebar}
-            style={{ background: "none", border: "none", padding: 0 }}
-            aria-label="menubar"
-         >
-            <div className={`menu-container ${isOpen ? "open" : ""}`}>
-               <div className="bar"></div>
-               <div className="bar"></div>
-               <div className="bar"></div>
-            </div>
-         </button>
+         <MenuBarButton toggleSidebar={toggleSidebar} isOpen={isOpen} />
 
          {/* This div is used for overloady where  */}
          {/* when client clicks outside the sidebar, it closed the sidebar */}

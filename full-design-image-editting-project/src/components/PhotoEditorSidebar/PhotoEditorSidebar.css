@@ -4,14 +4,14 @@
    flex-direction: column;
    width: 22rem;
    background-color: var(--color-white);
-   border-left: 1px solid #f4f3f0;
+   border-left: 1px solid var(--border-subtle);
    z-index: 20;
 }
 
 /* Tabs */
 .tab-header {
    display: flex;
-   border-bottom: 1px solid #f4f3f0;
+   border-bottom: 1px solid var(--border-subtle);
 }
 
 .tab-button {
@@ -24,19 +24,18 @@
    border: none;
    border-bottom: 2px solid transparent;
    cursor: pointer;
-   transition: all 0.2s;
+   transition: all 0.2s ease;
 }
 
 .tab-button:hover {
-   background-color: #f9fafb;
-   color: #374151;
+   background-color: var(--bg-light);
+   color: var(--text-black);
 }
 
-/* --- tab button when clicked --- */
 .tab-button.active {
-   color: #111827;
+   color: var(--text-black);
    font-weight: 600;
-   border-bottom-color: var(--text-primary-dark); /* Replace with your primary color */
+   border-bottom-color: var(--text-primary-dark);
 }
 
 /* Content Area */
@@ -44,13 +43,11 @@
    display: flex;
    flex-direction: column;
    gap: var(--gutter-sm);
-   overflow-y: auto; /* Make it's inside content scrollable */
+   overflow-y: auto;
    padding: var(--padding-xs);
 }
 
-/* =================
-slider
-==================*/
+/* --- Sliders --- */
 .slider-stack {
    display: flex;
    flex-direction: column;
@@ -68,22 +65,20 @@ slider
    display: flex;
    justify-content: space-between;
    font-weight: 500;
-   color: #6b7280;
+   color: var(--text-gray);
 }
 
 .slider-info span {
    font-size: var(--font-size-sm);
 }
 
-/* ===============
-presets
-================= */
+/* --- Presets & Groups --- */
 .control-group {
-   background-color: #ffffff;
-   border-radius: 12px;
-   border: 1px solid #f3f4f6;
+   background-color: var(--color-white);
+   border-radius: var(--border-radius-lg);
+   border: 1px solid var(--border-subtle);
    padding: var(--padding-sm);
-   margin-bottom: 24px;
+   margin-bottom: var(--margin-lg);
    box-shadow: var(--box-shadow-soft);
 }
 
@@ -92,40 +87,38 @@ presets
    justify-content: center;
    grid-template-columns: repeat(3, 5.8rem);
    grid-template-rows: repeat(2, 7rem);
-   gap: var(--gutter-md); /* Optional: adds spacing between items */
+   gap: var(--gutter-md);
    aspect-ratio: 1 / 1;
 }
 
 .preset-card {
    background-color: var(--bg-light);
-
    display: flex;
    flex-direction: column;
    align-items: center;
-   gap: 8px;
-   padding: 8px;
-   border-radius: 8px;
-   border: 1px solid #b6b6b6c4;
-   /* background: none; */
+   gap: var(--gutter-sm);
+   padding: var(--padding-sm);
+   border-radius: var(--border-radius-md);
+   border: 1px solid var(--border-gray);
    cursor: pointer;
    transition: background 0.2s;
 }
 
 .preset-card.active {
    border-color: var(--text-primary);
-   background-color: rgba(0, 0, 0, 0.05);
 }
 
 .filter-preview {
    width: 100%;
    aspect-ratio: 1/1;
-   border-radius: 4px;
+   border-radius: var(--border-radius-sm);
    overflow: hidden;
    position: relative;
    background-color: var(--bg-checkerboard);
 }
 
 .preview-image {
+   /* Background image logic preserved exactly as requested */
    background-image: -webkit-image-set(
       url("/public/background-image/presets-backgroundImage.webp") 1x,
       url("/public/background-image/presets-backgroundImage.webp") 2x
@@ -140,65 +133,78 @@ presets
    background-position: center;
 }
 
-/* Footer */
+/* Footer & Action Buttons */
 .sidebar-footer {
-   padding: 16px;
-   border-top: 1px solid #f4f3f0;
+   padding: var(--padding-md);
+   border-top: 1px solid var(--border-subtle);
 }
 
 .btn-auto-enhance {
    width: 100%;
    padding: 10px;
-   border-radius: 8px;
-   background-color: #111827;
-   color: white;
-   font-size: 14px;
+   border-radius: var(--border-radius-md);
+   background-color: var(--text-black);
+   color: var(--color-white);
+   font-size: var(--font-size-sm);
    font-weight: 700;
    display: flex;
    align-items: center;
    justify-content: center;
-   gap: 8px;
+   gap: var(--gutter-sm);
    border: none;
    cursor: pointer;
    transition: background 0.2s;
 }
 
 .btn-auto-enhance:hover {
-   background-color: #1f2937;
+   background-color: var(--bg-dark);
 }
 
-/* Add this to your CSS file */
-
+/* --- Menubar Toggle (X Animation) --- */
 .menubar {
    border: none;
+
    background-color: transparent;
+
    display: none;
+
    cursor: pointer;
 
    .menu-container {
       width: 30px;
+
       height: 30px;
+
       display: flex;
+
       flex-direction: column;
+
       justify-content: space-around;
 
       .bar {
          width: 100%;
+
          height: 3px;
+
          background-color: black;
+
          transition: all 0.3s ease-in-out;
+
          border-radius: 2px;
       }
 
       /* Transform logic */
    }
+
    .open .bar:nth-child(1) {
       transform: translateY(7.9px) rotate(45deg);
    }
 
    .open .bar:nth-child(2) {
       opacity: 0;
+
       display: none;
+
       transform: translateX(20px);
    }
 
@@ -207,30 +213,28 @@ presets
    }
 }
 
-/* The semi-transparent layer behind the sidebar */
 .sidebar-overlay {
    position: fixed;
    top: 0;
    left: 0;
    width: 100vw;
    height: 100vh;
-   background-color: transparent; /* Dim the background */
-   z-index: 100; /* Just below the sidebar */
+   background-color: var(--color-overlay);
+   z-index: 100;
+   display: none; /* Controlled by JS */
 }
 
-/* --- Tablet & Mobile (Everything 900px and below) --- */
+/* --- Responsiveness --- */
 @media (width <= 900px) {
    .editor-sidebar {
       position: fixed;
       right: 0;
       z-index: 1000000;
       height: calc(100vh - 53px);
-      /* width: 300px; Default width for tablets */
       transform: translateX(100%);
       transition: transform 0.3s ease-in-out;
    }
 
-   /* This toggle now works for ALL screens under 900px */
    .editor-sidebar-open {
       transform: translateX(0);
    }
@@ -243,21 +247,18 @@ presets
    }
 }
 
-/* --- Specific Mobile Tweaks (Everything below 490px) --- */
 @media (width < 490px) {
    .editor-sidebar {
-      width: 15rem; /* Shrinks the sidebar for small phones */
+      width: 15rem;
    }
 
    .sidebar-content {
       padding: 0;
    }
 
-   /* Typography adjustments for small screens */
-   .slider .slider-info span {
+   .slider-info span {
       font-size: var(--font-size-xs);
    }
-
    .slider-info label {
       font-size: var(--font-size-sm);
    }
@@ -268,18 +269,9 @@ presets
       margin: var(--margin-sm);
    }
 
-   .card h1 {
-      font-size: var(--font-size-md);
-   }
-
    .filter-grid {
       grid-template-columns: repeat(2, 5.8rem);
       grid-template-rows: repeat(2, 7rem);
       gap: var(--gutter-sm);
-      aspect-ratio: 1 / 1;
-   }
-
-   .menubar {
-      right: 0.5em;
    }
 }

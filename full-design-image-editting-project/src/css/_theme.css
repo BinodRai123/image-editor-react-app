@@ -49,7 +49,7 @@
    --border-radius-full: 9999px;
 
    --border-subtle: #f4f3f0; /* Specific border color from HTML */
-
+   --border-gray: #b6b6b6c4;
    /* ---- input range slider ---- */
    --range-track-bg: #e5e7eb;
    --accent-color: #ee9d2b;
