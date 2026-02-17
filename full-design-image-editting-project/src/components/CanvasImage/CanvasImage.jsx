@@ -6,6 +6,7 @@ import UnderConstruction from "../../pages/underConstruction";
 import { useCanvasLogic } from "../../hooks/useCanvasLogic.js";
 import { useFileHandler } from "../../hooks/useFileHandler.js"; // New Hook
 import DropZone from "../dropZone/DropZone"; // New Component
+import CropSection from "../../features/cropFeatureSection/CropSection.jsx";
 
 const CanvasImage = ({ activeFeature }) => {
    const { globalFilterData, setGlobalFilterData, setOriginalImage } = useContext(reactContext);
@@ -52,6 +53,7 @@ const CanvasImage = ({ activeFeature }) => {
             }}
          />
 
+         {/* Current Feature like: Filter, Crop, Layer and so on. */}
          {activeFeature === "brush" ? (
             <DropZone
                image={image}
@@ -60,6 +62,8 @@ const CanvasImage = ({ activeFeature }) => {
                uploadBtnRef={uploadBtnRef}
                showEmptyState={!imageStatus.success && !imageStatus.uploading && !image}
             />
+         ) : activeFeature === "crop" ? (
+            <CropSection />
          ) : (
             <UnderConstruction />
          )}
