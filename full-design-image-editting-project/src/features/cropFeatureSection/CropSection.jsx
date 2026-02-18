@@ -1,3 +1,5 @@
+import { useCropShape } from "../../hooks/useCropShape";
+import { useCropPreview } from "../../hooks/useCropPreview";
 import { useState, useRef, useEffect, useCallback } from "react";
 import ReactCrop, { centerCrop, makeAspectCrop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
@@ -15,80 +17,11 @@ const CropSection = () => {
    });
 
    // State to handle the shape toggle
-   const [isCircle, setIsCircle] = useState(true);
+   const [isCircle, setIsCircle] = useState(false);
 
-   const imgRef = useRef(null);
-   const previewCanvasRef = useRef(null);
+   const { showPreview, imgRef, previewCanvasRef } = useCropPreview(isCircle);
 
-   const drawPreview = useCallback(
-      (currentCrop) => {
-         if (!imgRef.current || !previewCanvasRef.current || !currentCrop.width || !currentCrop.height) {
-            return;
-         }
-
-         const image = imgRef.current;
-         const canvas = previewCanvasRef.current;
-         const ctx = canvas.getContext("2d");
-
-         const scaleX = image.naturalWidth / image.width;
-         const scaleY = image.naturalHeight / image.height;
-
-         // 1. Set internal resolution
-         canvas.width = Math.floor(currentCrop.width * scaleX);
-         canvas.height = Math.floor(currentCrop.height * scaleY);
-
-         ctx.clearRect(0, 0, canvas.width, canvas.height);
-         ctx.imageSmoothingQuality = "high";
-
-         ctx.save(); // Saved the clean state
-
-         // 2. APPLYING THE MASK IF CIRCLE
-         if (isCircle) {
-            ctx.beginPath();
-            // Draw a circle in the center of the canvas
-            ctx.arc(
-               canvas.width / 2,
-               canvas.height / 2,
-               Math.min(canvas.width, canvas.height) / 2,
-               0,
-               2 * Math.PI,
-            );
-            ctx.clip(); // Everything drawn after this will be inside the circle
-         }
-
-         // 3. DRAW THE IMAGE
-         ctx.drawImage(
-            image,
-            currentCrop.x * scaleX,
-            currentCrop.y * scaleY,
-            currentCrop.width * scaleX,
-            currentCrop.height * scaleY,
-            0,
-            0,
-            canvas.width,
-            canvas.height,
-         );
-
-         ctx.restore(); // Remove the clip mask for future draws
-      },
-      [isCircle],
-   );
-
-   const handleCropChange = (newCrop) => {
-      setCrop(newCrop);
-      drawPreview(newCrop);
-   };
-
-   // Toggle handler that forces a re-render of the crop box
-   const toggleShape = (shape) => {
-      const circleMode = shape === "circle";
-      setIsCircle(circleMode);
-   };
-
-   //apply preview when toogle shape
-   useEffect(() => {
-      drawPreview(crop);
-   }, [toggleShape]);
+   const { handleCropChange, toggleShape } = useCropShape({ showPreview, setCrop, setIsCircle, crop });
 
    const handleDownloadCrop = () => {
       if (!previewCanvasRef || !imgRef) return;
@@ -144,7 +77,7 @@ const CropSection = () => {
                      src={imageUrl}
                      alt="Source"
                      crossOrigin="anonymous"
-                     onLoad={() => drawPreview(crop)}
+                     onLoad={() => showPreview(crop)}
                      style={{ minWidth: "100%" }}
                   />
                </ReactCrop>
