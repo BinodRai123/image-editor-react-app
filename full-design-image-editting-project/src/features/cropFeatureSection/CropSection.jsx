@@ -3,6 +3,7 @@ import { useCropPreview } from "../../hooks/useCropPreview";
 import { useState, useRef, useEffect, useCallback } from "react";
 import ReactCrop, { centerCrop, makeAspectCrop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
+import "./cropSection.css";
 
 const imageUrl =
    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFYqoKTu_o3Zns2yExbst2Co84Gpc2Q1RJbA&s";
@@ -34,76 +35,70 @@ const CropSection = () => {
    };
 
    return (
-      <div style={{ padding: "20px", fontFamily: "sans-serif" }}>
-         {/* SHAPE SELECTOR UI */}
-         <div style={{ marginBottom: "20px", display: "flex", gap: "10px" }}>
-            <button
-               onClick={() => toggleShape("rect")}
-               style={{
-                  padding: "8px 16px",
-                  background: !isCircle ? "#007bff" : "#eee",
-                  color: !isCircle ? "white" : "black",
-                  border: "none",
-                  cursor: "pointer",
-               }}
+      <div className="editor-container">
+         {/* Main Workspace */}
+
+         <main className="editor-main">
+            <div class="bg-checkerboard"></div>
+            <ReactCrop
+               crop={crop}
+               onChange={handleCropChange}
+               circularCrop={isCircle}
+               className="canvas-area"
             >
-               Rectangle Mode
-            </button>
-            <button
-               onClick={() => toggleShape("circle")}
-               style={{
-                  padding: "8px 16px",
-                  background: isCircle ? "#007bff" : "#eee",
-                  color: isCircle ? "white" : "black",
-                  border: "none",
-                  cursor: "pointer",
-               }}
-            >
-               Circle Mode
-            </button>
-         </div>
+               <img ref={imgRef} src={imageUrl} alt="Workspace" />
+            </ReactCrop>
+         </main>
 
-         <div style={{ display: "flex", gap: "40px", alignItems: "flex-start" }}>
-            {/* EDITOR */}
-            <div style={{ flex: 1 }}>
-               <ReactCrop
-                  crop={crop}
-                  onChange={handleCropChange}
-                  circularCrop={isCircle}
-                  aspect={isCircle ? 1 : undefined} // Force 1:1 for circles
-               >
-                  <img
-                     ref={imgRef}
-                     src={imageUrl}
-                     alt="Source"
-                     crossOrigin="anonymous"
-                     onLoad={() => showPreview(crop)}
-                     style={{ minWidth: "100%" }}
-                  />
-               </ReactCrop>
+         {/* Sidebar Controls */}
+         <aside className="editor-sidebar">
+            <section className="sidebar-section">
+               <h4 className="section-title">LIVE PREVIEW</h4>
+               <div className="live-preview-box">
+                  <div className="preview-placeholder flex-center">
+                     <canvas
+                        ref={previewCanvasRef}
+                        style={{
+                           border: "2px solid #333",
+                           // THE MAGIC LINE: Toggle radius based on state
+                           borderRadius: isCircle ? "50%" : "0px",
+                           maxWidth: "300px",
+                           maxHeight: "300px",
+                           transition: "border-radius 0.3s ease", // Smooth transition
+                           background: "#f0f0f0",
+                        }}
+                     />
+                     {/* {imageUrl ? (
+                        
+                     ) : (
+                        <span>
+                           CROP PREVIEW
+                           <br />
+                           GOES HERE
+                        </span>
+                     )} */}
+                     <span className="resolution-tag">1920 x 1080</span>
+                  </div>
+               </div>
+            </section>
+
+            <section className="sidebar-section">
+               <h4 className="section-title">ASPECT RATIO</h4>
+               <div className="ratio-grid">
+                  <button className="ratio-btn active">1:1</button>
+                  <button className="ratio-btn">16:9</button>
+                  <button className="ratio-btn">4:5</button>
+                  <button className="ratio-btn">Free</button>
+               </div>
+            </section>
+
+            <div className="sidebar-footer">
+               <button className="download-btn">
+                  <span className="icon">↓</span> Download Final Crop
+               </button>
+               <p className="export-hint">Export as PNG, 300 DPI (High Quality)</p>
             </div>
-
-            {/* LIVE PREVIEW */}
-            <div style={{ flex: 1, textAlign: "center" }}>
-               <h3>{isCircle ? "Circular" : "Rectangular"} Preview</h3>
-               <canvas
-                  ref={previewCanvasRef}
-                  style={{
-                     border: "2px solid #333",
-                     // THE MAGIC LINE: Toggle radius based on state
-                     borderRadius: isCircle ? "50%" : "0px",
-                     maxWidth: "300px",
-                     maxHeight: "300px",
-                     transition: "border-radius 0.3s ease", // Smooth transition
-                     background: "#f0f0f0",
-                  }}
-               />
-            </div>
-
-            <button onClick={handleDownloadCrop} style={{ padding: "10px" }}>
-               Download
-            </button>
-         </div>
+         </aside>
       </div>
    );
 };

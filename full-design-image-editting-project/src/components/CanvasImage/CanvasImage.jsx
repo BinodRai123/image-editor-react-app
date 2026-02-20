@@ -41,27 +41,28 @@ const CanvasImage = ({ activeFeature }) => {
          {/* When image is uploading this will show up to inform */}
          {imageStatus.uploading && <div className="canvas-skeleton">Uploading...</div>}
 
-         <canvas
-            id="canvas-image-preview"
-            className={isDragging ? "canvas-blur" : ""}
-            ref={canvasRef}
-            style={{
-               display:
-                  imageStatus.success && !imageStatus.uploading && activeFeature === "brush"
-                     ? "block"
-                     : "none",
-            }}
-         />
-
          {/* Current Feature like: Filter, Crop, Layer and so on. */}
          {activeFeature === "brush" ? (
-            <DropZone
-               image={image}
-               isDragging={isDragging}
-               handleFileAction={handleFileAction}
-               uploadBtnRef={uploadBtnRef}
-               showEmptyState={!imageStatus.success && !imageStatus.uploading && !image}
-            />
+            <>
+               <canvas
+                  id="canvas-image-preview"
+                  className={isDragging ? "canvas-blur" : ""}
+                  ref={canvasRef}
+                  style={{
+                     display:
+                        imageStatus.success && !imageStatus.uploading && activeFeature === "brush"
+                           ? "block"
+                           : "none",
+                  }}
+               />
+               <DropZone
+                  image={image}
+                  isDragging={isDragging}
+                  handleFileAction={handleFileAction}
+                  uploadBtnRef={uploadBtnRef}
+                  showEmptyState={!imageStatus.success && !imageStatus.uploading && !image}
+               />
+            </>
          ) : activeFeature === "crop" ? (
             <CropSection />
          ) : (
