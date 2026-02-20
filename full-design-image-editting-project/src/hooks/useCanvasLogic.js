@@ -3,7 +3,7 @@ import { useCallback, useRef } from "react";
 import { generateCSSFilterString } from "../utils/imageUtils";
 
 //canvas logic (canvasRef, applyingFilter, resetingCanvas)
-export const useCanvasLogic = (image, globalFilterData) => {
+export const useCanvasLogic = (image = null, globalFilterData = null) => {
    const canvasRef = useRef(null);
    const requestRef = useRef();
 

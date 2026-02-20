@@ -1,65 +1,64 @@
 import { useCallback, useRef } from "react";
 
 export const useCropPreview = (isCircle) => {
-   const imgRef = useRef(null);
+   const imgRef = useRef(null); // This is your source canvas/image
    const previewCanvasRef = useRef(null);
 
    const showPreview = useCallback(
       (currentCrop) => {
-         if (!imgRef.current || !previewCanvasRef.current || !currentCrop.width || !currentCrop.height) {
+         const image = imgRef.current;
+         const canvas = previewCanvasRef.current;
+
+         if (!image || !canvas || !currentCrop.width || !currentCrop.height) {
             return;
          }
 
-         const image = imgRef.current;
-         const canvas = previewCanvasRef.current;
          const ctx = canvas.getContext("2d");
+         if (!ctx) return;
 
-         const scaleX = image.naturalWidth / image.width;
-         const scaleY = image.naturalHeight / image.height;
+         // 1. Get the real scaling factor
+         // If imgRef is a canvas where you drew the image, use its internal dimensions
+         const scaleX = image.width / image.offsetWidth || 1;
+         const scaleY = image.height / image.offsetHeight || 1;
 
-         // --- NEW LOGIC STARTS HERE ---
-         let drawWidth = currentCrop.width * scaleX;
-         let drawHeight = currentCrop.height * scaleY;
+         // 2. Adjust for High DPI displays (Retina)
+         const pixelRatio = window.devicePixelRatio || 1;
 
-         if (isCircle) {
-            // Force the canvas to be a square based on the smaller side
-            const size = Math.min(drawWidth, drawHeight);
-            canvas.width = size;
-            canvas.height = size;
-         } else {
-            canvas.width = Math.floor(drawWidth);
-            canvas.height = Math.floor(drawHeight);
-         }
+         // 3. Calculate actual pixel dimensions for the crop
+         const cropX = currentCrop.x * scaleX;
+         const cropY = currentCrop.y * scaleY;
+         const cropWidth = currentCrop.width * scaleX;
+         const cropHeight = currentCrop.height * scaleY;
 
-         ctx.clearRect(0, 0, canvas.width, canvas.height);
+         // 4. Set preview canvas size
+         // We use a square if it's a circle to avoid stretching
+         const size = isCircle ? Math.min(cropWidth, cropHeight) : 0;
+         canvas.width = (isCircle ? size : cropWidth) * pixelRatio;
+         canvas.height = (isCircle ? size : cropHeight) * pixelRatio;
+
+         ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
          ctx.imageSmoothingQuality = "high";
 
+         // 5. Handle Circular Clipping
          if (isCircle) {
             ctx.save();
             ctx.beginPath();
-            // Circle centered in new square canvas
-            ctx.arc(canvas.width / 2, canvas.height / 2, canvas.width / 2, 0, 2 * Math.PI);
+            ctx.arc(size / 2, size / 2, size / 2, 0, 2 * Math.PI);
             ctx.clip();
          }
 
-         // When drawing the image, center the crop area if it's a circle
-         const sourceX = isCircle
-            ? currentCrop.x * scaleX + (drawWidth - canvas.width) / 2
-            : currentCrop.x * scaleX;
-         const sourceY = isCircle
-            ? currentCrop.y * scaleY + (drawHeight - canvas.height) / 2
-            : currentCrop.y * scaleY;
-
+         // 6. Draw the image
+         // We map the source (cropX, cropY) to the destination (0, 0)
          ctx.drawImage(
             image,
-            sourceX,
-            sourceY,
-            isCircle ? canvas.width : drawWidth,
-            isCircle ? canvas.height : drawHeight,
+            cropX,
+            cropY,
+            cropWidth,
+            cropHeight,
             0,
             0,
-            canvas.width,
-            canvas.height,
+            isCircle ? size : cropWidth,
+            isCircle ? size : cropHeight,
          );
 
          if (isCircle) ctx.restore();

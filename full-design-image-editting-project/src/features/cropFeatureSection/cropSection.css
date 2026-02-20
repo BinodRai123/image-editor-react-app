@@ -25,6 +25,11 @@
    max-height: 90%;
 }
 
+canvas {
+   height: 100%;
+   width: 100%;
+}
+
 /* --- Sidebar --- */
 .editor-sidebar {
    width: 320px;
@@ -47,7 +52,8 @@
    background: var(--bg-light);
    border-radius: var(--border-radius-md);
    padding: var(--padding-sm);
-   aspect-ratio: 16 / 9;
+   height: 15rem;
+   aspect-ratio: 20 / 15;
 }
 
 .preview-placeholder {

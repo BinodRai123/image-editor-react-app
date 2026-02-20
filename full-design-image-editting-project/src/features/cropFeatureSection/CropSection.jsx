@@ -4,6 +4,9 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import ReactCrop, { centerCrop, makeAspectCrop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import "./cropSection.css";
+import { useFileHandler } from "../../hooks/useFileHandler";
+import DropZone from "../../components/dropZone/DropZone";
+import { useCanvasLogic } from "../../hooks/useCanvasLogic.js";
 
 const imageUrl =
    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFYqoKTu_o3Zns2yExbst2Co84Gpc2Q1RJbA&s";
@@ -17,6 +20,10 @@ const CropSection = () => {
       height: 50,
    });
 
+   const uploadBtnRef = useRef(null);
+   const [image, setImage] = useState(null);
+   const { resetCanvas } = useCanvasLogic();
+
    // State to handle the shape toggle
    const [isCircle, setIsCircle] = useState(false);
 
@@ -24,6 +31,11 @@ const CropSection = () => {
 
    const { handleCropChange, toggleShape } = useCropShape({ showPreview, setCrop, setIsCircle, crop });
 
+   //File action handler
+   const { imageStatus, isDragging, modal, setModal, handleFileAction, handleDrag, handleDrop } =
+      useFileHandler({ canvasRef: imgRef, setImage, resetCanvas, uploadBtnRef });
+
+   // { image, isDragging, handleFileAction, uploadBtnRef, showEmptyState }
    const handleDownloadCrop = () => {
       if (!previewCanvasRef || !imgRef) return;
 
@@ -34,19 +46,42 @@ const CropSection = () => {
       link.click();
    };
 
+   // Inside CropSection.js
+   useEffect(() => {
+      if (!image) return;
+
+      const ctx = imgRef.current.getContext("2d");
+
+      ctx.drawImage(image, 0, 0, imgRef.current.width, imgRef.current.height);
+   }, [image]);
    return (
       <div className="editor-container">
          {/* Main Workspace */}
 
          <main className="editor-main">
-            <div class="bg-checkerboard"></div>
+            {/* <div class="bg-checkerboard"></div> */}
+
+            <DropZone
+               image={image}
+               isDragging={isDragging}
+               handleFileAction={handleFileAction}
+               uploadBtnRef={uploadBtnRef}
+               showEmptyState={!image ? true : false}
+            />
+
             <ReactCrop
                crop={crop}
                onChange={handleCropChange}
                circularCrop={isCircle}
                className="canvas-area"
             >
-               <img ref={imgRef} src={imageUrl} alt="Workspace" />
+               <canvas
+                  ref={imgRef}
+                  alt="image"
+                  style={{
+                     display: imageStatus.success && !imageStatus.uploading ? "block" : "none",
+                  }}
+               />
             </ReactCrop>
          </main>
 
@@ -56,27 +91,23 @@ const CropSection = () => {
                <h4 className="section-title">LIVE PREVIEW</h4>
                <div className="live-preview-box">
                   <div className="preview-placeholder flex-center">
-                     <canvas
-                        ref={previewCanvasRef}
-                        style={{
-                           border: "2px solid #333",
-                           // THE MAGIC LINE: Toggle radius based on state
-                           borderRadius: isCircle ? "50%" : "0px",
-                           maxWidth: "300px",
-                           maxHeight: "300px",
-                           transition: "border-radius 0.3s ease", // Smooth transition
-                           background: "#f0f0f0",
-                        }}
-                     />
-                     {/* {imageUrl ? (
-                        
+                     {image ? (
+                        <canvas
+                           ref={previewCanvasRef}
+                           style={{
+                              border: "2px solid #333",
+                              borderRadius: isCircle ? "50%" : "0px",
+                              transition: "border-radius 0.3s ease", // Smooth transition
+                              background: "#f0f0f0",
+                           }}
+                        />
                      ) : (
                         <span>
                            CROP PREVIEW
                            <br />
                            GOES HERE
                         </span>
-                     )} */}
+                     )}
                      <span className="resolution-tag">1920 x 1080</span>
                   </div>
                </div>
@@ -93,7 +124,7 @@ const CropSection = () => {
             </section>
 
             <div className="sidebar-footer">
-               <button className="download-btn">
+               <button onClick={handleDownloadCrop} className="download-btn">
                   <span className="icon">↓</span> Download Final Crop
                </button>
                <p className="export-hint">Export as PNG, 300 DPI (High Quality)</p>

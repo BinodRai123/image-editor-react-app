@@ -16,7 +16,7 @@ export const processImageUpload = (file) => {
       img.src = URL.createObjectURL(file); // inserting image url in img src
 
       img.onload = () => {
-         // 2.storign img width and height in variables
+         // 2.storing img width and height in variables
          let width = img.width;
          let height = img.height;
 

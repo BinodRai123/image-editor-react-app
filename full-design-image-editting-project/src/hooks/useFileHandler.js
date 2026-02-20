@@ -1,7 +1,13 @@
 import { useState, useCallback } from "react";
 import { processImageUpload, DEFAULT_FILTERS } from "../utils/imageUtils.js";
 
-export const useFileHandler = (canvasRef, setImage, resetCanvas, setGlobalFilterData, uploadBtnRef) => {
+export const useFileHandler = ({
+   canvasRef,
+   setImage,
+   resetCanvas,
+   setGlobalFilterData,
+   uploadBtnRef = null,
+}) => {
    const [imageStatus, setImageStatus] = useState({ success: false, uploading: false, errorMessage: null });
    const [isDragging, setIsDragging] = useState(false);
    const [modal, setModal] = useState(false);
@@ -15,20 +21,19 @@ export const useFileHandler = (canvasRef, setImage, resetCanvas, setGlobalFilter
          //This function Create image, check if it is valid
          //calculate the height and width of image and return it
          const { img, width, height } = await processImageUpload(file);
-
          // 1. Adding height and width in canvas
          canvasRef.current.width = width;
          canvasRef.current.height = height;
+
          setImage(img); //updating image state
          resetCanvas(); //reseting the canvas
-         setGlobalFilterData(DEFAULT_FILTERS); //making the global filter value to default
          setImageStatus({ success: true, uploading: false, errorMessage: null });
       } catch (error) {
          setImageStatus({ success: false, uploading: false, errorMessage: error });
          setModal(true);
       } finally {
          // 2. RESET THE INPUT FILE
-         if (uploadBtnRef.current) {
+         if (uploadBtnRef?.current) {
             //after uploading the image
             //reseting the upload image button value
             uploadBtnRef.current.value = "";

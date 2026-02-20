@@ -7,6 +7,7 @@ import { useCanvasLogic } from "../../hooks/useCanvasLogic.js";
 import { useFileHandler } from "../../hooks/useFileHandler.js"; // New Hook
 import DropZone from "../dropZone/DropZone"; // New Component
 import CropSection from "../../features/cropFeatureSection/CropSection.jsx";
+import { DEFAULT_FILTERS } from "../..//utils/imageUtils";
 
 const CanvasImage = ({ activeFeature }) => {
    const { globalFilterData, setGlobalFilterData, setOriginalImage } = useContext(reactContext);
@@ -17,15 +18,16 @@ const CanvasImage = ({ activeFeature }) => {
 
    //custom hook to handle file logic
    const { imageStatus, isDragging, modal, setModal, handleFileAction, handleDrag, handleDrop } =
-      useFileHandler(canvasRef, setImage, resetCanvas, setGlobalFilterData, uploadBtnRef);
+      useFileHandler({ canvasRef, setImage, resetCanvas, setGlobalFilterData, uploadBtnRef });
 
    const toggleModalOverlay = () => setModal((prev) => !prev);
 
-   //Pain canvas with Filter when globalFilter changed
+   //Paint canvas with Filter when globalFilter changed
    useEffect(() => {
       if (!image) return; //if there is no image then return
 
       applyFilters(); // if ther is image then apply this filter
+
       const handler = setTimeout(() => setOriginalImage(image), 200);
       return () => {
          clearTimeout(handler);
