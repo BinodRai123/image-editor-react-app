@@ -1,3 +1,5 @@
+import "./dropZone.css";
+
 const DropZone = ({ image, isDragging, handleFileAction, uploadBtnRef, showEmptyState }) => {
    return (
       <div className="upload-zone">

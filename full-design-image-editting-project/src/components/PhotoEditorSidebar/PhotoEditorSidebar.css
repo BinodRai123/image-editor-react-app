@@ -78,7 +78,7 @@
    border-radius: var(--border-radius-lg);
    border: 1px solid var(--border-subtle);
    padding: var(--padding-sm);
-   margin-bottom: var(--margin-lg);
+   margin-bottom: var(--margin-md);
    box-shadow: var(--box-shadow-soft);
 }
 
@@ -87,7 +87,7 @@
    justify-content: center;
    grid-template-columns: repeat(3, 5.8rem);
    grid-template-rows: repeat(2, 7rem);
-   gap: var(--gutter-md);
+   gap: var(--gutter-sm);
    aspect-ratio: 1 / 1;
 }
 
@@ -163,33 +163,20 @@
 /* --- Menubar Toggle (X Animation) --- */
 .menubar {
    border: none;
-
    background-color: transparent;
-
    display: none;
-
    cursor: pointer;
-
    .menu-container {
       width: 30px;
-
       height: 30px;
-
       display: flex;
-
       flex-direction: column;
-
       justify-content: space-around;
-
       .bar {
          width: 100%;
-
          height: 3px;
-
          background-color: black;
-
          transition: all 0.3s ease-in-out;
-
          border-radius: 2px;
       }
 

@@ -7,6 +7,7 @@ import "./cropSection.css";
 import { useFileHandler } from "../../hooks/useFileHandler";
 import DropZone from "../../components/dropZone/DropZone";
 import { useCanvasLogic } from "../../hooks/useCanvasLogic.js";
+import DownloadIcon from "../../components/icons/DownloadIcon";
 
 const imageUrl =
    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFYqoKTu_o3Zns2yExbst2Co84Gpc2Q1RJbA&s";
@@ -59,7 +60,7 @@ const CropSection = () => {
          {/* Main Workspace */}
 
          <main className="editor-main">
-            {/* <div class="bg-checkerboard"></div> */}
+            <div class="bg-checkerboard"></div>
 
             <DropZone
                image={image}
@@ -125,7 +126,7 @@ const CropSection = () => {
 
             <div className="sidebar-footer">
                <button onClick={handleDownloadCrop} className="download-btn">
-                  <span className="icon">↓</span> Download Final Crop
+                  <DownloadIcon /> Download Final Crop
                </button>
                <p className="export-hint">Export as PNG, 300 DPI (High Quality)</p>
             </div>

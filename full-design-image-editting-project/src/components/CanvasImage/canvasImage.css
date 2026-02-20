@@ -12,33 +12,6 @@ input[type="file"] {
    display: none;
 }
 
-/* ---- UPLOAD BUTTON ---- */
-.upload-btn {
-   position: absolute;
-   z-index: 10;
-   margin: var(--margin-sm);
-   top: 0;
-   left: 0;
-   padding: var(--padding-sm) var(--padding-sm);
-   background-color: var(--text-success-color); /* primary color */
-   color: var(--color-white);
-   font-weight: 800;
-   font-size: var(--font-size-md);
-   border-radius: var(--border-radius-md);
-   border: none;
-   outline: none;
-   cursor: pointer;
-   transition: all ease 0.2s;
-}
-
-.upload-btn:hover {
-   background-color: #2d8a1aec; /* slightly darker on hover */
-}
-
-.upload-btn:active {
-   background-color: #188502; /* active click effect */
-}
-
 /* ====================
    Canvas Image 
 ==================== */
@@ -123,51 +96,6 @@ input[type="file"] {
 
 .btn-again:hover {
    background-color: var(--text-error-color);
-}
-
-/* ========================== 
-    Upload Drag and Drop Styles
-    if there is no image uploaded
-========================== */
-
-.upload-placeholder {
-   display: flex;
-   flex-direction: column;
-   align-items: center;
-   justify-content: center;
-   border: 2px dashed #ccc;
-   border-radius: 8px;
-   padding: 40px;
-   transition: all 0.3s ease;
-   background: #f8f9fa;
-   cursor: pointer;
-   position: relative;
-   min-height: 300px;
-}
-
-.upload-placeholder.active {
-   border-color: #007bff;
-   background: #e9ecef;
-}
-
-.upload-text h3 {
-   margin: 10px 0 5px;
-   color: #4a5568;
-   font-size: 1.25rem;
-}
-
-.upload-text p {
-   color: #718096;
-   font-size: 0.9rem;
-}
-
-.full-area-label {
-   position: absolute;
-   top: 0;
-   left: 0;
-   right: 0;
-   bottom: 0;
-   cursor: pointer;
 }
 
 /* ====================

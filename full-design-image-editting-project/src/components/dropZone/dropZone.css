@@ -1,0 +1,94 @@
+/* ---- BASE WRAPPER ---- */
+.upload-zone {
+   position: relative;
+   width: 100%;
+   max-width: 380px; /* Adjust based on your layout */
+   margin: 0 auto;
+   font-family: "space-grotesk";
+}
+
+/* ---- HIDDEN INPUT ---- */
+#image-upload {
+   display: none;
+}
+
+/* ---- THE EMPTY STATE (MATCHING DESIGN) ---- */
+.upload-placeholder {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+
+   /* Exact Border Style */
+   border: 2px dashed #cbd5e0;
+   border-radius: 12px;
+
+   /* Dimensions & Spacing */
+   min-height: 320px;
+   padding: 2rem;
+   background-color: #f8fafc;
+   transition: all 0.2s ease-in-out;
+   text-align: center;
+}
+
+.upload-placeholder.active {
+   border-color: #4a5568;
+   background-color: #edf2f7;
+}
+
+/* --- THE ICON (The Arrow) --- */
+.upload-icon-container {
+   margin-bottom: 20px;
+   color: #4a5568;
+   font-size: 1.5rem;
+}
+
+.arrow-up {
+   display: inline-block;
+   font-weight: 300;
+   transform: scaleY(1.2); /* Makes the arrow look more like the UI icon */
+}
+
+/* --- THE TEXT (Typography refinement) --- */
+.upload-text h1 {
+   margin: 0;
+   font-size: 1.5rem;
+   font-weight: 700;
+   color: #1a202c; /* Darker, almost black */
+   letter-spacing: -0.02em;
+}
+
+.upload-text p {
+   margin: 8px 0 0 0;
+   font-size: 1.1rem;
+   color: #718096; /* The specific blue-grey from your image */
+   font-weight: 400;
+}
+
+/* --- THE CLICKABLE OVERLAY --- */
+.full-area-label {
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   cursor: pointer;
+   z-index: 5;
+}
+
+/* --- FLOATING "CHANGE" BUTTON (When image exists) --- */
+.upload-btn {
+   position: absolute;
+   top: 15px;
+   left: 15px;
+   z-index: 20;
+   padding: 8px 16px;
+   background-color: #2f855a; /* A solid professional green */
+   color: white;
+   font-weight: 600;
+   font-size: 0.875rem;
+   border-radius: 6px;
+   border: none;
+   cursor: pointer;
+   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

@@ -23,11 +23,11 @@
    overflow: hidden;
    max-width: 90%;
    max-height: 90%;
-}
 
-canvas {
-   height: 100%;
-   width: 100%;
+   canvas {
+      height: 100%;
+      width: 100%;
+   }
 }
 
 /* --- Sidebar --- */
@@ -66,6 +66,11 @@ canvas {
    font-size: 10px;
    color: var(--text-black);
    position: relative;
+
+   canvas {
+      max-height: 100%;
+      max-width: 100%;
+   }
 }
 
 .resolution-tag {

@@ -46,6 +46,8 @@ const CanvasImage = ({ activeFeature }) => {
          {/* Current Feature like: Filter, Crop, Layer and so on. */}
          {activeFeature === "brush" ? (
             <>
+               <div class="bg-checkerboard"></div>
+
                <canvas
                   id="canvas-image-preview"
                   className={isDragging ? "canvas-blur" : ""}
