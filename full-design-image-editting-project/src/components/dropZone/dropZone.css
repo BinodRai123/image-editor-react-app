@@ -1,6 +1,5 @@
 /* ---- BASE WRAPPER ---- */
 .upload-zone {
-   position: relative;
    width: 100%;
    max-width: 380px; /* Adjust based on your layout */
    margin: 0 auto;
@@ -14,6 +13,7 @@
 
 /* ---- THE EMPTY STATE (MATCHING DESIGN) ---- */
 .upload-placeholder {
+   position: relative;
    display: flex;
    flex-direction: column;
    align-items: center;

@@ -1,6 +1,7 @@
 /* ---- canvas image container ----- */
 .canvas-image-container {
    position: relative;
+   width: 100%;
    /* padding: var(--padding-xl); */
    flex-grow: 1;
    display: flex;

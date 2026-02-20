@@ -60,8 +60,6 @@ const CropSection = () => {
          {/* Main Workspace */}
 
          <main className="editor-main">
-            <div class="bg-checkerboard"></div>
-
             <DropZone
                image={image}
                isDragging={isDragging}

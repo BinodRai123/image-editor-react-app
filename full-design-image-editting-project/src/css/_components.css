@@ -60,7 +60,7 @@
    CARD
    =============================== */
 .card {
-   max-width: 296.39px;
+   width: 264.39px;
    padding: var(--gutter-md);
    background: var(--color-white);
    border: 1px solid var(--bg-light);

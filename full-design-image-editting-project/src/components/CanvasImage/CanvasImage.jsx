@@ -34,6 +34,8 @@ const CanvasImage = ({ activeFeature }) => {
       };
    }, [globalFilterData, image, applyFilters, setOriginalImage]);
 
+   // console.log("canvas -> ", canvasRef?.current.width);
+
    return (
       <section
          className={`canvas-image-container ${isDragging ? "drag-active" : ""}`}
@@ -46,7 +48,7 @@ const CanvasImage = ({ activeFeature }) => {
          {/* Current Feature like: Filter, Crop, Layer and so on. */}
          {activeFeature === "brush" ? (
             <>
-               <div class="bg-checkerboard"></div>
+               {/* <div class="bg-checkerboard"></div> */}
 
                <canvas
                   id="canvas-image-preview"
