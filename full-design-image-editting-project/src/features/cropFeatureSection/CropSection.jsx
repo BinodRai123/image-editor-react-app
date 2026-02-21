@@ -24,9 +24,17 @@ const CropSection = () => {
       height: 50,
    });
 
-   const uploadBtnRef = useRef(null);
+   const ASPECT_RATIOS = [
+      { label: "1:1", value: 1 / 1 },
+      { label: "16:9", value: 16 / 9 },
+      { label: "4:5", value: 4 / 5 },
+      { label: "Free", value: undefined }, // undefined allows free-form dragging
+   ];
+   const [activeRatio, setActiveRatio] = useState("1:1");
+
    const [image, setImage] = useState(null);
    const { resetCanvas } = useCanvasLogic();
+   const uploadBtnRef = useRef(null);
 
    // State to handle the shape toggle
    const [isCircle, setIsCircle] = useState(false);
@@ -51,6 +59,28 @@ const CropSection = () => {
 
    //toggle modal overlay
    const toggleModalOverlay = () => setModal((prev) => !prev);
+
+   //handle active aspect ratio btn
+   const handleActiveRatioBtn = useCallback(
+      (ratio) => {
+         setActiveRatio(ratio.label);
+
+         if (!ratio.value) {
+            // Handle "Free" mode: we keep the current crop but remove aspect constraints
+            setCrop({ ...crop, aspect: undefined });
+            return;
+         }
+
+         const newHeight = crop.width / ratio.value;
+
+         setCrop({
+            ...crop,
+            aspect: ratio.value,
+            height: newHeight,
+         });
+      },
+      [crop],
+   );
 
    // Inside CropSection.js
    useEffect(() => {
@@ -145,10 +175,17 @@ const CropSection = () => {
             <section className="sidebar-section">
                <h4 className="section-title">ASPECT RATIO</h4>
                <div className="ratio-grid">
-                  <button className="ratio-btn active">1:1</button>
-                  <button className="ratio-btn">16:9</button>
-                  <button className="ratio-btn">4:5</button>
-                  <button className="ratio-btn">Free</button>
+                  {ASPECT_RATIOS.map((objectRatio, id) => {
+                     return (
+                        <AspectRatioBtn
+                           key={id}
+                           id={id}
+                           objectRatio={objectRatio}
+                           isActive={objectRatio.label === activeRatio}
+                           handleActiveRatioBtn={handleActiveRatioBtn}
+                        />
+                     );
+                  })}
                </div>
             </section>
 
@@ -160,6 +197,17 @@ const CropSection = () => {
             </div>
          </aside>
       </div>
+   );
+};
+
+const AspectRatioBtn = ({ objectRatio, isActive, handleActiveRatioBtn }) => {
+   return (
+      <button
+         onClick={() => handleActiveRatioBtn(objectRatio)}
+         className={`ratio-btn ${isActive && "active"}`}
+      >
+         {objectRatio.label}
+      </button>
    );
 };
 
