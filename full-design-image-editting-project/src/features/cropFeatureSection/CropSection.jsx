@@ -7,6 +7,7 @@ import DownloadIcon from "../../components/icons/DownloadIcon";
 
 import { useCropShape } from "./hooks/useCropShape";
 import { useCropPreview } from "./hooks/useCropPreview";
+import ErrorModalOverlay from "../../components/modalOverlay/errorModalOverlay/ErrorModalOverlay";
 
 import "react-image-crop/dist/ReactCrop.css";
 import "./cropSection.css";
@@ -31,7 +32,6 @@ const CropSection = () => {
    const [isCircle, setIsCircle] = useState(false);
 
    const { showPreview, canvasRef, previewCanvasRef } = useCropPreview(isCircle);
-
    const { handleCropChange, toggleShape } = useCropShape({ showPreview, setCrop, setIsCircle, crop });
 
    //File action handler
@@ -49,6 +49,9 @@ const CropSection = () => {
       link.click();
    };
 
+   //toggle modal overlay
+   const toggleModalOverlay = () => setModal((prev) => !prev);
+
    // Inside CropSection.js
    useEffect(() => {
       if (!image) return;
@@ -59,10 +62,10 @@ const CropSection = () => {
    }, [image]);
 
    return (
-      <div onDrag={handleDrag} onDrop={handleDrop} className="editor-container">
+      <div className="editor-container">
          {/* Main Workspace */}
 
-         <main className="editor-main">
+         <main onDragOver={handleDrag} onDrop={handleDrop} className="editor-main">
             <DropZone
                image={image}
                isDragging={isDragging}
@@ -71,20 +74,44 @@ const CropSection = () => {
                showEmptyState={!image ? true : false}
             />
 
-            <ReactCrop
-               crop={crop}
-               onChange={handleCropChange}
-               circularCrop={isCircle}
-               className="canvas-area"
+            {/* Notice the display property changed from "block" to "flex" */}
+
+            {/* Notice the display property changed from "block" to "flex" */}
+            <div className="canvas-image-wrapper" style={{ display: image ? "flex" : "none" }}>
+               <ReactCrop
+                  crop={crop}
+                  onChange={handleCropChange}
+                  circularCrop={isCircle}
+                  className="canvas-area"
+               >
+                  <canvas
+                     id="canvas-image"
+                     ref={canvasRef}
+                     alt="image"
+                     style={{
+                        display: imageStatus.success && !imageStatus.uploading ? "block" : "none",
+                     }}
+                  />
+               </ReactCrop>
+            </div>
+
+            {/* It will Appear if Error Occur during uploading image */}
+            <ErrorModalOverlay
+               modal={modal}
+               toggleModalOverlay={toggleModalOverlay}
+               erroMessage={imageStatus.errorMessage}
             >
-               <canvas
-                  ref={canvasRef}
-                  alt="image"
-                  style={{
-                     display: imageStatus.success && !imageStatus.uploading ? "block" : "none",
+               {/* Add Button to open file */}
+               <button
+                  className="btn-again"
+                  onClick={() => {
+                     toggleModalOverlay();
+                     uploadBtnRef?.current?.click(); // Trigger upload image button on try again
                   }}
-               />
-            </ReactCrop>
+               >
+                  Try Again
+               </button>
+            </ErrorModalOverlay>
          </main>
 
          {/* Sidebar Controls */}

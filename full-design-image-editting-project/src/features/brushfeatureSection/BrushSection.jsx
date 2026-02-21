@@ -17,6 +17,7 @@ const BrushSection = () => {
    const { imageStatus, isDragging, modal, setModal, handleFileAction, handleDrag, handleDrop } =
       useFileHandler({ canvasRef, setImage, resetCanvas, setGlobalFilterData, uploadBtnRef });
 
+   //Toggle modal overlay
    const toggleModalOverlay = () => setModal((prev) => !prev);
 
    //Paint canvas with Filter when globalFilter changed
