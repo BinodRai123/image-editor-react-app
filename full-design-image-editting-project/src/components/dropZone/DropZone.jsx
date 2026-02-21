@@ -3,23 +3,21 @@ import "./dropZone.css";
 const DropZone = ({ image, isDragging, handleFileAction, uploadBtnRef, showEmptyState }) => {
    return (
       <>
+         {/* Upload Button */}
+         {image && (
+            <label htmlFor="image-upload" className="btn upload-btn">
+               {isDragging ? "Drop to Upload" : "Change Image"}
+            </label>
+         )}
+         <input
+            ref={uploadBtnRef}
+            type="file"
+            id="image-upload"
+            onChange={(e) => handleFileAction(e.target.files[0])}
+            accept="image/*"
+         />
          {!image && (
             <div className="upload-zone">
-               {/* Upload Button */}
-               {image && (
-                  <label htmlFor="image-upload" className="btn upload-btn">
-                     {isDragging ? "Drop to Upload" : "Change Image"}
-                  </label>
-               )}
-
-               <input
-                  ref={uploadBtnRef}
-                  type="file"
-                  id="image-upload"
-                  onChange={(e) => handleFileAction(e.target.files[0])}
-                  accept="image/*"
-               />
-
                {/* 2. THE EMPTY STATE (Show only if no image is loaded) */}
                {showEmptyState && (
                   <div className={`upload-placeholder ${isDragging ? "active" : ""}`}>

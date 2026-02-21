@@ -1,13 +1,13 @@
 import { useCallback, useRef } from "react";
 
 export const useCropPreview = (isCircle) => {
-   const imgRef = useRef(null); // This is your source canvas/image
+   const canvasRef = useRef(null);
    const previewCanvasRef = useRef(null);
 
    const showPreview = useCallback(
       (currentCrop) => {
-         const image = imgRef.current;
-         const canvas = previewCanvasRef.current;
+         const image = canvasRef?.current;
+         const canvas = previewCanvasRef?.current;
 
          if (!image || !canvas || !currentCrop.width || !currentCrop.height) {
             return;
@@ -17,7 +17,7 @@ export const useCropPreview = (isCircle) => {
          if (!ctx) return;
 
          // 1. Get the real scaling factor
-         // If imgRef is a canvas where you drew the image, use its internal dimensions
+         // If canvasRef is a canvas where you drew the image, use its internal dimensions
          const scaleX = image.width / image.offsetWidth || 1;
          const scaleY = image.height / image.offsetHeight || 1;
 
@@ -66,5 +66,5 @@ export const useCropPreview = (isCircle) => {
       [isCircle],
    );
 
-   return { showPreview, imgRef, previewCanvasRef };
+   return { showPreview, canvasRef, previewCanvasRef };
 };

@@ -251,7 +251,7 @@
    }
 
    .card {
-      max-width: 13rem;
+      max-width: 11rem;
       padding: var(--padding-sm);
       margin: var(--margin-sm);
    }
@@ -259,6 +259,6 @@
    .filter-grid {
       grid-template-columns: repeat(2, 5.8rem);
       grid-template-rows: repeat(2, 7rem);
-      gap: var(--gutter-sm);
+      gap: 7px;
    }
 }

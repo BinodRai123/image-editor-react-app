@@ -1,13 +1,15 @@
-import { useCropShape } from "../../hooks/useCropShape";
-import { useCropPreview } from "../../hooks/useCropPreview";
 import { useState, useRef, useEffect, useCallback } from "react";
 import ReactCrop, { centerCrop, makeAspectCrop } from "react-image-crop";
-import "react-image-crop/dist/ReactCrop.css";
-import "./cropSection.css";
 import { useFileHandler } from "../../hooks/useFileHandler";
 import DropZone from "../../components/dropZone/DropZone";
 import { useCanvasLogic } from "../../hooks/useCanvasLogic.js";
 import DownloadIcon from "../../components/icons/DownloadIcon";
+
+import { useCropShape } from "./hooks/useCropShape";
+import { useCropPreview } from "./hooks/useCropPreview";
+
+import "react-image-crop/dist/ReactCrop.css";
+import "./cropSection.css";
 
 const imageUrl =
    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFYqoKTu_o3Zns2yExbst2Co84Gpc2Q1RJbA&s";
@@ -28,17 +30,17 @@ const CropSection = () => {
    // State to handle the shape toggle
    const [isCircle, setIsCircle] = useState(false);
 
-   const { showPreview, imgRef, previewCanvasRef } = useCropPreview(isCircle);
+   const { showPreview, canvasRef, previewCanvasRef } = useCropPreview(isCircle);
 
    const { handleCropChange, toggleShape } = useCropShape({ showPreview, setCrop, setIsCircle, crop });
 
    //File action handler
    const { imageStatus, isDragging, modal, setModal, handleFileAction, handleDrag, handleDrop } =
-      useFileHandler({ canvasRef: imgRef, setImage, resetCanvas, uploadBtnRef });
+      useFileHandler({ canvasRef: canvasRef, setImage, resetCanvas, uploadBtnRef });
 
    // { image, isDragging, handleFileAction, uploadBtnRef, showEmptyState }
    const handleDownloadCrop = () => {
-      if (!previewCanvasRef || !imgRef) return;
+      if (!previewCanvasRef || !canvasRef) return;
 
       const base64 = previewCanvasRef.current.toDataURL("image/png");
       const link = document.createElement("a");
@@ -51,12 +53,13 @@ const CropSection = () => {
    useEffect(() => {
       if (!image) return;
 
-      const ctx = imgRef.current.getContext("2d");
+      const ctx = canvasRef.current.getContext("2d");
 
-      ctx.drawImage(image, 0, 0, imgRef.current.width, imgRef.current.height);
+      ctx.drawImage(image, 0, 0, canvasRef.current.width, canvasRef.current.height);
    }, [image]);
+
    return (
-      <div className="editor-container">
+      <div onDrag={handleDrag} onDrop={handleDrop} className="editor-container">
          {/* Main Workspace */}
 
          <main className="editor-main">
@@ -75,7 +78,7 @@ const CropSection = () => {
                className="canvas-area"
             >
                <canvas
-                  ref={imgRef}
+                  ref={canvasRef}
                   alt="image"
                   style={{
                      display: imageStatus.success && !imageStatus.uploading ? "block" : "none",

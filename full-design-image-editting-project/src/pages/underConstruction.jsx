@@ -26,7 +26,7 @@ const UnderConstruction = () => {
 
             <div className={styles.actions}>
                <a href="/" className={styles.primaryBtn}>
-                  Back to Safety
+                  Back
                </a>
             </div>
          </section>
