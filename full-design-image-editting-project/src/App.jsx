@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import CanvasImage from "./components/CanvasImage/CanvasImage";
 import Navbar from "./components/Navbar/Navbar";
 import PhotoEditorSidebar from "./components/PhotoEditorSidebar/PhotoEditorSidebar";
-import Featureicon from "./components/featureIcon/Featureicon";
+import LeftSidebarFeatureIcons from "./components/leftSidebarFeatureIcons/leftSidebarFeatureIcon";
 import { Preloader } from "./features/preloaderAnimation/Preloader.jsx";
 
 const App = () => {
@@ -33,7 +33,10 @@ const App = () => {
             <Navbar />
             <main id="main">
                <section className="main__left">
-                  <Featureicon activeFeature={activeFeature} setActiveFeature={setActiveFeature} />
+                  <LeftSidebarFeatureIcons
+                     activeFeature={activeFeature}
+                     setActiveFeature={setActiveFeature}
+                  />
                </section>
                <CanvasImage activeFeature={activeFeature} />
                {activeFeature === "brush" ? <PhotoEditorSidebar /> : ""}

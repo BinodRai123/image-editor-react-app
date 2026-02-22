@@ -1,0 +1,60 @@
+/* ===============================
+   Feature Icon
+   =============================== */
+.main__left {
+   height: 100%;
+   width: fit-content;
+   width: 3.65rem;
+   background-color: var(--color-white);
+   box-shadow: var(--box-shadow-soft);
+}
+
+.main__left__features {
+   display: flex;
+   flex-direction: column;
+   gap: var(--gutter-sm);
+   padding: var(--padding-md) var(--padding-sm);
+}
+
+.feature-icon {
+   padding: var(--padding-sm);
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   border-radius: var(--border-radius-md);
+   opacity: 0.7;
+   cursor: pointer;
+}
+
+.active-feature-icon {
+   background-color: hsla(35, 85%, 55%, 0.4);
+}
+
+.inactive-feature-icon:hover {
+   background-color: #f3f4f6;
+}
+
+@media (width <= 600px) {
+   .main__left {
+      position: fixed;
+      width: 100%;
+      height: 4rem;
+      z-index: 100;
+      bottom: 0px;
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+      border-top: 1.5px solid #f5f4f2;
+   }
+
+   .main__left .main__left__features {
+      height: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-around;
+      padding: var(--padding-md);
+   }
+
+   h1 {
+      font-size: var(--font-size-md);
+   }
+}

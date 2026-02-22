@@ -2,6 +2,7 @@ import BrushIcon from "../icons/BrushIcon";
 import CropIcon from "../icons/CropIcon";
 import LayersIcon from "../icons/Layers";
 import TuneIcon from "../icons/TuneIcon";
+import "./leftsidebar.css";
 
 const allIcon = [
    { name: "brush", icon: BrushIcon, title: "Image Filter" },
@@ -10,7 +11,7 @@ const allIcon = [
    { name: "tune", icon: TuneIcon, title: "under construction" },
 ];
 
-const Featureicon = ({ activeFeature, setActiveFeature }) => {
+const LeftSidebarFeatureIcons = ({ activeFeature, setActiveFeature }) => {
    return (
       <>
          <div className="main__left__features">
@@ -36,4 +37,4 @@ const Featureicon = ({ activeFeature, setActiveFeature }) => {
    );
 };
 
-export default Featureicon;
+export default LeftSidebarFeatureIcons;

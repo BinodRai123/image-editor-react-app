@@ -2,7 +2,7 @@
 .upload-zone {
    width: 100%;
    max-width: 380px; /* Adjust based on your layout */
-   margin: 0 auto;
+   margin: 0 var(--margin-lg);
    font-family: "space-grotesk";
 }
 

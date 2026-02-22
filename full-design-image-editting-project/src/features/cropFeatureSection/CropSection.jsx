@@ -48,7 +48,7 @@ const CropSection = () => {
 
    // { image, isDragging, handleFileAction, uploadBtnRef, showEmptyState }
    const handleDownloadCrop = () => {
-      if (!previewCanvasRef || !canvasRef) return;
+      if (!previewCanvasRef.current || !image) return;
 
       const base64 = previewCanvasRef.current.toDataURL("image/png");
       const link = document.createElement("a");
