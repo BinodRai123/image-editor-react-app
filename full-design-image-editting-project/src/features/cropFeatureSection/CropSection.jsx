@@ -11,6 +11,7 @@ import ErrorModalOverlay from "../../components/modalOverlay/errorModalOverlay/E
 
 import "react-image-crop/dist/ReactCrop.css";
 import "./cropSection.css";
+import MenuBarButton from "../../components/menuIcon/menuIcon";
 
 const imageUrl =
    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFYqoKTu_o3Zns2yExbst2Co84Gpc2Q1RJbA&s";
@@ -31,6 +32,7 @@ const CropSection = () => {
       { label: "Free", value: undefined }, // undefined allows free-form dragging
    ];
    const [activeRatio, setActiveRatio] = useState("1:1");
+   const [isOpen, setIsOpen] = useState(false);
 
    const [image, setImage] = useState(null);
    const { resetCanvas } = useCanvasLogic();
@@ -82,6 +84,11 @@ const CropSection = () => {
       [crop],
    );
 
+   /* ---- toggle sidebar ---- */
+   const toggleSidebar = () => {
+      setIsOpen(!isOpen);
+   };
+
    // Inside CropSection.js
    useEffect(() => {
       if (!image) return;
@@ -108,6 +115,7 @@ const CropSection = () => {
 
             {/* Notice the display property changed from "block" to "flex" */}
             <div className="canvas-image-wrapper" style={{ display: image ? "flex" : "none" }}>
+               {/* ReactCrop will now be perfectly centered by the parent's Flexbox */}
                <ReactCrop
                   crop={crop}
                   onChange={handleCropChange}
@@ -117,7 +125,6 @@ const CropSection = () => {
                   <canvas
                      id="canvas-image"
                      ref={canvasRef}
-                     alt="image"
                      style={{
                         display: imageStatus.success && !imageStatus.uploading ? "block" : "none",
                      }}
@@ -144,8 +151,10 @@ const CropSection = () => {
             </ErrorModalOverlay>
          </main>
 
+         <MenuBarButton toggleSidebar={toggleSidebar} isOpen={isOpen} />
+
          {/* Sidebar Controls */}
-         <aside className="editor-sidebar">
+         <aside className={`crop-editor-sidebar ${isOpen && "crop-editor-sidebar-open"}`}>
             <section className="sidebar-section">
                <h4 className="section-title">LIVE PREVIEW</h4>
                <div className="live-preview-box">
@@ -200,6 +209,7 @@ const CropSection = () => {
    );
 };
 
+// Aspect Ratio Btn Components
 const AspectRatioBtn = ({ objectRatio, isActive, handleActiveRatioBtn }) => {
    return (
       <button

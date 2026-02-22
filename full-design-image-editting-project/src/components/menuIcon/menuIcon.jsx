@@ -1,3 +1,5 @@
+import "./menuIconStyle.css";
+
 const MenuBarButton = ({ toggleSidebar, isOpen }) => {
    return (
       <button
