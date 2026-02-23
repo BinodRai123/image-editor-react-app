@@ -39,6 +39,7 @@ const App = () => {
                   />
                </section>
                <CanvasImage activeFeature={activeFeature} />
+               {/* Sidebar of Canas filter  */}
                {activeFeature === "brush" ? <PhotoEditorSidebar /> : ""}
             </main>
          </section>

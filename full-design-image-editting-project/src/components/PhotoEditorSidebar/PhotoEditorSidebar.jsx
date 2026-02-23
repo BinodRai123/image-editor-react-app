@@ -12,6 +12,7 @@ import PresetCard from "../presetCard/PresetCard";
 import AutoEnchancerBtn from "./AutoEnhancerBtn/AutoEnchancerBtn";
 import InputRangesCard from "./InputRangeCard/InputRangesCard";
 import MenuBarButton from "../menuIcon/menuIcon";
+import { useAppDispatch, useAppSelector } from "../../hooks/index";
 
 const PhotoEditorSidebar = React.memo(() => {
    const tabs = ["All", "Filters", "Presets"];
@@ -19,6 +20,8 @@ const PhotoEditorSidebar = React.memo(() => {
    const [activeTab, setActiveTab] = useState("All");
    const [activePreset, setActivePreset] = useState("Original");
    const [isOpen, setIsOpen] = useState(false);
+   const filterDatas = useAppSelector((state) => state.imageEditor.filters);
+   // console.log(ReduxfilterData);
 
    /* ---- useCallback help to memorize the function ----*/
    /* ---- on every re-render which will avoid ----*/

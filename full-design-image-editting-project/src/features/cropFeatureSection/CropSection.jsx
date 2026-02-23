@@ -92,7 +92,7 @@ const CropSection = () => {
                   className="btn-again"
                   onClick={() => {
                      toggleModalOverlay();
-                     uploadBtnRef?.current?.click(); // Trigger upload image button on try again
+                     uploadBtnRef?.current?.click(); // Trigger upload image button as try again
                   }}
                >
                   Try Again
