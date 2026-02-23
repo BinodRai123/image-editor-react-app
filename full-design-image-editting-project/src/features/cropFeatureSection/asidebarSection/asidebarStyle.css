@@ -1,0 +1,130 @@
+/* --- Sidebar --- */
+.crop-editor-sidebar {
+   background: var(--color-white);
+   border-left: 1px solid var(--border-subtle);
+   padding: var(--padding-md);
+   display: flex;
+   flex-direction: column;
+   gap: var(--gutter-lg);
+}
+
+.section-title {
+   font-size: var(--font-size-xs);
+   color: var(--text-gray);
+   letter-spacing: 0.05em;
+   margin-bottom: var(--margin-md);
+}
+
+.live-preview-box {
+   background: var(--bg-light);
+   border-radius: var(--border-radius-md);
+   padding: var(--padding-sm);
+   height: 15rem;
+   aspect-ratio: 20 / 15;
+   width: 100%;
+}
+
+.preview-placeholder {
+   width: 100%;
+   height: 100%;
+   background: white;
+   border: 1px solid var(--border-subtle);
+   display: flex;
+   text-align: center;
+   font-size: 10px;
+   color: var(--text-black);
+   position: relative;
+
+   canvas {
+      position: relative;
+      max-height: 100%;
+      max-width: 100%;
+   }
+}
+
+.resolution-tag {
+   position: absolute;
+   bottom: 4px;
+   right: 4px;
+   background: rgba(0, 0, 0, 0.6);
+   color: white;
+   padding: 2px 4px;
+   border-radius: 2px;
+   font-size: 8px;
+}
+
+/* Aspect Ratio Buttons */
+.ratio-grid {
+   display: grid;
+   grid-template-columns: repeat(4, 1fr);
+   gap: var(--gutter-sm);
+}
+
+.ratio-btn {
+   padding: var(--padding-sm) 0;
+   border: 1px solid var(--border-subtle);
+   border-radius: var(--border-radius-md);
+   background: transparent;
+   font-size: var(--font-size-sm);
+   cursor: pointer;
+   transition: all 0.2s;
+}
+
+.ratio-btn.active {
+   background: var(--text-primary);
+   color: white;
+   border-color: var(--text-primary);
+}
+
+/* Sidebar Footer & Download */
+.sidebar-footer {
+   margin-top: auto;
+   text-align: center;
+}
+
+.download-btn {
+   width: 100%;
+   background: var(--text-primary);
+   color: white;
+   border: none;
+   padding: var(--padding-md);
+   border-radius: var(--border-radius-md);
+   font-weight: 600;
+   font-size: var(--font-size-md);
+   cursor: pointer;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   gap: var(--gutter-sm);
+   box-shadow: var(--box-shadow-primary);
+}
+
+.download-btn:hover {
+   background: var(--text-primary-dark);
+}
+
+.export-hint {
+   font-size: 10px;
+   color: var(--text-gray);
+   margin-top: var(--margin-sm);
+}
+
+@media (width <= 900px) {
+   .crop-editor-sidebar {
+      position: fixed;
+      z-index: 10000;
+      right: 0;
+      transform: translateX(100%);
+      transition: transform 0.3s ease-in-out;
+   }
+
+   .crop-editor-sidebar-open {
+      transform: translateX(0);
+   }
+}
+
+@media (width <= 490px) {
+   .crop-editor-sidebar {
+      width: 100%;
+   }
+}
