@@ -42,6 +42,7 @@
 .sidebar-content {
    display: flex;
    flex-direction: column;
+   align-items: center;
    gap: var(--gutter-sm);
    overflow-y: auto;
    padding: var(--padding-xs);
@@ -185,8 +186,6 @@
    .editor-sidebar-open {
       transform: translateX(0);
    }
-
-   
 }
 
 @media (width < 490px) {

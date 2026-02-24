@@ -29,6 +29,7 @@
    position: relative;
    display: flex;
    justify-content: center;
+   touch-action: none;
 
    #canvas-image {
       position: relative;

@@ -1,5 +1,6 @@
 /* ---- BASE WRAPPER ---- */
 .upload-zone {
+   -webkit-tap-highlight-color: transparent;
    width: 100%;
    max-width: 380px; /* Adjust based on your layout */
    margin: 0 var(--margin-lg);
