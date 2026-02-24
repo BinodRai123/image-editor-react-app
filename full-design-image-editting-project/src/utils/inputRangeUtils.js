@@ -13,7 +13,7 @@ const getInitialFilterState = (filterData) => {
 };
 
 // parse/convert the preset filter string into
-// nested objected for globalfilterdata
+// nested objected for FilterData
 function parseFilters(filterString) {
    const result = {};
 

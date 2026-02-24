@@ -1,7 +1,6 @@
-import React, { useState, useCallback, useContext, useEffect } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import FilterConstants from "./filtersData";
 import "./PhotoEditorSidebar.css";
-import { reactContext } from "../../WrapFilterData/WrapperFilters";
 
 // Destructuring filterData and PresetData from FilterConstants
 const { filterData, PresetData } = FilterConstants;
@@ -13,61 +12,27 @@ import AutoEnchancerBtn from "./AutoEnhancerBtn/AutoEnchancerBtn";
 import InputRangesCard from "./InputRangeCard/InputRangesCard";
 import MenuBarButton from "../menuIcon/menuIcon";
 import { useAppDispatch, useAppSelector } from "../../hooks/index";
+import { setFilters } from "../../Redux/slices/ImageFilter/imageFilterSlicer";
 
 const PhotoEditorSidebar = React.memo(() => {
    const tabs = ["All", "Filters", "Presets"];
-   const { globalFilterData, setGlobalFilterData } = useContext(reactContext);
    const [activeTab, setActiveTab] = useState("All");
    const [activePreset, setActivePreset] = useState("Original");
    const [isOpen, setIsOpen] = useState(false);
    const filterDatas = useAppSelector((state) => state.imageEditor.filters);
-   // console.log(ReduxfilterData);
-
-   /* ---- useCallback help to memorize the function ----*/
-   /* ---- on every re-render which will avoid ----*/
-   /* ---- Creating new function when react re-render ----*/
-   const handleRangeChange = useCallback((event) => {
-      const { id, value } = event.target;
-
-      // Use the functional update to ensure we don't have dependency issues
-      // AND wrap in a transition if using React 18+ to prioritize UI responsiveness
-      setGlobalFilterData((prev) => {
-         if (prev[id].value === Number(value)) return prev; // Skip if no change
-         return {
-            ...prev,
-            [id]: { ...prev[id], value: Number(value) },
-         };
-      });
-
-      setActivePreset("");
-   }, []);
-
-   //Initiailzed filterdata is seeting in globalfilterdata
-   //without useeffect the context cannot re-render immediatly after initialized
-   useEffect(() => {
-      setGlobalFilterData(() => getInitialFilterState(filterData));
-   }, []);
+   const dispatch = useAppDispatch();
 
    /* ---- Show which preset is active ----  */
    const handleActivePreset = useCallback((name, id) => {
       setActivePreset(name);
       const ParsedPresetStringtoObj = parseFilters(PresetData[id].style.filters);
-      setGlobalFilterData(ParsedPresetStringtoObj);
+      dispatch(setFilters(ParsedPresetStringtoObj));
    }, []);
 
    /* ---- toggle sidebar ---- */
    const toggleSidebar = () => {
       setIsOpen(!isOpen);
    };
-
-   /* Apply Filter To Preset Card for each preset card  */
-   const getPresetPreviewStyle = useCallback((preset) => {
-      return {
-         backgroundImage: "",
-         filter: preset.style.filters ?? "gray(10px)",
-         opacity: preset.style.opacity ?? 1,
-      };
-   }, []);
 
    return (
       <>
@@ -102,8 +67,9 @@ const PhotoEditorSidebar = React.memo(() => {
                      <InputRangesCard
                         key={section.SectionName}
                         section={section}
-                        globalFilterData={globalFilterData}
-                        handleRangeChange={handleRangeChange}
+                        dispatch={dispatch}
+                        useAppSelector={useAppSelector}
+                        setActivePreset={setActivePreset}
                      />
                   ))}
 
@@ -120,7 +86,6 @@ const PhotoEditorSidebar = React.memo(() => {
                               preset={preset}
                               id={id}
                               activePreset={activePreset}
-                              getPresetPreviewStyle={getPresetPreviewStyle}
                               handleActivePreset={handleActivePreset}
                            />
                         ))}
@@ -131,11 +96,7 @@ const PhotoEditorSidebar = React.memo(() => {
 
             {/* Footer */}
             {/* Auto Enhancer Button */}
-            <AutoEnchancerBtn
-               setActivePreset={setActivePreset}
-               setGlobalFilterData={setGlobalFilterData}
-               PresetData={PresetData}
-            />
+            <AutoEnchancerBtn setActivePreset={setActivePreset} dispatch={dispatch} PresetData={PresetData} />
          </aside>
       </>
    );

@@ -1,20 +1,25 @@
-import { useContext, useState } from "react";
-import { reactContext } from "../../../WrapFilterData/WrapperFilters.jsx";
+import { useState } from "react";
 import DownloadIcon from "../../icons/DownloadIcon.jsx";
 import { generateCSSFilterString } from "../../../utils/imageUtils.js";
 import "./exportButton.css";
 import ModalOverlay from "../../modalOverlay/ModalOverlay.jsx";
+import { useAppSelector } from "../../../hooks/index.js";
 
 const ExportButton = () => {
-   const { originalImage, globalFilterData } = useContext(reactContext);
    const [isExporting, setIsExporting] = useState(false);
    const [exportProgress, setExportProgress] = useState(0); // Track 0-100%
 
    const [NamingFileModal, setNamingFileModal] = useState(false);
    const [fileName, setFileName] = useState("edited-image");
 
+   //image and filterDAta
+   const { imageURL, originalImageHeight, originalImageWidth } = useAppSelector(
+      (state) => state.imageEditor.currentImage,
+   );
+   const filterData = useAppSelector((state) => state.imageEditor.filters);
+
    const handleExport = async () => {
-      if (!originalImage || isExporting) return;
+      if (!imageURL || isExporting) return;
 
       setIsExporting(true);
       setNamingFileModal(false);
@@ -33,17 +38,19 @@ const ExportButton = () => {
 
       setTimeout(() => {
          try {
-            const Image = originalImage;
+            const Image = document.createElement("img");
+            Image.src = imageURL;
+
             const ExportCanvas = document.createElement("canvas");
             const ctx = ExportCanvas.getContext("2d");
 
             // Use natural dimensions to prevent size loss
-            const width = Image.naturalWidth || Image.width;
-            const height = Image.naturalHeight || Image.height;
+            const width = originalImageWidth || Image.width;
+            const height = originalImageHeight || Image.height;
             ExportCanvas.width = width;
             ExportCanvas.height = height;
 
-            ctx.filter = generateCSSFilterString(globalFilterData);
+            ctx.filter = generateCSSFilterString(filterData);
             ctx.drawImage(Image, 0, 0, width, height);
 
             const link = document.createElement("a");
@@ -92,16 +99,16 @@ const ExportButton = () => {
             className="btn btn-primary row"
             style={{
                "--gap": "0.2rem",
-               cursor: isExporting || !originalImage ? "not-allowed" : "pointer",
+               cursor: isExporting || !imageURL ? "not-allowed" : "pointer",
             }}
             onClick={() => {
-               if (!originalImage) return;
+               if (!imageURL) return;
                setNamingFileModal(true);
             }}
-            disabled={isExporting || !originalImage}
+            disabled={isExporting || !imageURL}
             title="Export Image"
          >
-            <DownloadIcon size={"20"} color={`${originalImage ? "black" : "gray"}`} />
+            <DownloadIcon size={"20"} color={`${imageURL ? "black" : "gray"}`} />
             {isExporting ? "Exporting..." : "Export"}
          </button>
 

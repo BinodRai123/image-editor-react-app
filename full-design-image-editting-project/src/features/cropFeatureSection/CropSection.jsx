@@ -11,6 +11,7 @@ import ErrorModalOverlay from "../../components/modalOverlay/errorModalOverlay/E
 import "react-image-crop/dist/ReactCrop.css";
 import "./cropSection.css";
 import AsidebarSection from "./asidebarSection/AsidebarSection";
+import { useAppSelector } from "../../hooks/index";
 
 const CropSection = () => {
    const [crop, setCrop] = useState({
@@ -20,32 +21,40 @@ const CropSection = () => {
       width: 50,
       height: 50,
    });
-
-   const [image, setImage] = useState(null);
    const { resetCanvas } = useCanvasLogic();
    const uploadBtnRef = useRef(null);
 
    // State to handle the shape toggle
    const [isCircle, setIsCircle] = useState(false);
 
+   //Dispatch and Selector for image cropper
+   const { imageURL, height, width } = useAppSelector((state) => state.imageCropper.image);
+
+   //Cropped image Preview
    const { showPreview, canvasRef, previewCanvasRef } = useCropPreview(isCircle);
    const { handleCropChange, toggleShape } = useCropShape({ showPreview, setCrop, setIsCircle, crop });
 
    //File action handler
    const { imageStatus, isDragging, modal, setModal, handleFileAction, handleDrag, handleDrop } =
-      useFileHandler({ canvasRef, setImage, resetCanvas, uploadBtnRef });
+      useFileHandler({ canvasRef, resetCanvas, uploadBtnRef, mode: "imageCropper" });
 
    //toggle modal overlay
    const toggleModalOverlay = () => setModal((prev) => !prev);
 
    // Inside CropSection.js
    useEffect(() => {
-      if (!image) return;
+      if (!imageURL) return;
+      const Image = document.createElement("img");
+      Image.src = imageURL;
+
+      // console.log("image -> ", Image);
 
       const ctx = canvasRef.current.getContext("2d");
+      canvasRef.current.width = width;
+      canvasRef.current.height = height;
 
-      ctx.drawImage(image, 0, 0, canvasRef.current.width, canvasRef.current.height);
-   }, [image]);
+      ctx.drawImage(Image, 0, 0, canvasRef.current.width, canvasRef.current.height);
+   }, [imageURL]);
 
    return (
       <div className="editor-container">
@@ -53,17 +62,17 @@ const CropSection = () => {
 
          <main onDragOver={handleDrag} onDrop={handleDrop} className="editor-main">
             <DropZone
-               image={image}
+               image={imageURL}
                isDragging={isDragging}
                handleFileAction={handleFileAction}
                uploadBtnRef={uploadBtnRef}
-               showEmptyState={!image ? true : false}
+               showEmptyState={!imageURL ? true : false}
             />
 
             {/* Notice the display property changed from "block" to "flex" */}
 
             {/* Notice the display property changed from "block" to "flex" */}
-            <div className="canvas-image-wrapper" style={{ display: image ? "flex" : "none" }}>
+            <div className="canvas-image-wrapper" style={{ display: imageURL ? "flex" : "none" }}>
                {/* ReactCrop will now be perfectly centered by the parent's Flexbox */}
                <ReactCrop
                   crop={crop}
@@ -75,7 +84,7 @@ const CropSection = () => {
                      id="canvas-image"
                      ref={canvasRef}
                      style={{
-                        display: imageStatus.success && !imageStatus.uploading ? "block" : "none",
+                        display: imageURL ? "block" : "none",
                      }}
                   />
                </ReactCrop>
@@ -104,7 +113,7 @@ const CropSection = () => {
          <AsidebarSection
             crop={crop}
             setCrop={setCrop}
-            image={image}
+            image={imageURL}
             previewCanvasRef={previewCanvasRef}
             isCircle={isCircle}
          />

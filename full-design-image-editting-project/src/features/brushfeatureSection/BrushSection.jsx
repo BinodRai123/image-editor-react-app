@@ -2,37 +2,33 @@ import ErrorModalOverlay from "../../components/modalOverlay/errorModalOverlay/E
 import DropZone from "../../components/dropZone/DropZone";
 import { useCanvasLogic } from "../../hooks/useCanvasLogic";
 import { useFileHandler } from "../../hooks/useFileHandler";
-import { reactContext } from "../../WrapFilterData/WrapperFilters";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./BrushSectionStyle.css";
+import { useAppDispatch, useAppSelector } from "../../hooks/index";
+import { setCurrentImage } from "../../Redux/slices/ImageFilter/imageFilterSlicer";
 
 const BrushSection = () => {
-   const { globalFilterData, setGlobalFilterData, setOriginalImage } = useContext(reactContext);
-   const [image, setImage] = useState(null);
    const uploadBtnRef = useRef(null);
+   const filterData = useAppSelector((state) => state.imageEditor.filters);
 
-   const { canvasRef, applyFilters, resetCanvas } = useCanvasLogic(image, globalFilterData);
+   const imageURL = useAppSelector((state) => state.imageEditor.currentImage.imageURL);
+   const dispatch = useAppDispatch();
+
+   const { canvasRef, applyFilters, resetCanvas } = useCanvasLogic(filterData);
 
    //custom hook to handle file logic
    const { imageStatus, isDragging, modal, setModal, handleFileAction, handleDrag, handleDrop } =
-      useFileHandler({ canvasRef, setImage, resetCanvas, setGlobalFilterData, uploadBtnRef });
+      useFileHandler({ canvasRef, resetCanvas, uploadBtnRef, mode: "imageEditor" });
 
    //Toggle modal overlay
    const toggleModalOverlay = () => setModal((prev) => !prev);
 
-   //Paint canvas with Filter when globalFilter changed
+   //Paint canvas with Filter when Redux Filter data changed
    useEffect(() => {
-      if (!image) return; //if there is no image then return
+      if (!imageURL) return; //if there is no image then return
 
       applyFilters(); // if ther is image then apply this filter
-
-      const handler = setTimeout(() => setOriginalImage(image), 200);
-      return () => {
-         clearTimeout(handler);
-      };
-   }, [globalFilterData, image, applyFilters, setOriginalImage]);
-
-   // console.log("canvas -> ", canvasRef?.current.width);
+   }, [filterData, imageURL, applyFilters]);
 
    return (
       <section
@@ -49,15 +45,15 @@ const BrushSection = () => {
             className={isDragging ? "canvas-blur" : ""}
             ref={canvasRef}
             style={{
-               display: imageStatus.success && !imageStatus.uploading ? "block" : "none",
+               display: imageURL ? "block" : "none",
             }}
          />
          <DropZone
-            image={image}
+            image={imageURL}
             isDragging={isDragging}
             handleFileAction={handleFileAction}
             uploadBtnRef={uploadBtnRef}
-            showEmptyState={!imageStatus.success && !imageStatus.uploading && !image}
+            showEmptyState={!imageStatus.success && !imageStatus.uploading && !imageURL}
          />
 
          <ErrorModalOverlay

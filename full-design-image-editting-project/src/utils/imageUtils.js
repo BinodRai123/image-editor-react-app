@@ -19,6 +19,8 @@ export const processImageUpload = (file) => {
          // 2.storing img width and height in variables
          let width = img.width;
          let height = img.height;
+         let originalImageHeight = img.height;
+         let originalImageWidth = img.width;
 
          //This check whether the image size is greater than
          //MAX_PREVIEW_SIZE and if yes then it will resize width and height
@@ -29,7 +31,7 @@ export const processImageUpload = (file) => {
          }
 
          // 3. Return the processed data
-         resolve({ img, width, height });
+         resolve({ img, width, height, imageURL: img.src, originalImageHeight, originalImageWidth });
       };
 
       //If there is an error then it will throw reject(message)

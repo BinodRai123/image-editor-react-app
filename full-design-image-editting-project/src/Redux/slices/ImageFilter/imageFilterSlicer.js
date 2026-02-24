@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialFilterData = {
-   brightness: { value: 0, unit: "%" },
-   contrast: { value: 15, unit: "%" },
-   saturate: { value: 0, unit: "%" },
-   "hue-rotate": { value: 0, unit: "°" },
+   brightness: { value: 100, unit: "%" },
+   contrast: { value: 100, unit: "%" },
+   saturate: { value: 100, unit: "%" },
+   "hue-rotate": { value: 0, unit: "deg" },
    blur: { value: 0, unit: "px" },
    grayscale: { value: 0, unit: "%" },
    sepia: { value: 0, unit: "%" },
@@ -15,7 +15,13 @@ const initialFilterData = {
 export const ImageFilter = createSlice({
    name: "ImageFilter",
    initialState: {
-      currentImage: null,
+      currentImage: {
+         imageURL: null,
+         width: 0,
+         height: 0,
+         originalImageWidth: 0,
+         originalImageHeight: 0,
+      },
       filters: initialFilterData,
    },
    reducers: {
@@ -33,6 +39,11 @@ export const ImageFilter = createSlice({
          }
       },
 
+      setFilters: (state, action) => {
+         // This replaces the entire filters object with the payload
+         state.filters = action.payload;
+      },
+
       // 3. Action to reset everything (No payload needed here!)
       resetEditor: (state) => {
          state.filters = initialFilterData;
@@ -40,5 +51,5 @@ export const ImageFilter = createSlice({
    },
 });
 
-export const { setCurrentImage, updateFilterValue, resetEditor } = ImageFilter.actions;
+export const { setCurrentImage, updateFilterValue, resetEditor, setFilters } = ImageFilter.actions;
 export default ImageFilter.reducer;

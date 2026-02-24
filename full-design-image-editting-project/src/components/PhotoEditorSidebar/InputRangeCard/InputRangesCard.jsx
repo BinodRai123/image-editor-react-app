@@ -1,4 +1,21 @@
-const InputRangesCard = ({ section, globalFilterData, handleRangeChange }) => {
+import { updateFilterValue } from "../../../Redux/slices/ImageFilter/imageFilterSlicer";
+import { useCallback } from "react";
+
+const InputRangesCard = ({ section, setActivePreset, dispatch, useAppSelector }) => {
+   const filterData = useAppSelector((state) => state.imageEditor.filters);
+
+   /* ---- useCallback help to memorize the function ----*/
+   /* ---- on every re-render which will avoid ----*/
+   /* ---- Creating new function when react re-render ----*/
+   const handleRangeChange = useCallback(({ event, name }) => {
+      const { id, value } = event.target;
+
+      //Update the Filter Data in the Redux Filter Data
+      dispatch(updateFilterValue({ name: id, value: value }));
+
+      setActivePreset("");
+   }, []);
+
    return (
       <div className="card">
          <div className="row">
@@ -13,7 +30,7 @@ const InputRangesCard = ({ section, globalFilterData, handleRangeChange }) => {
                      <label htmlFor={`${control.id}`} aria-label={`${control.id}`}>
                         {control.label}
                      </label>
-                     <span>{globalFilterData[`${control?.id}`]["value"]}</span>
+                     <span>{filterData[`${control?.id}`]["value"]}</span>
                   </div>
 
                   <input
@@ -22,8 +39,8 @@ const InputRangesCard = ({ section, globalFilterData, handleRangeChange }) => {
                      className="custom-range"
                      min={control.min}
                      max={control.max}
-                     value={globalFilterData[`${control.id}`]["value"]}
-                     onChange={handleRangeChange}
+                     value={filterData[`${control?.id}`]["value"]}
+                     onChange={(event) => handleRangeChange({ event, name: control.label })}
                   />
                </div>
             ))}

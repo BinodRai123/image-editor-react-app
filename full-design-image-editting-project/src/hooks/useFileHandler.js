@@ -1,16 +1,14 @@
 import { useState, useCallback } from "react";
 import { processImageUpload, DEFAULT_FILTERS } from "../utils/imageUtils.js";
+import { useAppDispatch } from "./index.js";
+import { resetEditor, setCurrentImage } from "../Redux/slices/ImageFilter/imageFilterSlicer.js";
+import { setCropImage } from "../Redux/slices/cropImage/cropImageSlilcer.js";
 
-export const useFileHandler = ({
-   canvasRef,
-   setImage,
-   resetCanvas,
-   setGlobalFilterData,
-   uploadBtnRef = null,
-}) => {
+export const useFileHandler = ({ canvasRef, resetCanvas, uploadBtnRef = null, mode }) => {
    const [imageStatus, setImageStatus] = useState({ success: false, uploading: false, errorMessage: null });
    const [isDragging, setIsDragging] = useState(false);
    const [modal, setModal] = useState(false);
+   const dispatch = useAppDispatch();
 
    const handleFileAction = async (file) => {
       if (!file) return;
@@ -20,13 +18,34 @@ export const useFileHandler = ({
       try {
          //This function Create image, check if it is valid
          //calculate the height and width of image and return it
-         const { img, width, height } = await processImageUpload(file);
-         // 1. Adding height and width in canvas
-         canvasRef.current.width = width;
-         canvasRef.current.height = height;
+         const { img, width, height, imageURL, originalImageHeight, originalImageWidth } =
+            await processImageUpload(file);
 
-         setImage(img); //updating image state
-         resetCanvas(); //reseting the canvas
+         //This Dispatch will Run if this is from image editor section
+         if (mode === "imageEditor") {
+            //Updating image, width and height in the redux toolkit
+            dispatch(
+               setCurrentImage({
+                  imageURL,
+                  width,
+                  height,
+                  originalImageHeight,
+                  originalImageWidth,
+               }),
+            );
+
+            resetCanvas(); //reseting the canvas
+
+            dispatch(resetEditor()); //Reseting the filterData to initial Value
+         }
+
+         // This Dispatch will run if it is from image cropper section
+         if (mode === "imageCropper") {
+            resetCanvas();
+
+            dispatch(setCropImage({ imageURL, width, height }));
+         }
+
          setImageStatus({ success: true, uploading: false, errorMessage: null });
       } catch (error) {
          setImageStatus({ success: false, uploading: false, errorMessage: error });
