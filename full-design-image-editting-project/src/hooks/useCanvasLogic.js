@@ -24,7 +24,7 @@ export const useCanvasLogic = (filterData = null) => {
 
       const drawInCanvas = () => {
          const canvas = canvasRef.current;
-         const ctx = canvas.getContext("2d");
+         const ctx = canvas?.getContext("2d");
 
          canvas.width = imageWidth;
          canvas.height = imageHeight;

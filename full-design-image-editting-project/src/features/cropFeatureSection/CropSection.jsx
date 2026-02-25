@@ -22,6 +22,7 @@ const CropSection = () => {
       width: 50,
       height: 50,
    });
+   const [isLoadingUIActive, setIsLoadingUIActive] = useState(true);
    const { resetCanvas } = useCanvasLogic();
    const uploadBtnRef = useRef(null);
 
@@ -42,28 +43,42 @@ const CropSection = () => {
    //toggle modal overlay
    const toggleModalOverlay = () => setModal((prev) => !prev);
 
-   // Inside CropSection.js
+   // Insert image into Canvas
    useEffect(() => {
       if (!imageURL) return;
       const Image = document.createElement("img");
       Image.src = imageURL;
+      setIsLoadingUIActive(true);
 
       // console.log("image -> ", Image);
 
-      const ctx = canvasRef.current.getContext("2d");
-      canvasRef.current.width = width;
-      canvasRef.current.height = height;
+      Image.onload = () => {
+         const ctx = canvasRef.current.getContext("2d");
+         canvasRef.current.width = width;
+         canvasRef.current.height = height;
 
-      ctx.drawImage(Image, 0, 0, canvasRef.current.width, canvasRef.current.height);
-      console.log("Croped Image -> ", Image);
+         // console.log("image", Image);
+
+         ctx.drawImage(Image, 0, 0, canvasRef.current.width, canvasRef.current.height);
+      };
    }, [imageURL]);
+
+   useEffect(() => {
+      const timerId = setTimeout(() => {
+         setIsLoadingUIActive(false);
+      }, 500);
+
+      return () => clearTimeout(timerId);
+   }, []);
 
    return (
       <div className="editor-container">
          {/* Main Workspace */}
 
          <main onDragOver={handleDrag} onDrop={handleDrop} className="editor-main">
-            {imageStatus.uploading && <CanvasSkeleton message={"UPLOADING IMAGE..."} />}
+            {(imageStatus.uploading || isLoadingUIActive) && (
+               <CanvasSkeleton message={"UPLOADING IMAGE..."} />
+            )}
 
             <DropZone
                image={imageURL}
@@ -74,9 +89,10 @@ const CropSection = () => {
             />
 
             {/* Notice the display property changed from "block" to "flex" */}
-
-            {/* Notice the display property changed from "block" to "flex" */}
-            <div className="canvas-image-wrapper" style={{ display: imageURL ? "flex" : "none" }}>
+            <div
+               className="canvas-image-wrapper"
+               style={{ display: imageURL && !isLoadingUIActive ? "flex" : "none" }}
+            >
                {/* ReactCrop will now be perfectly centered by the parent's Flexbox */}
                <ReactCrop
                   crop={crop}

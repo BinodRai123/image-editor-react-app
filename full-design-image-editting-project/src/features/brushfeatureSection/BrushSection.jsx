@@ -2,12 +2,13 @@ import ErrorModalOverlay from "../../components/modalOverlay/errorModalOverlay/E
 import DropZone from "../../components/dropZone/DropZone";
 import { useCanvasLogic } from "../../hooks/useCanvasLogic";
 import { useFileHandler } from "../../hooks/useFileHandler";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/index";
 import CanvasSkeleton from "../../components/loadingUI/CanvasSkeleton/CanvasSkeleton";
 import "./BrushSectionStyle.css";
 
 const BrushSection = () => {
+   const [isLoadingUIActive, setIsLoadingUIActive] = useState(true);
    const uploadBtnRef = useRef(null);
    const filterData = useAppSelector((state) => state.imageEditor.filters);
 
@@ -30,6 +31,14 @@ const BrushSection = () => {
       applyFilters(); // if ther is image then apply this filter
    }, [filterData, imageURL, applyFilters]);
 
+   useEffect(() => {
+      const timerId = setTimeout(() => {
+         setIsLoadingUIActive(false);
+      }, 500);
+
+      return () => clearTimeout(timerId);
+   }, []);
+
    return (
       <section
          className={`canvas-image-container ${isDragging ? "drag-active" : ""}`}
@@ -37,7 +46,7 @@ const BrushSection = () => {
          onDrop={handleDrop}
       >
          {/* When image is uploading this will show up to inform */}
-         {imageStatus.uploading && <CanvasSkeleton message={"UPLOADING IMAGE..."} />}
+         {(imageStatus.uploading || isLoadingUIActive) && <CanvasSkeleton message={"UPLOADING IMAGE..."} />}
 
          {/* <div class="bg-checkerboard"></div> */}
          <canvas
@@ -45,7 +54,7 @@ const BrushSection = () => {
             className={isDragging ? "canvas-blur" : ""}
             ref={canvasRef}
             style={{
-               display: imageURL && !imageStatus.uploading ? "block" : "none",
+               display: imageURL && !imageStatus.uploading && !isLoadingUIActive ? "block" : "none",
             }}
          />
          <DropZone
@@ -53,7 +62,7 @@ const BrushSection = () => {
             isDragging={isDragging}
             handleFileAction={handleFileAction}
             uploadBtnRef={uploadBtnRef}
-            showEmptyState={!imageStatus.success && !imageStatus.uploading && !imageURL}
+            showEmptyState={!imageURL && !isLoadingUIActive ? true : false}
          />
 
          <ErrorModalOverlay
