@@ -38,7 +38,7 @@ const CropSection = () => {
 
    //File action handler
    const { imageStatus, isDragging, modal, setModal, handleFileAction, handleDrag, handleDrop } =
-      useFileHandler({ canvasRef, resetCanvas, uploadBtnRef, mode: "imageCropper" });
+      useFileHandler({ canvasRef, resetCanvas, uploadBtnRef, mode: "imageCropper", setIsLoadingUIActive });
 
    //toggle modal overlay
    const toggleModalOverlay = () => setModal((prev) => !prev);
@@ -48,8 +48,6 @@ const CropSection = () => {
       if (!imageURL) return;
       const Image = document.createElement("img");
       Image.src = imageURL;
-      setIsLoadingUIActive(true);
-
       // console.log("image -> ", Image);
 
       Image.onload = () => {
@@ -77,7 +75,7 @@ const CropSection = () => {
 
          <main onDragOver={handleDrag} onDrop={handleDrop} className="editor-main">
             {(imageStatus.uploading || isLoadingUIActive) && (
-               <CanvasSkeleton message={"UPLOADING IMAGE..."} />
+               <CanvasSkeleton message={`${imageURL ? "UPLOADING IMAGE..." : "LOADING..."}`} />
             )}
 
             <DropZone
@@ -85,7 +83,7 @@ const CropSection = () => {
                isDragging={isDragging}
                handleFileAction={handleFileAction}
                uploadBtnRef={uploadBtnRef}
-               showEmptyState={!imageURL ? true : false}
+               showEmptyState={!imageURL && !isLoadingUIActive ? true : false}
             />
 
             {/* Notice the display property changed from "block" to "flex" */}

@@ -19,7 +19,6 @@ export const useCanvasLogic = (filterData = null) => {
 
    const applyFilters = useCallback(() => {
       //check image and canvas
-
       if (!img || !canvasRef.current) return;
 
       const drawInCanvas = () => {

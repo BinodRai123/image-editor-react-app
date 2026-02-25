@@ -19,7 +19,7 @@ const BrushSection = () => {
 
    //custom hook to handle file logic
    const { imageStatus, isDragging, modal, setModal, handleFileAction, handleDrag, handleDrop } =
-      useFileHandler({ canvasRef, resetCanvas, uploadBtnRef, mode: "imageEditor" });
+      useFileHandler({ canvasRef, resetCanvas, uploadBtnRef, mode: "imageEditor", setIsLoadingUIActive });
 
    //Toggle modal overlay
    const toggleModalOverlay = () => setModal((prev) => !prev);
@@ -46,24 +46,28 @@ const BrushSection = () => {
          onDrop={handleDrop}
       >
          {/* When image is uploading this will show up to inform */}
-         {(imageStatus.uploading || isLoadingUIActive) && <CanvasSkeleton message={"UPLOADING IMAGE..."} />}
+         {(imageStatus.uploading || isLoadingUIActive) && (
+            <CanvasSkeleton message={`${imageURL ? "UPLOADING IMAGE..." : "LOADING..."}`} />
+         )}
 
          {/* <div class="bg-checkerboard"></div> */}
-         <canvas
-            id="canvas-image-preview"
-            className={isDragging ? "canvas-blur" : ""}
-            ref={canvasRef}
-            style={{
-               display: imageURL && !imageStatus.uploading && !isLoadingUIActive ? "block" : "none",
-            }}
-         />
-         <DropZone
-            image={imageURL}
-            isDragging={isDragging}
-            handleFileAction={handleFileAction}
-            uploadBtnRef={uploadBtnRef}
-            showEmptyState={!imageURL && !isLoadingUIActive ? true : false}
-         />
+         <div style={{ display: !isLoadingUIActive ? "block" : "none" }}>
+            <canvas
+               id="canvas-image-preview"
+               className={isDragging ? "canvas-blur" : ""}
+               ref={canvasRef}
+               style={{
+                  display: imageURL && !imageStatus.uploading && !isLoadingUIActive ? "block" : "none",
+               }}
+            />
+            <DropZone
+               image={imageURL}
+               isDragging={isDragging}
+               handleFileAction={handleFileAction}
+               uploadBtnRef={uploadBtnRef}
+               showEmptyState={!imageURL ? true : false}
+            />
+         </div>
 
          <ErrorModalOverlay
             modal={modal}

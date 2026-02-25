@@ -4,7 +4,13 @@ import { useAppDispatch } from "./index.js";
 import { resetEditor, setCurrentImage } from "../Redux/slices/ImageFilter/imageFilterSlicer.js";
 import { setCropImage } from "../Redux/slices/cropImage/cropImageSlilcer.js";
 
-export const useFileHandler = ({ canvasRef, resetCanvas, uploadBtnRef = null, mode }) => {
+export const useFileHandler = ({
+   canvasRef,
+   resetCanvas,
+   uploadBtnRef = null,
+   mode,
+   setIsLoadingUIActive,
+}) => {
    const [imageStatus, setImageStatus] = useState({ success: false, uploading: false, errorMessage: null });
    const [isDragging, setIsDragging] = useState(false);
    const [modal, setModal] = useState(false);
@@ -13,6 +19,7 @@ export const useFileHandler = ({ canvasRef, resetCanvas, uploadBtnRef = null, mo
    const handleFileAction = async (file) => {
       if (!file) return;
       //initalizing process of image uploading
+      setIsLoadingUIActive(true);
       setImageStatus({ success: false, uploading: true, errorMessage: null });
 
       try {
@@ -57,6 +64,8 @@ export const useFileHandler = ({ canvasRef, resetCanvas, uploadBtnRef = null, mo
             //reseting the upload image button value
             uploadBtnRef.current.value = "";
          }
+
+         setIsLoadingUIActive(false);
       }
    };
 
