@@ -37,7 +37,7 @@ const BrushSection = () => {
          onDrop={handleDrop}
       >
          {/* When image is uploading this will show up to inform */}
-         {imageStatus.uploading && <CanvasSkeleton />}
+         {imageStatus.uploading && <CanvasSkeleton message={"UPLOADING IMAGE..."} />}
 
          {/* <div class="bg-checkerboard"></div> */}
          <canvas

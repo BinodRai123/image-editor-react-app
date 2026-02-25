@@ -1,45 +1,72 @@
-/* ====================
-   Canvas Skeleton 
-==================== */
-
-.canvas-skeleton {
+/* CanvasLoading.css */
+.loader-container {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
    width: 100%;
-   max-width: 800px;
-   aspect-ratio: 16 / 9; /* Matches common image shapes */
-   background: #2a2a2a;
-   opacity: 0.7;
-   margin-inline: var(--margin-sm);
-   border-radius: 8px;
+   height: 300px; /* Adjust based on your editor layout */
+   background: transparent;
+}
+
+.canvas-spinner {
+   position: relative;
+   width: 80px;
+   height: 80px;
    display: flex;
    align-items: center;
    justify-content: center;
-   position: relative;
-   overflow: hidden;
-   color: var(--text-primary-dark);
-   font-size: var(--font-size-2xl);
 }
 
-.skeleton-shimmer {
+/* The Outer Rotating Ring */
+.spinner-ring {
    position: absolute;
-   top: 0;
-   left: 0;
    width: 100%;
    height: 100%;
-   background: linear-gradient(90deg, transparent, rgba(255, 254, 254, 0.342), transparent);
-   animation: shimmer 1.5s infinite;
+   border: 4px solid rgba(0, 0, 0, 0.05);
+   border-top: 4px solid #3b82f6; /* Modern primary blue */
+   border-radius: 50%;
+   animation: spin 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
 }
 
-@keyframes shimmer {
+/* The Inner Pulsing Icon (represents an image/canvas) */
+.spinner-core {
+   width: 30px;
+   height: 30px;
+   background-color: #3b82f6;
+   border-radius: 4px;
+   animation: pulse-morph 2s ease-in-out infinite;
+}
+
+.loader-text {
+   margin-top: 20px;
+   font-family: "Inter", sans-serif;
+   font-size: 14px;
+   color: #64748b;
+   letter-spacing: 0.5px;
+   font-weight: 500;
+}
+
+/* Keyframes */
+@keyframes spin {
    0% {
-      transform: translateX(-100%);
+      transform: rotate(0deg);
    }
    100% {
-      transform: translateX(100%);
+      transform: rotate(360deg);
    }
 }
 
-@media (width <=490px) {
-   .canvas-skeleton {
-      font-size: var(--font-size-md);
+@keyframes pulse-morph {
+   0%,
+   100% {
+      transform: scale(1);
+      border-radius: 4px;
+      opacity: 0.8;
+   }
+   50% {
+      transform: scale(1.2);
+      border-radius: 50%; /* Morphs into a circle */
+      opacity: 1;
    }
 }

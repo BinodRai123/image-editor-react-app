@@ -63,7 +63,7 @@ const CropSection = () => {
          {/* Main Workspace */}
 
          <main onDragOver={handleDrag} onDrop={handleDrop} className="editor-main">
-            {imageStatus.uploading && <CanvasSkeleton />}
+            {imageStatus.uploading && <CanvasSkeleton message={"UPLOADING IMAGE..."} />}
 
             <DropZone
                image={imageURL}
