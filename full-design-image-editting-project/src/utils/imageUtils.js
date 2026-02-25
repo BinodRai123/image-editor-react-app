@@ -1,8 +1,4 @@
-// utils/imageUtils.js
-
 const MAX_PREVIEW_SIZE = 1200;
-
-// utils/imageUtils.js
 
 export const processImageUpload = (file) => {
    return new Promise((resolve, reject) => {

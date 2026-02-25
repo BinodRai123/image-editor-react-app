@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect, useCallback } from "react";
-import ReactCrop, { centerCrop, makeAspectCrop } from "react-image-crop";
+import { useState, useRef, useEffect } from "react";
+import ReactCrop from "react-image-crop";
 import { useFileHandler } from "../../hooks/useFileHandler";
 import DropZone from "../../components/dropZone/DropZone";
 import { useCanvasLogic } from "../../hooks/useCanvasLogic.js";
@@ -7,11 +7,12 @@ import { useCanvasLogic } from "../../hooks/useCanvasLogic.js";
 import { useCropShape } from "./hooks/useCropShape";
 import { useCropPreview } from "./hooks/useCropPreview";
 import ErrorModalOverlay from "../../components/modalOverlay/errorModalOverlay/ErrorModalOverlay";
+import CanvasSkeleton from "../../components/loadingUI/CanvasSkeleton/CanvasSkeleton";
 
 import "react-image-crop/dist/ReactCrop.css";
-import "./cropSection.css";
 import AsidebarSection from "./asidebarSection/AsidebarSection";
 import { useAppSelector } from "../../hooks/index";
+import "./cropSection.css";
 
 const CropSection = () => {
    const [crop, setCrop] = useState({
@@ -54,6 +55,7 @@ const CropSection = () => {
       canvasRef.current.height = height;
 
       ctx.drawImage(Image, 0, 0, canvasRef.current.width, canvasRef.current.height);
+      console.log("Croped Image -> ", Image);
    }, [imageURL]);
 
    return (
@@ -61,6 +63,8 @@ const CropSection = () => {
          {/* Main Workspace */}
 
          <main onDragOver={handleDrag} onDrop={handleDrop} className="editor-main">
+            {imageStatus.uploading && <CanvasSkeleton />}
+
             <DropZone
                image={imageURL}
                isDragging={isDragging}
@@ -84,7 +88,7 @@ const CropSection = () => {
                      id="canvas-image"
                      ref={canvasRef}
                      style={{
-                        display: imageURL ? "block" : "none",
+                        display: imageURL && !imageStatus.uploading ? "block" : "none",
                      }}
                   />
                </ReactCrop>

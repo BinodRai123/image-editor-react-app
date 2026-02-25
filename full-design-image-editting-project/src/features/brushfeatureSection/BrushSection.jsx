@@ -2,10 +2,10 @@ import ErrorModalOverlay from "../../components/modalOverlay/errorModalOverlay/E
 import DropZone from "../../components/dropZone/DropZone";
 import { useCanvasLogic } from "../../hooks/useCanvasLogic";
 import { useFileHandler } from "../../hooks/useFileHandler";
-import React, { useEffect, useRef, useState } from "react";
-import "./BrushSectionStyle.css";
+import { useEffect, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/index";
-import { setCurrentImage } from "../../Redux/slices/ImageFilter/imageFilterSlicer";
+import CanvasSkeleton from "../../components/loadingUI/CanvasSkeleton/CanvasSkeleton";
+import "./BrushSectionStyle.css";
 
 const BrushSection = () => {
    const uploadBtnRef = useRef(null);
@@ -37,7 +37,7 @@ const BrushSection = () => {
          onDrop={handleDrop}
       >
          {/* When image is uploading this will show up to inform */}
-         {imageStatus.uploading && <div className="canvas-skeleton">Uploading...</div>}
+         {imageStatus.uploading && <CanvasSkeleton />}
 
          {/* <div class="bg-checkerboard"></div> */}
          <canvas
@@ -45,7 +45,7 @@ const BrushSection = () => {
             className={isDragging ? "canvas-blur" : ""}
             ref={canvasRef}
             style={{
-               display: imageURL ? "block" : "none",
+               display: imageURL && !imageStatus.uploading ? "block" : "none",
             }}
          />
          <DropZone
