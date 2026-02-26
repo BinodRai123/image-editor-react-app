@@ -1,11 +1,14 @@
 import DownloadIcon from "../../../components/icons/DownloadIcon";
 import MenuBarButton from "../../../components/menuIcon/menuIcon";
 import React, { useCallback, useState } from "react";
+import NamingFileModalOverlay from "../../../components/modalOverlay/namingfileModalOverlay/NamingFileModalOverlay";
 import "./asidebarStyle.css";
 
 const AsidebarSection = ({ crop, setCrop, image, previewCanvasRef, isCircle }) => {
    const [activeRatio, setActiveRatio] = useState("1:1");
    const [isOpen, setIsOpen] = useState(false);
+   const [NamingFileModal, setNamingFileModal] = useState(false);
+   const [fileName, setFileName] = useState("Croped-Image");
 
    const ASPECT_RATIOS = [
       { label: "1:1", value: 1 / 1 },
@@ -50,6 +53,8 @@ const AsidebarSection = ({ crop, setCrop, image, previewCanvasRef, isCircle }) =
       link.download = "crop image";
       link.href = base64;
       link.click();
+
+      setNamingFileModal(false);
    };
 
    return (
@@ -58,6 +63,7 @@ const AsidebarSection = ({ crop, setCrop, image, previewCanvasRef, isCircle }) =
          <MenuBarButton toggleSidebar={toggleSidebar} isOpen={isOpen} />
 
          <aside className={`crop-editor-sidebar ${isOpen && "crop-editor-sidebar-open"}`}>
+            {/* LIVE PREVIEW SECTION */}
             <section className="sidebar-section">
                <h4 className="section-title">LIVE PREVIEW</h4>
                <div className="live-preview-box">
@@ -84,6 +90,7 @@ const AsidebarSection = ({ crop, setCrop, image, previewCanvasRef, isCircle }) =
                </div>
             </section>
 
+            {/* Ratio Grid Section */}
             <section className="sidebar-section">
                <h4 className="section-title">ASPECT RATIO</h4>
                <div className="ratio-grid">
@@ -101,13 +108,29 @@ const AsidebarSection = ({ crop, setCrop, image, previewCanvasRef, isCircle }) =
                </div>
             </section>
 
+            {/* DOWNLOAD BUTTON  */}
             <div className="sidebar-footer">
-               <button onClick={handleDownloadCrop} className="download-btn">
+               <button
+                  onClick={() => {
+                     if (!previewCanvasRef.current) return;
+                     setNamingFileModal(true);
+                  }}
+                  className="download-btn"
+               >
                   <DownloadIcon /> Download Final Crop
                </button>
                <p className="export-hint">Export as PNG, 300 DPI (High Quality)</p>
             </div>
          </aside>
+
+         {/* Naming the file Before Downloading */}
+         <NamingFileModalOverlay
+            NamingFileModal={NamingFileModal}
+            setNamingFileModal={setNamingFileModal}
+            fileName={fileName}
+            setFileName={setFileName}
+            handleExport={handleDownloadCrop}
+         />
       </>
    );
 };

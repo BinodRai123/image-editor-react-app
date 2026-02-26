@@ -17,7 +17,7 @@ const ErrorModalOverlay = ({ modal, toggleModalOverlay, children, erroMessage = 
                      <h2 className="title">ERROR</h2>
                      <p className="description">{erroMessage}</p>
                   </div>
-                  {/* Additional Feature Add If you like */}
+                  {/* Additional Feature Add, If you like */}
                   {children}
                </div>
             </section>

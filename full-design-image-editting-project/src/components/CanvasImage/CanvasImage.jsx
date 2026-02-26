@@ -2,6 +2,7 @@ import UnderConstruction from "../../pages/underConstruction";
 import CropSection from "../../features/cropFeatureSection/CropSection.jsx";
 import { DEFAULT_FILTERS } from "../../utils/imageUtils";
 import BrushSection from "../../features/brushfeatureSection/BrushSection";
+import ImageGeneration from "../../features/ImageGeneration/ImageGeneration";
 
 const CanvasImage = ({ activeFeature }) => {
    return (

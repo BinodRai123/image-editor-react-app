@@ -51,7 +51,10 @@ const BrushSection = () => {
          )}
 
          {/* <div class="bg-checkerboard"></div> */}
-         <div style={{ display: !isLoadingUIActive ? "block" : "none" }}>
+         <div
+            className="flex-center"
+            style={{ display: !isLoadingUIActive ? "flex" : "none", height: "100%", width: "100%" }}
+         >
             <canvas
                id="canvas-image-preview"
                className={isDragging ? "canvas-blur" : ""}

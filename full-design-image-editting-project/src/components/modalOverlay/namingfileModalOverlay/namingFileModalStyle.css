@@ -1,0 +1,19 @@
+.modalContentStyle {
+   background-color: white;
+   padding: 2rem;
+   border-radius: 12px;
+   width: 90%;
+   max-width: 400px;
+   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+   color: #333;
+}
+
+.inputStyle {
+   width: 100%;
+   padding: 12px;
+   margin-top: 10px;
+   border-radius: 6px;
+   border: 1px solid #ddd;
+   font-size: 1rem;
+   box-sizing: border-box;
+}
