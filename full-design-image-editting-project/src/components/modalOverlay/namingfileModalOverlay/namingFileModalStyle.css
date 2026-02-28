@@ -17,3 +17,90 @@
    font-size: 1rem;
    box-sizing: border-box;
 }
+
+.modal-field-group {
+   display: flex;
+   flex-direction: column;
+   gap: 6px;
+}
+
+.field-label {
+   font-size: 0.7rem;
+   font-weight: 700;
+   color: #999;
+   text-transform: uppercase;
+   letter-spacing: 1px;
+}
+
+/* The Grid Layout you liked */
+.format-grid-container {
+   display: grid;
+   grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+   gap: 12px;
+}
+
+/* The "Card" style with primary color support */
+.format-card {
+   position: relative;
+   padding: 15px 10px;
+   border: 2px solid #eee;
+   background: #fff;
+   border-radius: 10px;
+   cursor: pointer;
+   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+.format-card:hover {
+   border-color: #ddd;
+   transform: translateY(-2px);
+}
+
+.format-card.active {
+   background-color: var(--bg-primary);
+   border-color: var(--bg-primary);
+}
+
+.format-text {
+   font-weight: 700;
+   font-size: 0.95rem;
+   color: #444;
+}
+
+.format-card.active .format-text {
+   color: #ffffff;
+}
+
+/* white dot in the corner of the active format */
+.active-indicator {
+   position: absolute;
+   top: 6px;
+   right: 6px;
+   width: 6px;
+   height: 6px;
+   background: white;
+   border-radius: 50%;
+}
+
+.modal-footer-actions {
+   display: flex;
+   gap: 12px;
+   justify-content: flex-end;
+   margin-top: 32px;
+}
+
+.btn-cancel {
+   background: #f0f0f0;
+   color: #666;
+   border: 1px solid #eee;
+   padding: 10px 20px;
+   border-radius: 6px;
+}
+
+.btn-primary {
+   padding: 10px 25px;
+   border-radius: 6px;
+   font-weight: 600;
+}

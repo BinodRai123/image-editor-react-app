@@ -9,6 +9,7 @@ const AsidebarSection = ({ crop, setCrop, image, previewCanvasRef, isCircle }) =
    const [isOpen, setIsOpen] = useState(false);
    const [NamingFileModal, setNamingFileModal] = useState(false);
    const [fileName, setFileName] = useState("Croped-Image");
+   const [fileFormat, setFileFormat] = useState("jpg");
 
    const ASPECT_RATIOS = [
       { label: "1:1", value: 1 / 1 },
@@ -48,9 +49,9 @@ const AsidebarSection = ({ crop, setCrop, image, previewCanvasRef, isCircle }) =
    const handleDownloadCrop = () => {
       if (!previewCanvasRef.current || !image) return;
 
-      const base64 = previewCanvasRef.current.toDataURL("image/png");
+      const base64 = previewCanvasRef.current.toDataURL(`image/${fileFormat}`, 0.95);
       const link = document.createElement("a");
-      link.download = "crop image";
+      link.download = `${fileName}.${fileFormat}`;
       link.href = base64;
       link.click();
 
@@ -130,6 +131,8 @@ const AsidebarSection = ({ crop, setCrop, image, previewCanvasRef, isCircle }) =
             fileName={fileName}
             setFileName={setFileName}
             handleExport={handleDownloadCrop}
+            fileFormat={fileFormat}
+            setFileFormat={setFileFormat}
          />
       </>
    );

@@ -57,10 +57,10 @@ const ExportButton = () => {
 
             const link = document.createElement("a");
             const finalName = fileName.trim() || `image-${Date.now()}`;
-            link.download = `${finalName}.jpg`;
+            link.download = `${finalName}.${fileFormat}`;
 
-            // Using 0.95 to keep quality high (closer to your 16mb original)
-            link.href = ExportCanvas.toDataURL(`image/${"png"}`, 0.95);
+            // Using 0.95 to keep quality high
+            link.href = ExportCanvas.toDataURL(`image/${fileFormat}`, 0.95);
 
             setExportProgress(100); // Finish progress
 
@@ -121,6 +121,8 @@ const ExportButton = () => {
             fileName={fileName}
             setFileName={setFileName}
             handleExport={handleExport}
+            fileFormat={fileFormat}
+            setFileFormat={setFileFormat}
          />
       </>
    );
