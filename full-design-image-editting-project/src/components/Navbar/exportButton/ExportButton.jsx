@@ -12,6 +12,7 @@ const ExportButton = () => {
 
    const [NamingFileModal, setNamingFileModal] = useState(false);
    const [fileName, setFileName] = useState("edited-image");
+   const [fileFormat, setFileFormat] = useState("jpg"); //jpg, png, webp
 
    //image and filterDAta
    const { imageURL, originalImageHeight, originalImageWidth } = useAppSelector(
@@ -59,7 +60,7 @@ const ExportButton = () => {
             link.download = `${finalName}.jpg`;
 
             // Using 0.95 to keep quality high (closer to your 16mb original)
-            link.href = ExportCanvas.toDataURL("image/jpeg", 0.95);
+            link.href = ExportCanvas.toDataURL(`image/${"png"}`, 0.95);
 
             setExportProgress(100); // Finish progress
 
