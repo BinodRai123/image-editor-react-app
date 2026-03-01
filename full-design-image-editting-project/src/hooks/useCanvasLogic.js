@@ -17,6 +17,7 @@ export const useCanvasLogic = (filterData = null) => {
    const img = document.createElement("img");
    img.src = imageURL;
 
+   img.onload = () => {};
    const applyFilters = useCallback(() => {
       //check image and canvas
       if (!img || !canvasRef.current) return;

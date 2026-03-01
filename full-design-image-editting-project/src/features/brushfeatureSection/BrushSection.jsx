@@ -6,13 +6,15 @@ import { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/index";
 import CanvasSkeleton from "../../components/loadingUI/CanvasSkeleton/CanvasSkeleton";
 import "./BrushSectionStyle.css";
+import BeforeAfterImage from "../beforeAfterImage/BeforeAfterImage";
 
 const BrushSection = () => {
    const [isLoadingUIActive, setIsLoadingUIActive] = useState(true);
    const uploadBtnRef = useRef(null);
-   const filterData = useAppSelector((state) => state.imageEditor.filters);
 
+   // Fetching image, filterData and updating Redux State
    const imageURL = useAppSelector((state) => state.imageEditor.currentImage.imageURL);
+   const filterData = useAppSelector((state) => state.imageEditor.filters);
    const dispatch = useAppDispatch();
 
    const { canvasRef, applyFilters, resetCanvas } = useCanvasLogic(filterData);
@@ -26,7 +28,7 @@ const BrushSection = () => {
 
    //Paint canvas with Filter when Redux Filter data changed
    useEffect(() => {
-      if (!imageURL) return; //if there is no image then return
+      if (!imageURL) return;
 
       applyFilters(); // if ther is image then apply this filter
    }, [filterData, imageURL, applyFilters]);
@@ -55,14 +57,18 @@ const BrushSection = () => {
             className="flex-center"
             style={{ display: !isLoadingUIActive ? "flex" : "none", height: "100%", width: "100%" }}
          >
-            <canvas
+            {/* <canvas
                id="canvas-image-preview"
                className={isDragging ? "canvas-blur" : ""}
                ref={canvasRef}
                style={{
-                  display: imageURL && !imageStatus.uploading && !isLoadingUIActive ? "block" : "none",
+                  display:
+                     imageURL && !imageStatus.uploading && !isLoadingUIActive && false ? "block" : "none",
                }}
-            />
+            /> */}
+
+            {imageURL && <BeforeAfterImage beforeImage={imageURL} afterImage={canvasRef} />}
+
             <DropZone
                image={imageURL}
                isDragging={isDragging}

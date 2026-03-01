@@ -104,6 +104,7 @@ const CropSection = () => {
                      style={{
                         display: imageURL && !imageStatus.uploading ? "block" : "none",
                      }}
+                     draggable={false}
                   />
                </ReactCrop>
             </div>
