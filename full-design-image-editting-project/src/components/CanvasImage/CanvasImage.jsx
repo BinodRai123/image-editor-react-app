@@ -4,6 +4,7 @@ import { DEFAULT_FILTERS } from "../../utils/imageUtils";
 import BrushSection from "../../features/brushfeatureSection/BrushSection";
 import ImageGeneration from "../../features/ImageGeneration/ImageGeneration";
 import BeforeAfterImage from "../../features/beforeAfterImage/BeforeAfterImage";
+import CanvasSketchPaint from "../../features/canvasSketchPaint/CanvasSketchPaint";
 
 const CanvasImage = ({ activeFeature }) => {
    return (
@@ -14,7 +15,7 @@ const CanvasImage = ({ activeFeature }) => {
          ) : activeFeature === "crop" ? (
             <CropSection />
          ) : activeFeature === "layers" ? (
-            <BeforeAfterImage />
+            <CanvasSketchPaint />
          ) : (
             <UnderConstruction />
          )}

@@ -31,7 +31,7 @@ const App = () => {
       <>
          <section id="image-generator-page">
             <Navbar />
-            <main id="main">
+            <mpain id="main">
                <section className="main__left">
                   <LeftSidebarFeatureIcons
                      activeFeature={activeFeature}

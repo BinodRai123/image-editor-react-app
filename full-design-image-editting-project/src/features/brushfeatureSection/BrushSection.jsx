@@ -52,7 +52,6 @@ const BrushSection = () => {
             <CanvasSkeleton message={`${imageURL ? "UPLOADING IMAGE..." : "LOADING..."}`} />
          )}
 
-         {/* <div class="bg-checkerboard"></div> */}
          <div
             className="flex-center"
             style={{ display: !isLoadingUIActive ? "flex" : "none", height: "100%", width: "100%" }}
