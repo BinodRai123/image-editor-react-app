@@ -7,6 +7,13 @@ const PaintingArea = ({ canvasRef, brushWidth, eraserWidth, isEraser, strokeColo
          <div className="canvas-elevation-wrapper" style={{ backgroundColor: canvasColor }}>
             <ReactSketchCanvas
                ref={canvasRef}
+               width="100%"
+               height="100%"
+               style={{
+                  display: "block",
+                  width: "100%",
+                  height: "100%",
+               }}
                strokeWidth={brushWidth}
                eraserWidth={eraserWidth}
                strokeColor={strokeColor}
