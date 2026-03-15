@@ -1,0 +1,37 @@
+.editor-container {
+   display: flex;
+   flex-direction: column;
+   background: #121212;
+   border-radius: 8px;
+   overflow: hidden;
+}
+
+.tools {
+   display: flex;
+   gap: 10px;
+   padding: 10px;
+   background: #222;
+   z-index: 10;
+}
+
+.tools button {
+   padding: 8px 12px;
+   background: #333;
+   color: white;
+   border: 1px solid #444;
+   cursor: pointer;
+   border-radius: 4px;
+}
+
+.tools button:hover {
+   background: #444;
+}
+
+/* TransformComponent needs to be centered */
+.react-transform-component {
+   width: 100% !important;
+   height: 100% !important;
+   display: flex !important;
+   justify-content: center;
+   align-items: center;
+}

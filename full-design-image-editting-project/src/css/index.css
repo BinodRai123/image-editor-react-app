@@ -91,6 +91,6 @@ h3 {
 
 #image-generator-page > #main {
    display: flex;
-   height: 88%;
+   height: 87%;
    background-color: var(--bg-white);
 }
