@@ -12,11 +12,12 @@ const CanvasSketchPaint = () => {
    const [isEraser, setIsEraser] = useState(false);
    const [strokeColor, setStrokeColor] = useState("#221a10");
    const [canvasColor, setCanvasColor] = useState("#ffffff");
+   const [image, setImage] = useState(null);
 
    const handleExport = async () => {
-      const image = await canvasRef.current.exportImage("png");
+      const img = await canvasRef.current.exportImage("png");
       const link = document.createElement("a");
-      link.href = image;
+      link.href = img;
       link.download = "paint-canvas.png";
       link.click();
    };
@@ -30,6 +31,7 @@ const CanvasSketchPaint = () => {
             isEraser={isEraser}
             strokeColor={strokeColor}
             canvasColor={canvasColor}
+            backgroundImage={image}
          />
          <PaintNavbar
             canvasRef={canvasRef}
@@ -44,6 +46,7 @@ const CanvasSketchPaint = () => {
             strokeColor={strokeColor}
             setCanvasColor={setCanvasColor}
             canvasColor={canvasColor}
+            setImage={setImage}
          />
       </div>
    );

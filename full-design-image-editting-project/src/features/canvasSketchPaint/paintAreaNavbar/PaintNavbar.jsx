@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 // Icons
 import MenuBarButton from "../../../components/menuIcon/menuIcon";
@@ -11,6 +11,9 @@ import DownloadIcon from "../../../components/icons/DownloadIcon";
 
 //PAINTNAVBAR CSS//
 import "./PaintNavbar.css";
+
+//MAX-PREVIWE OF IMAGE
+const MAX_PREVIEW_SIZE = 1200;
 
 const PaintNavbar = ({
    canvasRef,
@@ -25,8 +28,10 @@ const PaintNavbar = ({
    canvasColor,
    setCanvasColor,
    onExport,
+   setImage,
 }) => {
    const [isOpen, setIsOpen] = useState(false);
+   const fileInputRef = useRef(null);
 
    /* ---- Toogle Tool(BRUSH / ERAISER) ---- */
    const handleToolChange = (mode) => {
@@ -37,6 +42,38 @@ const PaintNavbar = ({
    /* ---- toggle sidebar ---- */
    const toggleSidebar = () => {
       setIsOpen(!isOpen);
+   };
+
+   /* ---------- handle image upload ---------- */
+   const handleImageUpload = (event) => {
+      const file = event.target.files[0];
+      if (file && file.type.startsWith("image/")) {
+         //create new img and store url
+         const img = document.createElement("img");
+         img.src = URL.createObjectURL(file);
+
+         img.onload = () => {
+            let width = img.width;
+            let height = img.height;
+
+            if (width > MAX_PREVIEW_SIZE || height > MAX_PREVIEW_SIZE) {
+               const ratio = Math.min(MAX_PREVIEW_SIZE / width, MAX_PREVIEW_SIZE / height);
+               width *= ratio;
+               height *= ratio;
+            }
+
+            img.width = width;
+            img.height = height;
+
+            setImage(img.src);
+            img.remove();
+         };
+      }
+   };
+
+   /* -------- Trigger File to open When Click on Add Backgorund Image -------- */
+   const triggerFileSelect = () => {
+      fileInputRef.current.click();
    };
 
    return (
@@ -127,7 +164,16 @@ const PaintNavbar = ({
                {/* Upload BG Image */}
                <section className="nav-section">
                   <h4 className="nav-title">MEDIA</h4>
-                  <div className="media-dropzone">
+                  {/* Hidden Input */}
+                  <input
+                     type="file"
+                     ref={fileInputRef}
+                     style={{ display: "none" }}
+                     accept="image/*"
+                     onChange={handleImageUpload}
+                  />
+                  {/* Clickable Dropzone */}
+                  <div className="media-dropzone" onClick={triggerFileSelect} style={{ cursor: "pointer" }}>
                      <div className="icon-slot media-icon"></div>
                      <p>Add Background Photo</p>
                   </div>
