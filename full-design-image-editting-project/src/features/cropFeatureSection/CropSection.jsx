@@ -48,14 +48,11 @@ const CropSection = () => {
       if (!imageURL) return;
       const Image = document.createElement("img");
       Image.src = imageURL;
-      // console.log("image -> ", Image);
 
       Image.onload = () => {
          const ctx = canvasRef.current.getContext("2d");
          canvasRef.current.width = width;
          canvasRef.current.height = height;
-
-         // console.log("image", Image);
 
          ctx.drawImage(Image, 0, 0, canvasRef.current.width, canvasRef.current.height);
       };
