@@ -32,7 +32,7 @@
    flex: 1;
    border: 2px solid var(--border-subtle);
    border-radius: var(--border-radius-md);
-   padding: var(--padding-md);
+   padding: var(--padding-sm);
    background: none;
    cursor: pointer;
    display: flex;
@@ -99,10 +99,15 @@
 }
 
 .export-trigger {
+   display: flex;
+   justify-content: center;
+   align-items: center;
    background-color: var(--bg-primary);
    color: white;
    border: none;
    padding: 12px;
+   width: 250px;
+   margin-inline: auto;
    border-radius: var(--border-radius-md);
    font-weight: bold;
    cursor: pointer;
@@ -172,5 +177,9 @@
 
    .paint-sidebar-open {
       transform: translateX(0);
+   }
+
+   .nav-actions {
+      gap: var(--gutter-sm);
    }
 }

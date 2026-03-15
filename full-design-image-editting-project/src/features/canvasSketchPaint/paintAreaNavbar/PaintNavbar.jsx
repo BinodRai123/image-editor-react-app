@@ -1,5 +1,15 @@
 import { useState } from "react";
+
+// Icons
 import MenuBarButton from "../../../components/menuIcon/menuIcon";
+import CanvasPaintBrush from "../../../components/icons/CanvasPaintBrush";
+import EraserIcon from "../../../components/icons/EraserIcon";
+import UndoIcon from "../../../components/icons/UndoIcon";
+import RedoIcon from "../../../components/icons/RedoIcon";
+import ResetIcon from "../../../components/icons/ResetIcon";
+import DownloadIcon from "../../../components/icons/DownloadIcon";
+
+//PAINTNAVBAR CSS//
 import "./PaintNavbar.css";
 
 const PaintNavbar = ({
@@ -41,22 +51,25 @@ const PaintNavbar = ({
                <section className="nav-section">
                   <h4 className="nav-title">TOOL SELECTION</h4>
                   <div className="tool-toggle-row">
+                     {/* Brush Button */}
                      <button
                         className={`tool-box ${!isEraser ? "active" : ""}`}
                         onClick={() => handleToolChange(false)}
                      >
                         <div className="icon-slot brush-icon"></div>
-                        <span>Brush</span>
+                        <CanvasPaintBrush size="40px" color={!isEraser && "orange"} />
                      </button>
+                     {/* Eraiser Button */}
                      <button
                         className={`tool-box ${isEraser ? "active" : ""}`}
                         onClick={() => handleToolChange(true)}
                      >
                         <div className="icon-slot eraser-icon"></div>
-                        <span>Eraser</span>
+                        <EraserIcon size="40px" color={isEraser && "orange"} />
                      </button>
                   </div>
                </section>
+
                {/* Stroke and BG Color */}
                <section className="nav-section">
                   <h4 className="nav-title">APPEARANCE</h4>
@@ -79,6 +92,7 @@ const PaintNavbar = ({
                      </div>
                   </div>
                </section>
+
                {/* Width of Stroke and Erasier */}
                <section className="nav-section">
                   <h4 className="nav-title">ADJUSTMENTS</h4>
@@ -109,6 +123,7 @@ const PaintNavbar = ({
                      />
                   </div>
                </section>
+
                {/* Upload BG Image */}
                <section className="nav-section">
                   <h4 className="nav-title">MEDIA</h4>
@@ -122,14 +137,21 @@ const PaintNavbar = ({
             {/* History (Redo/Undo) , Reset and Export Image */}
             <section className="nav-actions">
                <div className="history-btns">
-                  <button onClick={() => canvasRef.current.undo()}>Undo</button>
-                  <button onClick={() => canvasRef.current.redo()}>Redo</button>
+                  {/* Undo Button */}
+                  <button onClick={() => canvasRef.current.undo()}>
+                     <UndoIcon />
+                  </button>
+                  <button onClick={() => canvasRef.current.redo()}>
+                     {/* Redo Button */}
+                     <RedoIcon />
+                  </button>
                   <button className="span-2" onClick={() => canvasRef.current.clearCanvas()}>
-                     Reset
+                     {/* Reset Button */}
+                     <ResetIcon />
                   </button>
                </div>
                <button className="export-trigger" onClick={onExport}>
-                  Export Image
+                  <DownloadIcon /> Export Image
                </button>
                <span className="timestamp">Paint Everything you like.</span>
             </section>
